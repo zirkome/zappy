@@ -5,12 +5,12 @@
 ## Login   <maxime@epitech.net>
 ##
 ## Started on  Wed Mar 12 15:15:11 2014 guillaume fillon
-## Last update Thu May  1 16:23:33 2014 luc sinet
+## Last update Thu May  1 20:25:40 2014 guillaume fillon
 ##
 
 CC 	= gcc
 
-NAME 	= libsocket.so
+NAME 	= libsocket.a
 
 SRCDIR	= src/
 OBJDIR	= obj/
@@ -29,7 +29,7 @@ SRC 	= accept_inet.c  \
 OBJ	= $(addprefix $(OBJDIR), $(SRC:.c=.o))
 
 CFLAGS 	+= -Iinclude -W -Wall -Wextra -fPIC
-LDFLAGS += -shared
+LDFLAGS +=
 
 dummy	:= $(shell test -d $(OBJDIR) || mkdir $(OBJDIR))
 
@@ -37,7 +37,8 @@ $(OBJDIR)%.o: $(SRCDIR)%.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -o $(NAME) $(LDFLAGS)
+	$(AR) rc $(NAME) $(OBJ)
+	ranlib $(NAME)
 
 all: $(NAME)
 
