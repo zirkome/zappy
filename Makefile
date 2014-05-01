@@ -5,7 +5,7 @@
 ## Login   <kokaz@epitech.net>
 ## 
 ## Started on  Thu May  1 16:49:19 2014 guillaume fillon
-## Last update Thu May  1 16:49:20 2014 guillaume fillon
+## Last update Thu May  1 20:22:23 2014 guillaume fillon
 ##
 
 LIBSOCKET	= libsocket
@@ -14,8 +14,8 @@ SERVER		= server
 
 zappy:
 	$(MAKE) -C $(LIBSOCKET)
-	$(MAKE) -C $(CLIENT) BASEPATH=`pwd`
-	$(MAKE) -C $(SERVER) BASEPATH=`pwd`
+	$(MAKE) -C $(CLIENT)
+	$(MAKE) -C $(SERVER)
 
 all: zappy
 

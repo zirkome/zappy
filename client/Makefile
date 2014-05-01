@@ -5,7 +5,7 @@
 ## Login   <kokaz@epitech.net>
 ## 
 ## Started on  Sat Mar 22 23:12:17 2014 guillaume fillon
-## Last update Thu May  1 17:04:37 2014 guillaume fillon
+## Last update Thu May  1 20:27:01 2014 guillaume fillon
 ##
 
 CC 		= gcc
@@ -19,11 +19,11 @@ SRC 		= main.c
 
 OBJ		= $(addprefix $(OBJDIR), $(SRC:.c=.o))
 
-LIBSOCKET	= $(BASEPATH)/libsocket
+LIBSOCKET	= ../libsocket
 
-CFLAGS 		+= -W -Wall -Wextra -I$(BASEPATH)/include -I$(LIBSOCKET)/include
+CFLAGS 		+= -W -Wall -Wextra -I../include -I$(LIBSOCKET)/include
 
-LDFLAGS 	+= -Wl,-rpath=$(LIBSOCKET) -L$(LIBSOCKET) -lsocket
+LDFLAGS 	+= -L$(LIBSOCKET) -lsocket
 
 dummy := $(shell test -d $(OBJDIR) || mkdir $(OBJDIR))
 
