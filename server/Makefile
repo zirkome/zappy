@@ -5,7 +5,7 @@
 ## Login   <kokaz@epitech.net>
 ## 
 ## Started on  Sat Mar 22 23:12:17 2014 guillaume fillon
-## Last update Thu May  1 20:27:16 2014 guillaume fillon
+## Last update Fri May  2 09:49:54 2014 luc sinet
 ##
 
 CC 		= gcc
@@ -15,13 +15,15 @@ NAME 		= server
 SRCDIR		= src/
 OBJDIR		= obj/
 
-SRC 		= main.c
+SRC 		= main.c \
+		  init.c \
+		  error.c
 
 OBJ		= $(addprefix $(OBJDIR), $(SRC:.c=.o))
 
 LIBSOCKET	= ../libsocket
 
-CFLAGS 		+= -W -Wall -Wextra -I../include -I$(LIBSOCKET)/include
+CFLAGS 		+= -W -Wall -Wextra -I../include -I$(LIBSOCKET)/include -I./include
 
 LDFLAGS 	+= -L$(LIBSOCKET) -lsocket
 
