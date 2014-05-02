@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Apr 25 22:02:19 2014 luc sinet
-** Last update Thu May  1 16:35:43 2014 luc sinet
+** Last update Fri May  2 19:05:10 2014 luc sinet
 */
 
 #include <string.h>
@@ -58,7 +58,7 @@ void	free_ringbuffer(t_ringb *rb)
   free(rb);
 }
 
-t_ringb		*init_ringbuffer(size_t size)
+t_ringb		*create_ringbuffer(size_t size)
 {
   t_ringb	*rb;
 
@@ -72,9 +72,4 @@ t_ringb		*init_ringbuffer(size_t size)
   rb->start = 0;
   rb->end = 0;
   return (rb);
-}
-
-int main()
-{
-  return 0;
 }
