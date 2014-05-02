@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Fri May  2 09:53:31 2014 luc sinet
+** Last update Fri May  2 18:16:10 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -15,7 +15,7 @@
 # include <stdio.h>
 # include <string.h>
 # include <libsocket.h>
-# include "error.h"
+# include "errors.h"
 
 # define TIMEOUT (5 * 60)
 # define UNUSED __attribute__((unused))

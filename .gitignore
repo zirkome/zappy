@@ -33,8 +33,7 @@ Thumbs.db
 [Dd]ebug*/
 *.sbr
 obj/
-./client
-./serveur
+bin/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
