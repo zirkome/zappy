@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
-#include <libsocket.h>
+#include "server.h"
 
 static int	g_sigint = 0;
 
@@ -12,26 +12,28 @@ static int	usage(FILE *stream)
   return ((stream == stderr) ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 
-static void	handle_signal(int sig)
+void	handle_signal(int sig)
 {
   if (sig == SIGINT)
     g_sigint = 1;
 }
 
-int		main(int argc, char *argv[])
+int	monitor_fd(t_serv *serv)
 {
-  int	listenfd;
+  (void)serv;
+  return (0);
+}
 
-  if (argc != 2)
+int		main(int ac, char **av)
+{
+  t_serv	serv;
+
+  if (ac != 2)
     return (usage(stderr));
-  signal(SIGPIPE, SIG_IGN);
-  signal(SIGINT, &handle_signal);
-  if ((listenfd = create_inet_server_socket(NULL, argv[1])) < 0)
-    return (EXIT_FAILURE);
+  if (init_serv(&serv, ac, av) == -1)
+    return (-1);
   while (!g_sigint)
-    {
-      pause();
-    }
-  close(listenfd);
+    monitor_fd(&serv);
+  close(serv.fd);
   return (EXIT_SUCCESS);
 }
