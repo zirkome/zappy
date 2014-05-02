@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Fri May  2 18:46:53 2014 luc sinet
+## Last update Fri May  2 22:20:18 2014 luc sinet
 ##
 
 CC 		= gcc
@@ -21,21 +21,23 @@ OBJDIR		= obj/
 INCDIR		= include/
 SRCCOMMON	= $(COMMONDIR)/$(SRCDIR)
 OBJCOMMON	= $(COMMONDIR)/$(OBJDIR)
+LIBSOCKET	= ../libsocket
 
 SRC 		= main.c \
-		  init.c
+		  init.c \
+		  handle_user.c \
+		  select.c \
+		  connection.c
 
 COMMONSRC	= error.c
 
 OBJ		= $(addprefix $(OBJDIR), $(SRC:.c=.o))
 COBJ		= $(addprefix $(OBJCOMMON), $(COMMONSRC:.c=.o))
 
-LIBSOCKET	= ../libsocket
-
-CFLAGS 		+= -W -Wall -Wextra -I../include -I$(LIBSOCKET)/include \
+CFLAGS 		+= -g -W -Wall -Wextra -I../include -I$(LIBSOCKET)/$(INCDIR) \
 		   -I./include -I$(COMMONDIR)/$(INCDIR)
 
-LDFLAGS 	+= -L$(LIBSOCKET) -lsocket
+LDFLAGS 	=
 
 dummy := $(shell test -d $(OBJDIR) || mkdir $(OBJDIR)) \
 	 $(shell test -d $(OBJCOMMON) || mkdir $(OBJCOMMON)) \
@@ -51,7 +53,7 @@ $(OBJCOMMON)%.o: $(SRCCOMMON)%.c
 
 $(BINPATH): $(OBJ) $(COBJ)
 	@echo "- linking of: $@ (flag: "$(LDFLAGS)")"
-	@$(CC) -o $(BINPATH) $(OBJ) $(COBJ) $(LDFLAGS)
+	@$(CC) -o $(BINPATH) $(OBJ) $(COBJ) $(LIBSOCKET)/libsocket.a $(LDFLAGS)
 
 all: $(BINPATH)
 

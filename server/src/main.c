@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include <signal.h>
 #include "server.h"
 
@@ -20,7 +17,12 @@ void	handle_signal(int sig)
 
 int	monitor_fd(t_serv *serv)
 {
-  (void)serv;
+  init_fds(serv);
+  if (select(serv->maxfd + 1, &serv->r_fd, &serv->w_fd,
+	     NULL, NULL) == -1)
+    return (iperror("accept_connection: select", -1));
+  read_state(serv);
+  write_state(serv);
   return (0);
 }
 

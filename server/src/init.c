@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 09:39:44 2014 luc sinet
-** Last update Fri May  2 09:54:16 2014 luc sinet
+** Last update Fri May  2 19:03:11 2014 luc sinet
 */
 
 #include <signal.h>
@@ -38,5 +38,6 @@ int		init_serv(t_serv *serv, int ac, char **av)
   if ((serv->fd = create_inet_server_socket(NULL, (ac == 1) ?
 					    "6000" : av[1])) < 0)
     return (-1);
+  serv->cl = NULL;
   return (0);
 }
