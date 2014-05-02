@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Apr 25 22:02:19 2014 luc sinet
-** Last update Fri May  2 19:05:10 2014 luc sinet
+** Last update Fri May  2 23:35:26 2014 luc sinet
 */
 
 #include <string.h>
@@ -33,8 +33,9 @@ ssize_t		get_char_pos(t_ringb *rb, char *tab, char c)
 
   if ((pos = (size_t)strchr(tab, c)) == 0)
     return (-1);
+  pos -= (size_t)tab;
   rb->start = (rb->start + pos + 1) % rb->size;
-  return (pos - (size_t)tab);
+  return (pos);
 }
 
 void		fill_ringbuffer(t_ringb *rb, char *buf, ssize_t bufsize)
