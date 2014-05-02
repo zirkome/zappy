@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Fri May  2 18:16:10 2014 luc sinet
+** Last update Fri May  2 22:19:00 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -47,5 +47,10 @@ typedef struct	s_command
 int		init_serv(t_serv *serv, int ac, char **av);
 void		init_fds(t_serv *serv);
 void		handle_signal(int sig);
+int		read_state(t_serv *serv);
+int		write_state(t_serv *serv);
+int		connect_new_user(t_serv *serv);
+int		disconnect_user(t_serv *serv, t_client *cl);
+int		add_user(t_client **cl, int fd);
 
 #endif /* _SERVER_H_ */
