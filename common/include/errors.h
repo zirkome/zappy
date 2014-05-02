@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr  6 10:44:42 2014 luc sinet
-** Last update Fri May  2 09:51:09 2014 luc sinet
+** Last update Fri May  2 18:10:10 2014 luc sinet
 */
 
 #ifndef _ERROR_H_
