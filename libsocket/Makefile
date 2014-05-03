@@ -5,7 +5,7 @@
 ## Login   <maxime@epitech.net>
 ##
 ## Started on  Wed Mar 12 15:15:11 2014 guillaume fillon
-## Last update Fri May  2 23:44:34 2014 luc sinet
+## Last update Sat May  3 15:37:43 2014 luc sinet
 ##
 
 CC 	= gcc
@@ -24,7 +24,9 @@ SRC 	= accept_inet.c  \
 	  create_inet_stream_socket.c \
 	  create_inet_server_socket.c \
 	  write_socket_inet.c \
-	  ringbuffer.c
+	  ringbuffer.c \
+	  queue.c \
+	  manage_queue.c
 
 OBJ	= $(addprefix $(OBJDIR), $(SRC:.c=.o))
 
