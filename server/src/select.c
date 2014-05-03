@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr 20 08:36:48 2014 luc sinet
-** Last update Fri May  2 23:35:54 2014 luc sinet
+** Last update Sat May  3 17:18:22 2014 luc sinet
 */
 
 #include "server.h"
@@ -41,9 +41,9 @@ int	user_write(t_serv *serv, t_client *cl)
 int		read_state(t_serv *serv)
 {
   t_client	*tmp;
+  t_client	*tofree;
   int		ret;
 
-  (void)ret;
   tmp = serv->cl;
   if (FD_ISSET(serv->fd, &serv->r_fd))
     connect_new_user(serv);
@@ -52,7 +52,11 @@ int		read_state(t_serv *serv)
       ret = 0;
       if (FD_ISSET(tmp->fd, &serv->r_fd))
 	ret = user_read(serv, tmp);
+      if (ret == DISCONNECTED)
+	tofree = tmp;
       tmp = tmp->next;
+      if (ret == DISCONNECTED)
+	free(tofree);
     }
   return (0);
 }
