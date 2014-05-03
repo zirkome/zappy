@@ -38,3 +38,5 @@ bin/
 _ReSharper*/
 [Tt]est[Rr]esult*
 *.a
+client/client
+server/server
