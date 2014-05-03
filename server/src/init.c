@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 09:39:44 2014 luc sinet
-** Last update Sat May  3 17:23:08 2014 luc sinet
+** Last update Sat May  3 18:49:16 2014 luc sinet
 */
 
 #include <signal.h>
@@ -24,7 +24,8 @@ void		init_fds(t_serv *serv)
   while (tmp != NULL)
     {
       FD_SET(tmp->fd, &serv->r_fd);
-      FD_SET(tmp->fd, &serv->w_fd);
+      if (!queue_empty(tmp->queue))
+	FD_SET(tmp->fd, &serv->w_fd);
       if (tmp->fd > serv->maxfd)
 	serv->maxfd = tmp->fd;
       tmp = tmp->next;

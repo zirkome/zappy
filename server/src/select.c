@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr 20 08:36:48 2014 luc sinet
-** Last update Sat May  3 17:18:22 2014 luc sinet
+** Last update Sat May  3 18:48:46 2014 luc sinet
 */
 
 #include "server.h"
@@ -31,10 +31,20 @@ int		user_read(t_serv *serv, t_client *cl)
   return (0);
 }
 
-int	user_write(t_serv *serv, t_client *cl)
+int		user_write(t_client *cl)
 {
-  (void)serv;
-  (void)cl;
+  ssize_t	wsize;
+  ssize_t	msglen;
+  char		*msg;
+
+  msg = queue_front(cl->queue);
+  msglen = strlen(msg);
+  if ((wsize = write(cl->fd, msg, msglen)) == -1)
+    return (-1);
+  if (wsize < msglen)
+    shift_msg(msg, wsize);
+  else
+    queue_pop(&cl->queue);
   return (0);
 }
 
@@ -69,7 +79,7 @@ int		write_state(t_serv *serv)
   while (tmp)
     {
       if (FD_ISSET(tmp->fd, &serv->w_fd))
-	user_write(serv, tmp);
+	user_write(tmp);
       tmp = tmp->next;
     }
   return (0);
