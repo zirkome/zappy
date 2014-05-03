@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Sat May  3 16:40:48 2014 luc sinet
+** Last update Sat May  3 21:29:53 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -21,6 +21,12 @@
 # define UNUSED __attribute__((unused))
 # define RSIZE 512
 # define DISCONNECTED 2
+
+enum	bool
+  {
+    false = 0,
+    true
+  };
 
 typedef struct	s_client t_client;
 
