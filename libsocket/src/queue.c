@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr 20 08:27:21 2014 luc sinet
-** Last update Sat May  3 14:32:56 2014 luc sinet
+** Last update Sat May  3 15:06:55 2014 luc sinet
 */
 
 #include <stdlib.h>
@@ -14,7 +14,7 @@
 #include <errno.h>
 #include "queue.h"
 
-int		add_to_queue(t_queue **queue, char *msg)
+int		queue_push(t_queue **queue, char *msg)
 {
   t_queue	*tmp;
   t_queue	*new;
@@ -38,7 +38,7 @@ int		add_to_queue(t_queue **queue, char *msg)
   return (0);
 }
 
-void		pop_msg(t_queue **queue)
+void		queue_pop(t_queue **queue)
 {
   t_queue	*tmp;
 
@@ -60,7 +60,7 @@ void	shift_msg(char *msg, int pos)
   msg[i] = '\0';
 }
 
-void		erase_queue(t_queue **queue)
+void		queue_erase(t_queue **queue)
 {
   t_queue	*tmp;
   t_queue	*next;
@@ -76,7 +76,7 @@ void		erase_queue(t_queue **queue)
   *queue = NULL;
 }
 
-t_queue	*init_queue()
+t_queue	*queue_init()
 {
   return (NULL);
 }
