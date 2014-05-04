@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun Apr 13 18:55:41 2014 guillaume fillon
-** Last update Thu May  1 16:04:04 2014 guillaume fillon
+** Last update Sat May  3 13:44:47 2014 guillaume fillon
 */
 
 #include <stdio.h>
@@ -47,6 +47,7 @@ int			create_inet_stream_socket(const char* host,
 						  int flags)
 {
   int			sfd;
+  int			ret;
   struct addrinfo	hint;
   struct addrinfo	*result;
 
@@ -61,6 +62,8 @@ int			create_inet_stream_socket(const char* host,
       return (-1);
     }
   sfd = check_result(result, flags);
+  if (sfd < 0)
+    warn("connect");
   freeaddrinfo(result);
   return (sfd);
 }
