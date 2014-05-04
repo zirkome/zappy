@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Tue Apr  8 13:05:39 2014 luc sinet
-** Last update Sat May  3 15:58:57 2014 luc sinet
+** Last update Sun May  4 17:11:10 2014 guillaume fillon
 */
 
 #include <time.h>
@@ -71,14 +71,14 @@ int			list_ip()
   return (ret);
 }
 
-void	welcome_server(int port)
+void	welcome_server(char *port)
 {
   char	*date;
 
   if (get_time(&date) == -1)
     return ;
   printf("Welcome !\n%s\n"
-	 "Port used: %d\n"
+	 "Port used: %s\n"
 	 "Server's ip:\n", date, port);
   list_ip();
   fflush(stdout);
