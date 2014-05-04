@@ -1,4 +1,5 @@
 require("utils")
+require("utils_math")
 require("global")
 require("view")
 require("movements")
@@ -10,7 +11,7 @@ function execute_ia(x, y, level, orientation)
 	ORIENTATION = orientation
 end
 
-execute_ia(0, 0, 1, 1)
+execute_ia(1, 1, 1, 1)
 avance()
 avance()
 avance()

@@ -1,4 +1,5 @@
 SRC = 	main.lua \
+	utils_math.lua \
 	global.lua \
 	view.lua \
 	movements.lua \
