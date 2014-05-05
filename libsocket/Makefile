@@ -5,7 +5,7 @@
 ## Login   <maxime@epitech.net>
 ##
 ## Started on  Wed Mar 12 15:15:11 2014 guillaume fillon
-## Last update Fri May  2 23:44:34 2014 luc sinet
+## Last update Sat May  3 14:54:00 2014 Harold Fritsch
 ##
 
 CC 	= gcc

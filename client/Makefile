@@ -1,35 +1,47 @@
 ##
-## Makefile for MyFTP in /home/kokaz/projects/tek2/unix/PSU_2013_myftp
+## Makefile for  in /home/fritsc_h/zappy/client
 ## 
-## Made by guillaume fillon
-## Login   <kokaz@epitech.net>
+## Made by Harold Fritsch
+## Login   <fritsc_h@epitech.net>
 ## 
-## Started on  Sat Mar 22 23:12:17 2014 guillaume fillon
-## Last update Thu May  1 20:27:01 2014 guillaume fillon
+## Started on  Sun May  4 15:17:27 2014 Harold Fritsch
+## Last update Sun May  4 21:38:36 2014 Harold Fritsch
 ##
 
-CC 		= gcc
+CC 		=	g++
 
-NAME 		= client
+NAME 		=	client
 
-SRCDIR		= src/
-OBJDIR		= obj/
+LIBGDLDIR	=	./libGDL
 
-SRC 		= main.c
+LIBSOCKET	=	../libsocket
 
-OBJ		= $(addprefix $(OBJDIR), $(SRC:.c=.o))
+SRCDIR		=	src/
+OBJDIR		= 	obj/
+INCDIR		= 	-I./include/ -I../include -I$(LIBSOCKET)/include -I$(LIBGDLDIR)/includes
 
-LIBSOCKET	= ../libsocket
+SRC 		=	main.cpp \
+			Cube.cpp \
+			Player.cpp \
+			AObject.cpp \
+			Exception.cpp \
+			LaunchGfx.cpp \
+			GameEngine.cpp \
+			ModelObject.cpp \
+			Camera.cpp
 
-CFLAGS 		+= -W -Wall -Wextra -I../include -I$(LIBSOCKET)/include
+OBJ		=	$(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 
-LDFLAGS 	+= -L$(LIBSOCKET) -lsocket
+CXXFLAGS 	+=	-W -Wall -Wextra
+
+LDFLAGS 	+=	-L$(LIBSOCKET) -lsocket -L$(LIBGDLDIR)/libs/ -Wl,-whole-archive -lgdl_gl -Wl,-no-whole-archive -lGL -lGLEW -lrt -lfbxsdk -lSDL2 -lpthread -ldl
+
 
 dummy := $(shell test -d $(OBJDIR) || mkdir $(OBJDIR))
 
-$(OBJDIR)%.o: $(SRCDIR)%.c
-	@echo "- compilation of: $< (flag: "$(CFLAGS)")"
-	@$(CC) -o $@ -c $< $(CFLAGS)
+$(OBJDIR)%.o: $(SRCDIR)%.cpp
+	@echo "- compilation of: $< (flag: "$(CXXFLAGS)")"
+	@$(CC) -o $@ -c $< $(CXXFLAGS) $(INCDIR) $(LDFLAGS)
 
 $(NAME): $(OBJ)
 	@echo "- linking of: $@ (flag: "$(LDFLAGS)")"
