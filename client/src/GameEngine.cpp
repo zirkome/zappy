@@ -25,14 +25,14 @@ bool GameEngine::initialize()
   _shader.setUniform("projection", _cam.getProjection());
 
 
-  // AObject *cube = new Cube();
-  // if (cube->initialize() == false)
-  //   return (false);
-  // _obj.push_back(cube);
-  AObject *model = new ModelObject("./libGDL/assets/marvin.fbx");
-  if (model->initialize() == false)
+  AObject *cube = new Cube();
+  if (cube->initialize() == false)
     return (false);
-  _obj.push_back(model);
+  _obj.push_back(cube);
+  // AObject *model = new ModelObject("./libGDL/assets/marvin.fbx");
+  // if (model->initialize() == false)
+  //   return (false);
+  // _obj.push_back(model);
   return (true);
 }
 
