@@ -5,7 +5,7 @@
 ## Login   <fritsc_h@epitech.net>
 ## 
 ## Started on  Sun May  4 15:17:27 2014 Harold Fritsch
-## Last update Tue May  6 14:34:02 2014 Harold Fritsch
+## Last update Thu May 15 11:07:32 2014 Harold Fritsch
 ##
 
 CC 		=	g++
@@ -18,30 +18,22 @@ LIBSOCKET	=	../libsocket
 
 SRCDIR		=	src/
 OBJDIR		= 	obj/
-INCDIR		= 	-I./include/ -I../include -I$(LIBSOCKET)/include -I$(LIBGDLDIR)/includes
+INCDIR		= 	-I./include -I../include -I$(LIBSOCKET)/include -I$(LIBGDLDIR)/includes
 
-SRC 		=	main.cpp \
-			Cube.cpp \
-			Player.cpp \
-			AObject.cpp \
-			Exception.cpp \
-			LaunchGfx.cpp \
-			GameEngine.cpp \
-			ModelObject.cpp \
-			Camera.cpp
+SRC 		=	main.cpp
 
 OBJ		=	$(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 
 CXXFLAGS 	+=	-W -Wall -Wextra
 
-LDFLAGS 	+=	-L$(LIBSOCKET) -lsocket -L$(LIBGDLDIR)/libs/ -Wl,-whole-archive -lgdl_gl -Wl,-no-whole-archive -lGL -lGLEW -lrt -lfbxsdk -lSDL2 -lpthread -ldl
+LDFLAGS 	+=	-L$(LIBSOCKET) -L$(LIBGDLDIR)/libs/ -Wl,-whole-archive -lgdl_gl -Wl,-no-whole-archive -lGL -lGLEW -lrt -lfbxsdk -lSDL2 -lpthread -lsocket -ldl
 
 
 dummy := $(shell test -d $(OBJDIR) || mkdir $(OBJDIR))
 
 $(OBJDIR)%.o: $(SRCDIR)%.cpp
 	@echo "- compilation of: $< (flag: "$(CXXFLAGS)")"
-	@$(CC) -o $@ -c $< $(CXXFLAGS) $(INCDIR) $(LDFLAGS)
+	@$(CC) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
 
 $(NAME): $(OBJ)
 	@echo "- linking of: $@ (flag: "$(LDFLAGS)")"
