@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Fri May  2 22:49:16 2014 luc sinet
+## Last update Sun May  4 17:04:15 2014 guillaume fillon
 ##
 
 CC 		= gcc
@@ -25,9 +25,12 @@ LIBSOCKET	= ../libsocket
 
 SRC 		= main.c \
 		  init.c \
+		  welcome.c \
 		  handle_user.c \
 		  select.c \
 		  connection.c \
+		  getopt.c \
+		  util.c \
 		  pars.c
 
 COMMONSRC	= error.c

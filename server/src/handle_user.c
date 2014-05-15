@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Fri May  2 23:23:24 2014 luc sinet
+** Last update Sat May  3 15:41:47 2014 luc sinet
 */
 
 #include "server.h"
@@ -20,7 +20,7 @@ int		add_user(t_client **cl, int fd)
     return (iperror("add_user: malloc", -1));
   else if ((new->rb = create_ringbuffer(1024)) == NULL)
     return (-1);
-  printf("rb: %p\n", new->rb);
+  new->queue = queue_init();
   new->fd = fd;
   new->next = NULL;
   if (*cl == NULL)

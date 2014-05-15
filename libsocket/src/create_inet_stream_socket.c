@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun Apr 13 18:55:41 2014 guillaume fillon
-** Last update Sat May  3 14:39:48 2014 Harold Fritsch
+** Last update Thu May 15 11:26:34 2014 Harold Fritsch
 */
 
 #include <stdio.h>
@@ -62,6 +62,8 @@ int			create_inet_stream_socket(const char *host,
       return (-1);
     }
   sfd = check_result(result, flags);
+  if (sfd < 0)
+    warn("connect");
   freeaddrinfo(result);
   return (sfd);
 }

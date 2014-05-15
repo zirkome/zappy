@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr 20 08:36:48 2014 luc sinet
-** Last update Fri May  2 23:35:54 2014 luc sinet
+** Last update Sat May  3 21:32:06 2014 luc sinet
 */
 
 #include "server.h"
@@ -31,19 +31,29 @@ int		user_read(t_serv *serv, t_client *cl)
   return (0);
 }
 
-int	user_write(t_serv *serv, t_client *cl)
+int		user_write(t_serv *serv, t_client *cl)
 {
-  (void)serv;
-  (void)cl;
+  ssize_t	wsize;
+  ssize_t	msglen;
+  char		*msg;
+
+  msg = queue_front(cl->queue);
+  msglen = strlen(msg);
+  if ((wsize = write(cl->fd, msg, msglen)) <= 0)
+    return (disconnect_user(serv, cl));
+  if (wsize < msglen)
+    shift_msg(msg, wsize);
+  else
+    queue_pop(&cl->queue);
   return (0);
 }
 
 int		read_state(t_serv *serv)
 {
   t_client	*tmp;
+  t_client	*tofree;
   int		ret;
 
-  (void)ret;
   tmp = serv->cl;
   if (FD_ISSET(serv->fd, &serv->r_fd))
     connect_new_user(serv);
@@ -52,7 +62,11 @@ int		read_state(t_serv *serv)
       ret = 0;
       if (FD_ISSET(tmp->fd, &serv->r_fd))
 	ret = user_read(serv, tmp);
+      if (ret == DISCONNECTED)
+	tofree = tmp;
       tmp = tmp->next;
+      if (ret == DISCONNECTED)
+	free(tofree);
     }
   return (0);
 }
@@ -60,13 +74,20 @@ int		read_state(t_serv *serv)
 int		write_state(t_serv *serv)
 {
   t_client	*tmp;
+  t_client	*tofree;
+  int		ret;
 
   tmp = serv->cl;
   while (tmp)
     {
+      ret = 0;
       if (FD_ISSET(tmp->fd, &serv->w_fd))
-	user_write(serv, tmp);
+	ret = user_write(serv, tmp);
+      if (ret == DISCONNECTED)
+	tofree = tmp;
       tmp = tmp->next;
+      if (ret == DISCONNECTED)
+	free(tofree);
     }
   return (0);
 }
