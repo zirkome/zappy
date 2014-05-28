@@ -2,7 +2,6 @@ SRC = 	main.lua \
 	utils_math.lua \
 	global.lua \
 	view.lua \
-	communication.lua \
 	movements.lua \
 	utils.lua
 
