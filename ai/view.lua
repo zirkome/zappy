@@ -3,8 +3,8 @@ function view(str)
 	if (str) then
 		local i = 1
 		for w in str:gmatch("%w+.") do
-			if (w:find(",")) then
-				for x in w:gmatch("(%w+)") do
+			if (w:find(",") or w:find("}")) then
+				for x in w:gmatch("%a+") do
 					table.insert(tab[i], x)
 				end
 				i = i + 1;

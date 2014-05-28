@@ -10,7 +10,7 @@ function execute_ia(x, y, level, orientation)
 	LEVEL = level
 	ORIENTATION = orientation
 
-	local tab = view("{,coco,,, phalis,,,, joueur deraumere, joueur joueur phalis, genial aussi,,,,,}")
+	local tab = view("{coco,,, phalis,,,, joueur deraumere, joueur joueur phalis, genial aussi,,,,,lol}")
 	display_2dtab(tab)
 end
 
