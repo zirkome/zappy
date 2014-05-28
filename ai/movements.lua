@@ -5,10 +5,10 @@ function calc_new_position()
 	else
 		X = X + tab[ORIENTATION]
 	end
-	if (X == 0) then X = MAP_XMAX end
-	if (Y == 0) then Y = MAP_YMAX end
-	if (X == MAP_XMAX + 1) then x = 1 end
-	if (Y == MAP_YMAX + 1) then	y = 1 end
+	if (X == 0) 			then X = MAP_XMAX end
+	if (Y == 0) 			then Y = MAP_YMAX end
+	if (X == MAP_XMAX + 1) 	then x = 1 end
+	if (Y == MAP_YMAX + 1) 	then y = 1 end
 	return modulo(X, MAP_XMAX + 1), modulo(Y, MAP_YMAX + 1)
 end
 
