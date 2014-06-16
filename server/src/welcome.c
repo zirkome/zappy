@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Tue Apr  8 13:05:39 2014 luc sinet
-** Last update Sun May  4 17:11:10 2014 guillaume fillon
+** Last update Mon Jun 16 10:58:40 2014 guillaume fillon
 */
 
 #include <time.h>
@@ -24,7 +24,7 @@ int		get_time(char **date)
   time_t	ltime;
 
   if (time(&ltime) == (time_t)-1 || ((*date) = ctime(&ltime)) == NULL)
-    return (iperror("get_time", -1));
+    return (iperror("time", -1));
   return (0);
 }
 
@@ -56,13 +56,13 @@ int			list_ip()
   int			ret;
 
   if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-    return (iperror("list_ip: socket", -1));
+    return (iperror("socket", -1));
   ifconf.ifc_buf = (char *)ifreq;
   ifconf.ifc_len = sizeof(ifreq);
   if (ioctl(sock, SIOCGIFCONF, &ifconf) == -1)
     {
       close(sock);
-      return (iperror("list_ip: ioctl", -1));
+      return (iperror("ioctl", -1));
     }
   interfaces = ifconf.ifc_len / sizeof(struct ifreq);
   interfaces = (interfaces > 20) ? 20 : interfaces;

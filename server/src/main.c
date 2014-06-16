@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 16:42:29 2014 guillaume fillon
-** Last update Mon Jun 16 10:17:20 2014 guillaume fillon
+** Last update Mon Jun 16 10:58:07 2014 guillaume fillon
 */
 
 #include <signal.h>
@@ -54,7 +54,7 @@ static int	monitor_fd(t_server *server)
   init_fds(server);
   if (select(server->maxfd + 1, &server->r_fd, &server->w_fd,
 	     NULL, NULL) == -1)
-    return (iperror("accept_connection: select", -1));
+    return (iperror("select", -1));
   read_state(server);
   write_state(server);
   return (0);
@@ -70,7 +70,7 @@ int		main(int argc, char *argv[])
   setlocale(LC_NUMERIC, "C");
   if (signal(SIGPIPE, SIG_IGN) == SIG_ERR ||
       signal(SIGINT, &handle_signal) == SIG_ERR)
-    return (iperror("init_server: signal", -1));
+    return (iperror("signal", -1));
   memset(&server.world, 0, sizeof(server.world));
   opt_index = 0;
   while ((opt = getopt_long(argc, argv, "p:x:y:c:t:vh",
