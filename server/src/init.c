@@ -5,41 +5,41 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 09:39:44 2014 luc sinet
-** Last update Sun May  4 17:14:37 2014 guillaume fillon
+** Last update Mon Jun 16 10:18:11 2014 guillaume fillon
 */
 
 #include <signal.h>
 #include "server.h"
 
-void		init_fds(t_serv *serv)
+void		init_fds(t_server *server)
 {
   t_client	*tmp;
 
-  tmp = serv->cl;
-  FD_ZERO(&serv->r_fd);
-  FD_ZERO(&serv->w_fd);
-  FD_SET(serv->fd, &serv->r_fd);
-  FD_SET(serv->fd, &serv->w_fd);
-  serv->maxfd = serv->fd;
+  tmp = server->cl;
+  FD_ZERO(&server->r_fd);
+  FD_ZERO(&server->w_fd);
+  FD_SET(server->fd, &server->r_fd);
+  FD_SET(server->fd, &server->w_fd);
+  server->maxfd = server->fd;
   while (tmp != NULL)
     {
-      FD_SET(tmp->fd, &serv->r_fd);
+      FD_SET(tmp->fd, &server->r_fd);
       if (!queue_empty(tmp->queue))
-	FD_SET(tmp->fd, &serv->w_fd);
-      if (tmp->fd > serv->maxfd)
-	serv->maxfd = tmp->fd;
+	FD_SET(tmp->fd, &server->w_fd);
+      if (tmp->fd > server->maxfd)
+	server->maxfd = tmp->fd;
       tmp = tmp->next;
     }
-  ++serv->maxfd;
+  ++server->maxfd;
 }
 
-int		init_serv(t_serv *serv)
+int		init_server(t_server *server)
 {
-  if (serv->world.port == NULL)
-    serv->world.port = DEFAULT_PORT;
-  if ((serv->fd = create_inet_server_socket(NULL, serv->world.port)) < 0)
+  if (server->world.port == NULL)
+    server->world.port = DEFAULT_PORT;
+  if ((server->fd = create_inet_server_socket(NULL, server->world.port)) < 0)
     return (-1);
-  serv->cl = NULL;
-  welcome_server(serv->world.port);
+  server->cl = NULL;
+  welcome_server(server->world.port);
   return (0);
 }

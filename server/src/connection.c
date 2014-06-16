@@ -5,12 +5,12 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Sat May  3 18:41:03 2014 luc sinet
+** Last update Mon Jun 16 10:18:56 2014 guillaume fillon
 */
 
 #include "server.h"
 
-int			connect_new_user(t_serv *serv)
+int			connect_new_user(t_server *server)
 {
   int			fd;
   struct sockaddr_in	client;
@@ -18,11 +18,11 @@ int			connect_new_user(t_serv *serv)
   t_client		*cl;
 
   size = sizeof(struct sockaddr_in);
-  if ((fd = accept(serv->fd, (struct sockaddr *)&client, &size)) == -1)
+  if ((fd = accept(server->fd, (struct sockaddr *)&client, &size)) == -1)
     return (iperror("connect_new_user: accept", -1));
-  if (add_user(&serv->cl, fd) == -1)
+  if (add_user(&server->cl, fd) == -1)
     return (-1);
-  cl = serv->cl;
+  cl = server->cl;
   while (cl->next)
     cl = cl->next;
   queue_push(&cl->queue, "BIENVENUE\n");
@@ -37,14 +37,14 @@ void		erase_client(t_client *cl)
   close(cl->fd);
 }
 
-int		disconnect_user(t_serv *serv, t_client *cl)
+int		disconnect_user(t_server *server, t_client *cl)
 {
   t_client	*list;
 
-  list = serv->cl;
-  if (serv->cl == cl)
+  list = server->cl;
+  if (server->cl == cl)
     {
-      serv->cl = cl->next;
+      server->cl = cl->next;
       erase_client(cl);
       return (2);
     }
