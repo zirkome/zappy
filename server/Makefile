@@ -5,13 +5,13 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Sun May  4 17:04:15 2014 guillaume fillon
+## Last update Mon Jun 16 10:36:57 2014 guillaume fillon
 ##
 
 CC 		= gcc
 
 BINDIR		= ../bin/
-NAME 		= server
+NAME 		= zappyd
 BINPATH		= $(addprefix $(BINDIR), $(NAME))
 
 COMMON		= common
