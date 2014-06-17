@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Mon Jun 16 10:16:13 2014 guillaume fillon
+** Last update Tue Jun 17 16:26:17 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -37,6 +37,7 @@ struct		s_client
   int		fd;
   t_ringb	*rb;
   t_queue	*queue;
+  char		*teamptr;
   t_client	*next;
 };
 
@@ -78,7 +79,7 @@ int		write_state(t_server *server);
 int		connect_new_user(t_server *server);
 int		disconnect_user(t_server *server, t_client *cl);
 int		add_user(t_client **cl, int fd);
-int		pars_msg(t_server *server, t_client *cl, char *cmd);
+int		parse_msg(t_server *server, t_client *cl, char *cmd);
 void		welcome_server(char *port);
 
 #endif /* _SERVER_H_ */

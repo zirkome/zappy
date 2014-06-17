@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr 20 08:36:48 2014 luc sinet
-** Last update Mon Jun 16 10:18:39 2014 guillaume fillon
+** Last update Tue Jun 17 16:27:30 2014 luc sinet
 */
 
 #include "server.h"
@@ -25,7 +25,7 @@ int		user_read(t_server *server, t_client *cl)
   while ((retv = get_char_pos(cl->rb, tmp, '\n')) != -1)
     {
       tmp[retv] = '\0';
-      pars_msg(server, cl, tmp);
+      parse_msg(server, cl, tmp);
       tmp = &tmp[retv + 1];
     }
   return (0);

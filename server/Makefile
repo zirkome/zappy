@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Mon Jun 16 10:36:57 2014 guillaume fillon
+## Last update Tue Jun 17 16:26:37 2014 luc sinet
 ##
 
 CC 		= gcc
@@ -31,7 +31,7 @@ SRC 		= main.c \
 		  connection.c \
 		  getopt.c \
 		  util.c \
-		  pars.c
+		  parse.c
 
 COMMONSRC	= error.c
 
