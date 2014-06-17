@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Mon Jun 16 10:59:26 2014 guillaume fillon
+** Last update Tue Jun 17 18:39:08 2014 luc sinet
 */
 
 #include "server.h"
@@ -22,6 +22,7 @@ int		add_user(t_client **cl, int fd)
     return (-1);
   new->queue = queue_init();
   new->fd = fd;
+  new->teamptr = NULL;
   new->next = NULL;
   if (*cl == NULL)
     {
