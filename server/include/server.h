@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Tue Jun 17 16:26:17 2014 luc sinet
+** Last update Tue Jun 17 18:32:44 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -66,7 +66,7 @@ typedef struct	s_server
 typedef struct	s_command
 {
   char		*name;
-  int		(*func)(void);
+  int		(*func)(char *arg);
 }		t_command;
 
 int		parse_option(int opt, t_world *option);
