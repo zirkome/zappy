@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 16:42:29 2014 guillaume fillon
-** Last update Mon Jun 16 10:58:07 2014 guillaume fillon
+** Last update Tue Jun 17 11:44:41 2014 luc sinet
 */
 
 #include <signal.h>
@@ -81,6 +81,9 @@ int		main(int argc, char *argv[])
     usage(server.world.hflg ? stdout : stderr);
   if (init_server(&server) == -1)
     return (-1);
+  int i = 0;
+  while (server.world.teams[i])
+    printf("%s\n", server.world.teams[i]);
   while (!g_sigint)
     monitor_fd(&server);
   close(server.fd);
