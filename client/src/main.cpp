@@ -1,15 +1,15 @@
 #include <iostream>
-#include "libsocket.h"
+#include <libsocket.h>
+#include "GameEngine.hpp"
 
 void	usage(const char *name)
 {
   std::cerr << "Usage: " << name << " ip [port = 6000]" << std::endl;
 }
 
-int		main(int ac, char **av)
+int	main(int ac, char **av)
 {
-  std::string ip;
-  std::string port;
+  std::string ip, port;
   int fdSocket;
 
   if (ac < 2)
@@ -21,8 +21,7 @@ int		main(int ac, char **av)
   if (ac > 2)
     port = av[2];
   else
-    port = "6000";
-
+    port = std::string("6000");
   if ((fdSocket = create_inet_stream_socket(ip.c_str(), port.c_str(), 0)) < 0)
     return (1);
   write_socket_inet(fdSocket, "TOTO", 4);

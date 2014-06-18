@@ -1,11 +1,11 @@
 ##
 ## Makefile for  in /home/fritsc_h/zappy/client
-## 
+##
 ## Made by Harold Fritsch
 ## Login   <fritsc_h@epitech.net>
-## 
+##
 ## Started on  Sun May  4 15:17:27 2014 Harold Fritsch
-## Last update Wed Jun 18 14:27:20 2014 Parallels
+## Last update Wed Jun 18 15:31:44 2014 Parallels
 ##
 
 CC 		=	g++
@@ -20,7 +20,8 @@ SRCDIR		=	src/
 OBJDIR		= 	obj/
 INCDIR		= 	-I./include/ -I../include/ -I$(LIBSOCKET)/include/ -I$(LIBGDL)/includes/
 
-SRC 		=	main.cpp
+SRC 		=	main.cpp \
+			GameEngine.cpp
 
 OBJ		=	$(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 
