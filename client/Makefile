@@ -5,20 +5,20 @@
 ## Login   <fritsc_h@epitech.net>
 ## 
 ## Started on  Sun May  4 15:17:27 2014 Harold Fritsch
-## Last update Wed Jun 18 13:08:35 2014 Parallels
+## Last update Wed Jun 18 14:27:20 2014 Parallels
 ##
 
 CC 		=	g++
 
 NAME 		=	client
 
-LIBGDLDIR	=	./libGDL
+LIBGDL		=	./libGDL
 
 LIBSOCKET	=	../libsocket
 
 SRCDIR		=	src/
 OBJDIR		= 	obj/
-INCDIR		= 	-I./include -I../include -I$(LIBSOCKET)/include -I$(LIBGDLDIR)/includes
+INCDIR		= 	-I./include/ -I../include/ -I$(LIBSOCKET)/include/ -I$(LIBGDL)/includes/
 
 SRC 		=	main.cpp
 
@@ -26,17 +26,15 @@ OBJ		=	$(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 
 CXXFLAGS 	+=	-W -Wall -Wextra
 
-LDFLAGS		+=	-L$(LIBGDLDIR)/libs/
-LDFLAGS		+=	-lgdl_gl -lGL -lGLEW -lfbxsdk -llua -lSDL2_mixer -lSDL2 -lpthread -lm -ldl -lrt
-LDFLAGS		+=	-L$(LIBSOCKET)/
-LDFLAGS		+=	-lsocket
+LDFLAGS		+=	-L$(LIBGDL)/libs/ -lgdl_gl -lGL -lGLEW -lfbxsdk -lSDL2 -lpthread -lm -ldl -lrt
+LDFLAGS		+=	-L$(LIBSOCKET)/ -lsocket
 
 
 dummy := $(shell test -d $(OBJDIR) || mkdir $(OBJDIR))
 
 $(OBJDIR)%.o: $(SRCDIR)%.cpp
 	@echo "- compilation of: $< (flag: "$(CXXFLAGS)")"
-	@$(CC) -o $@ -c $< $(CXXFLAGS) $(INCDIR)
+	@$(CC) -o $@ -c $< $(INCDIR) $(CXXFLAGS)
 
 $(NAME): $(OBJ)
 	@echo "- linking of: $@ (flag: "$(LDFLAGS)")"

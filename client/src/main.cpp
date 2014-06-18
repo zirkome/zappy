@@ -1,46 +1,31 @@
-#include <cstring>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
-#include <libsocket.h>
-#include "LaunchGfx.hpp"
+#include <iostream>
+#include "libsocket.h"
 
-static int	usage(FILE *stream)
+void	usage(const char *name)
 {
-  fputs("\nUsage:\n ./client IP PORT\n\n", stream);
-  return ((stream == stderr) ? EXIT_FAILURE : EXIT_SUCCESS);
+  std::cerr << "Usage: " << name << " ip [port = 6000]" << std::endl;
 }
 
-int		main(int argc, char *argv[])
+int		main(int ac, char **av)
 {
-  char	*ip = NULL;
-  char	*port = NULL;
-  char	*team_name = NULL;
-  int	listenfd;
-  int	opt;
+  std::string ip;
+  std::string port;
+  int fdSocket;
 
-  signal(SIGPIPE, SIG_IGN);
-  while ((opt = getopt(argc, argv, "n:h:p:")) != -1)
+  if (ac < 2)
     {
-      switch (opt)
-	{
-	case 'n':
-	  team_name = argv[optind - 1];
-	  break;
-	case 'h':
-	  ip = argv[optind - 1];
-	  break;
-	case 'p':
-	  port = argv[optind - 1];
-	  break;
-	default:
-	  return (usage(stderr));
-	}
+      usage(av[0]);
+      return (1);
     }
-  printf("team_name : %s\nip : %s\nport : %s\n", team_name, ip, port);
-  if ((listenfd = create_inet_stream_socket(ip, port, 0)) < 0)
-    return (EXIT_FAILURE);
-  close(listenfd);
-  return (EXIT_SUCCESS);
+  ip = av[1];
+  if (ac > 2)
+    port = av[2];
+  else
+    port = "6000";
+
+  if ((fdSocket = create_inet_stream_socket(ip.c_str(), port.c_str(), 0)) < 0)
+    return (1);
+  write_socket_inet(fdSocket, "TOTO", 4);
+  close(fdSocket);
+  return (0);
 }
