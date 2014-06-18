@@ -24,8 +24,9 @@ void GameEngine::draw()
 
 bool GameEngine::update()
 {
+  _win.updateInputs(_input);
   if (_input.getKey(SDLK_ESCAPE))
     return (false);
-  sleep(1);
+  usleep(1000);
   return (true);
 }
