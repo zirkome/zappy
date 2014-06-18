@@ -5,7 +5,7 @@
 ## Login   <fritsc_h@epitech.net>
 ##
 ## Started on  Sun May  4 15:17:27 2014 Harold Fritsch
-## Last update Wed Jun 18 15:31:44 2014 Parallels
+## Last update Thu Jun 19 01:13:22 2014 Parallels
 ##
 
 CC 		=	g++
@@ -27,7 +27,7 @@ OBJ		=	$(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 
 CXXFLAGS 	+=	-W -Wall -Wextra
 
-LDFLAGS		+=	-L$(LIBGDL)/libs/ -lgdl_gl -lGL -lGLEW -lfbxsdk -lSDL2 -lpthread -lm -ldl -lrt
+LDFLAGS		+=	-L$(LIBGDL)/libs/ -lgdl_gl -lGLEW -lGL -lfbxsdk -lSDL2 -lpthread -lm -ldl -lrt
 LDFLAGS		+=	-L$(LIBSOCKET)/ -lsocket
 
 
