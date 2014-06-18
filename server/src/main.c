@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 16:42:29 2014 guillaume fillon
-** Last update Sun May  4 17:19:49 2014 guillaume fillon
+** Last update Mon Jun 16 10:58:07 2014 guillaume fillon
 */
 
 #include <signal.h>
@@ -49,20 +49,20 @@ static void	handle_signal(int sig)
     g_sigint = 1;
 }
 
-static int	monitor_fd(t_serv *serv)
+static int	monitor_fd(t_server *server)
 {
-  init_fds(serv);
-  if (select(serv->maxfd + 1, &serv->r_fd, &serv->w_fd,
+  init_fds(server);
+  if (select(server->maxfd + 1, &server->r_fd, &server->w_fd,
 	     NULL, NULL) == -1)
-    return (iperror("accept_connection: select", -1));
-  read_state(serv);
-  write_state(serv);
+    return (iperror("select", -1));
+  read_state(server);
+  write_state(server);
   return (0);
 }
 
 int		main(int argc, char *argv[])
 {
-  t_serv	serv;
+  t_server	server;
   int		opt;
   int		opt_index;
 
@@ -70,19 +70,19 @@ int		main(int argc, char *argv[])
   setlocale(LC_NUMERIC, "C");
   if (signal(SIGPIPE, SIG_IGN) == SIG_ERR ||
       signal(SIGINT, &handle_signal) == SIG_ERR)
-    return (iperror("init_serv: signal", -1));
-  memset(&serv.world, 0, sizeof(serv.world));
+    return (iperror("signal", -1));
+  memset(&server.world, 0, sizeof(server.world));
   opt_index = 0;
   while ((opt = getopt_long(argc, argv, "p:x:y:c:t:vh",
 			    g_longopts, &opt_index)) != -1)
-    if (parse_option(opt, &serv.world) != 0)
+    if (parse_option(opt, &server.world) != 0)
       break;
-  if (serv.world.hflg || serv.world.unkflg)
-    usage(serv.world.hflg ? stdout : stderr);
-  if (init_serv(&serv) == -1)
+  if (server.world.hflg || server.world.unkflg)
+    usage(server.world.hflg ? stdout : stderr);
+  if (init_server(&server) == -1)
     return (-1);
   while (!g_sigint)
-    monitor_fd(&serv);
-  close(serv.fd);
+    monitor_fd(&server);
+  close(server.fd);
   return (EXIT_SUCCESS);
 }
