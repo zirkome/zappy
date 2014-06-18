@@ -5,7 +5,7 @@
 ## Login   <fritsc_h@epitech.net>
 ## 
 ## Started on  Sun May  4 15:17:27 2014 Harold Fritsch
-## Last update Wed Jun 18 12:25:26 2014 Parallels
+## Last update Wed Jun 18 13:08:35 2014 Parallels
 ##
 
 CC 		=	g++
@@ -28,6 +28,9 @@ CXXFLAGS 	+=	-W -Wall -Wextra
 
 LDFLAGS		+=	-L$(LIBGDLDIR)/libs/
 LDFLAGS		+=	-lgdl_gl -lGL -lGLEW -lfbxsdk -llua -lSDL2_mixer -lSDL2 -lpthread -lm -ldl -lrt
+LDFLAGS		+=	-L$(LIBSOCKET)/
+LDFLAGS		+=	-lsocket
+
 
 dummy := $(shell test -d $(OBJDIR) || mkdir $(OBJDIR))
 
