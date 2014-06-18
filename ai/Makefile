@@ -3,6 +3,7 @@ SRC = 	main.lua \
 	global.lua \
 	view.lua \
 	movements.lua \
+	socket.lua \
 	utils.lua
 
 NAME = ia.out
