@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Tue Jun 17 18:32:44 2014 luc sinet
+** Last update Wed Jun 18 14:08:09 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -23,12 +23,14 @@
 # define UNUSED __attribute__((unused))
 # define RSIZE 512
 # define DISCONNECTED 2
+# define CMDLEN 32
+# define ARGLEN 256
 
-enum	bool
+typedef enum	ebool
   {
     false = 0,
     true
-  };
+  }		bool;
 
 typedef struct	s_client t_client;
 
@@ -66,6 +68,7 @@ typedef struct	s_server
 typedef struct	s_command
 {
   char		*name;
+  bool		arg;
   int		(*func)(char *arg);
 }		t_command;
 
@@ -79,7 +82,7 @@ int		write_state(t_server *server);
 int		connect_new_user(t_server *server);
 int		disconnect_user(t_server *server, t_client *cl);
 int		add_user(t_client **cl, int fd);
-int		parse_msg(t_server *server, t_client *cl, char *cmd);
+int		process_input(t_server *server, t_client *cl, char *input);
 void		welcome_server(char *port);
 
 #endif /* _SERVER_H_ */
