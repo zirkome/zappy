@@ -5,8 +5,7 @@ Thumbs.db
 #*#
 *.out
 *.o
-*.so
-.directory
+*.so.directory
 *.cbp
 *.layout*
 *.layout
@@ -37,6 +36,6 @@ bin/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
-*.a
 client/client
 server/server
+libsocket/libsocket.a
