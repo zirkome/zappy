@@ -5,18 +5,23 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Wed Jun 18 14:08:09 2014 luc sinet
+** Last update Thu Jun 19 16:02:10 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
 # define _SERVER_H_
 
+# include <sys/epoll.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
 # include <libsocket.h>
 
 # include "errors.h"
+
+#ifndef MAX_EPOLL_EVENTS
+# define MAX_EPOLL_EVENTS 128
+#endif
 
 # define DEFAULT_PORT "6000"
 # define TIMEOUT (5 * 60)
@@ -55,15 +60,13 @@ typedef struct	s_world
   int		unkflg;
 }		t_world;
 
-typedef struct	s_server
+typedef struct		s_server
 {
-  int		fd;
-  int		maxfd;
-  fd_set	r_fd;
-  fd_set	w_fd;
-  t_client	*cl;
-  t_world	world;
-}		t_server;
+  int			fd;
+  struct epoll_event	events[MAX_EPOLL_EVENTS];
+  t_world		world;
+  t_client		*cl;
+}			t_server;
 
 typedef struct	s_command
 {
@@ -84,5 +87,16 @@ int		disconnect_user(t_server *server, t_client *cl);
 int		add_user(t_client **cl, int fd);
 int		process_input(t_server *server, t_client *cl, char *input);
 void		welcome_server(char *port);
+
+/*
+** epoll/monitoring
+*/
+int		start_monitoring(t_server *server);
+int		epoll_create_monitor();
+int		epoll_monitor(struct epoll_event events[],
+			      int maxevents, int timeout);
+int		epoll_event_add(int fd, struct epoll_event *ev);
+int		epoll_event_mod(int fd, struct epoll_event *ev);
+int		epoll_event_del(int fd, struct epoll_event *ev);
 
 #endif /* _SERVER_H_ */
