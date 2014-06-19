@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Tue Jun 17 16:26:37 2014 luc sinet
+## Last update Thu Jun 19 21:20:59 2014 luc sinet
 ##
 
 CC 		= gcc
@@ -31,15 +31,16 @@ SRC 		= main.c \
 		  connection.c \
 		  getopt.c \
 		  util.c \
-		  parse.c
+		  parse.c \
+		  parse_type.c
 
 COMMONSRC	= error.c
 
 OBJ		= $(addprefix $(OBJDIR), $(SRC:.c=.o))
 COBJ		= $(addprefix $(OBJCOMMON), $(COMMONSRC:.c=.o))
 
-CFLAGS 		+= -g -W -Wall -Wextra -I../include -I$(LIBSOCKET)/$(INCDIR) \
-		   -I./include -I$(COMMONDIR)/$(INCDIR)
+CFLAGS 		+= -g -W -Wall -Wextra -std=gnu99
+CFLAGS		+= -I../include -I./include -I$(COMMONDIR)/$(INCDIR) -I$(LIBSOCKET)/$(INCDIR)
 
 LDFLAGS 	=
 

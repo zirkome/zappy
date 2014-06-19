@@ -5,37 +5,38 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Wed Jun 18 17:03:22 2014 luc sinet
+** Last update Thu Jun 19 21:25:10 2014 luc sinet
 */
 
 #include "server.h"
 
 static	t_command	g_command[] =
 {
-  {"avance", false,  NULL},
-  {"droite", false, NULL},
-  {"gauche", false, NULL},
-  {"voir", false, NULL},
-  {"inventaire", false, NULL},
-  {"prend", true, NULL},
-  {"pose", true, NULL},
-  {"expulse", false, NULL},
-  {"broadcast", true, NULL},
-  {"incantation", false, NULL},
-  {"fork", false, NULL},
-  {"connect_nbr", false, NULL},
-  {"msz", false, NULL},
-  {"bct", true, NULL},
-  {"mct", false, NULL},
-  {"ppo", true, NULL},
-  {"plv", true, NULL},
-  {"pin", true, NULL},
-  {"sgt", false, NULL},
-  {"sst", true, NULL},
-  {NULL, false, NULL}
+  {"avance", false, none,  NULL},
+  {"droite", false, none, NULL},
+  {"gauche", false, none, NULL},
+  {"voir", false, none, NULL},
+  {"inventaire", false, none, NULL},
+  {"prend", true, string, NULL},
+  {"pose", true, string, NULL},
+  {"expulse", false, none, NULL},
+  {"broadcast", true, string, NULL},
+  {"incantation", false, none, NULL},
+  {"fork", false, none, NULL},
+  {"connect_nbr", false, none, NULL},
+  {"msz", false, none, NULL},
+  {"bct", true, string, NULL},
+  {"mct", false, none, NULL},
+  {"tna", false, none, NULL},
+  {"ppo", true, number, NULL},
+  {"plv", true, number, NULL},
+  {"pin", true, number, NULL},
+  {"sgt", false, none, NULL},
+  {"sst", true, number, NULL},
+  {NULL, false, none, NULL}
 };
 
-bool	get_command(char *line, char *command)
+t_bool	get_command(char *line, char *command)
 {
   int	i;
 
@@ -51,7 +52,7 @@ bool	get_command(char *line, char *command)
   return (true);
 }
 
-int	get_argument(char *line, char *arg, bool need_arg)
+int	get_argument(char *line, char *arg, t_bool need_arg)
 {
   int	i;
   int	j;
@@ -81,8 +82,14 @@ int	parse_input(char *line, char *command, char *arg)
   while (g_command[i].name && strcmp(g_command[i].name, command) != 0)
     ++i;
   if (g_command[i].name == NULL ||
-      get_argument(&line[strlen(command)], arg, g_command[i].arg) == false)
+      get_argument(&line[strlen(command)], arg, g_command[i].arg) == false ||
+      check_argument_type(arg, g_command, i) == false)
     return (-1);
+  if (g_command[i].arg == true && i != BROADCAST)
+    {
+      if (check_argument_type(arg, g_command, i) == false)
+	return (-1);
+    }
   return (i);
 }
 
