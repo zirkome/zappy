@@ -5,7 +5,7 @@
 ## Login   <fritsc_h@epitech.net>
 ##
 ## Started on  Sun May  4 15:17:27 2014 Harold Fritsch
-## Last update Thu Jun 19 01:13:22 2014 Parallels
+## Last update Thu Jun 19 17:04:04 2014 Adrien Della Maggiora
 ##
 
 CC 		=	g++
@@ -21,7 +21,11 @@ OBJDIR		= 	obj/
 INCDIR		= 	-I./include/ -I../include/ -I$(LIBSOCKET)/include/ -I$(LIBGDL)/includes/
 
 SRC 		=	main.cpp \
-			GameEngine.cpp
+			GameEngine.cpp \
+			ATransformation.cpp \
+			Camera.cpp \
+			Cube.cpp \
+			Exception.cpp
 
 OBJ		=	$(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 
