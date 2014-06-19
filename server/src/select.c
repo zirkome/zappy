@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr 20 08:36:48 2014 luc sinet
-** Last update Wed Jun 18 13:37:02 2014 luc sinet
+** Last update Thu Jun 19 16:39:24 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -38,6 +38,8 @@ int		user_write(t_server *server, t_client *cl)
   char		*msg;
 
   msg = queue_front(cl->queue);
+  if (msg == NULL)
+    return (-1);
   msglen = strlen(msg);
   if ((wsize = write(cl->fd, msg, msglen)) <= 0)
     return (disconnect_user(server, cl));
@@ -55,13 +57,9 @@ int		read_state(t_server *server)
   int		ret;
 
   tmp = server->cl;
-  if (FD_ISSET(server->fd, &server->r_fd))
-    connect_new_user(server);
   while (tmp)
     {
-      ret = 0;
-      if (FD_ISSET(tmp->fd, &server->r_fd))
-	ret = user_read(server, tmp);
+      ret = user_read(server, tmp);
       if (ret == DISCONNECTED)
 	tofree = tmp;
       tmp = tmp->next;
@@ -80,9 +78,7 @@ int		write_state(t_server *server)
   tmp = server->cl;
   while (tmp)
     {
-      ret = 0;
-      if (FD_ISSET(tmp->fd, &server->w_fd))
-	ret = user_write(server, tmp);
+      ret = user_write(server, tmp);
       if (ret == DISCONNECTED)
 	tofree = tmp;
       tmp = tmp->next;

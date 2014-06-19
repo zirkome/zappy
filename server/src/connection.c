@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Mon Jun 16 10:59:09 2014 guillaume fillon
+** Last update Thu Jun 19 15:46:27 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -26,7 +26,7 @@ int			connect_new_user(t_server *server)
   while (cl->next)
     cl = cl->next;
   queue_push(&cl->queue, "BIENVENUE\n");
-  return (0);
+  return (fd);
 }
 
 void		erase_client(t_client *cl)

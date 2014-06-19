@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 16:42:29 2014 guillaume fillon
-** Last update Tue Jun 17 16:30:45 2014 luc sinet
+** Last update Thu Jun 19 16:41:26 2014 guillaume fillon
 */
 
 #include <signal.h>
@@ -49,17 +49,6 @@ static void	handle_signal(int sig)
     g_sigint = 1;
 }
 
-static int	monitor_fd(t_server *server)
-{
-  init_fds(server);
-  if (select(server->maxfd + 1, &server->r_fd, &server->w_fd,
-	     NULL, NULL) == -1)
-    return (iperror("select", -1));
-  read_state(server);
-  write_state(server);
-  return (0);
-}
-
 int		main(int argc, char *argv[])
 {
   t_server	server;
@@ -81,8 +70,7 @@ int		main(int argc, char *argv[])
     usage(server.world.hflg ? stdout : stderr);
   if (init_server(&server) == -1)
     return (-1);
-  while (!g_sigint)
-    monitor_fd(&server);
+  start_monitoring(&server);
   close(server.fd);
   return (EXIT_SUCCESS);
 }
