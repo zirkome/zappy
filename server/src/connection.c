@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Thu Jun 19 15:46:27 2014 guillaume fillon
+** Last update Fri Jun 20 17:29:26 2014 luc sinet
 */
 
 #include "server.h"
@@ -34,6 +34,7 @@ void		erase_client(t_client *cl)
   printf("Client disconnected\n");
   free(cl->rb->buf);
   free(cl->rb);
+  free(cl->player);
   close(cl->fd);
 }
 

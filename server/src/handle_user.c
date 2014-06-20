@@ -5,10 +5,20 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Tue Jun 17 18:39:08 2014 luc sinet
+** Last update Fri Jun 20 17:31:19 2014 luc sinet
 */
 
 #include "server.h"
+
+int		init_player(t_client *new)
+{
+  if ((new->player = malloc(sizeof(t_player))) == NULL)
+    return (iperror("init_player: malloc", -1));
+  new->player->dir = NORTH;
+  new->player->x = 0;
+  new->player->y = 0;
+  return (0);
+}
 
 int		add_user(t_client **cl, int fd)
 {
@@ -17,8 +27,9 @@ int		add_user(t_client **cl, int fd)
 
   tmp = *cl;
   if ((new = malloc(sizeof(t_client))) == NULL)
-    return (iperror("malloc", -1));
-  else if ((new->rb = create_ringbuffer(1024)) == NULL)
+    return (iperror("add_user: malloc", -1));
+  else if ((new->rb = create_ringbuffer(1024)) == NULL ||
+	   init_player(new) == -1)
     return (-1);
   new->queue = queue_init();
   new->fd = fd;

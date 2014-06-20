@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Fri Jun 20 15:16:23 2014 luc sinet
+** Last update Fri Jun 20 16:56:29 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -69,6 +69,21 @@ typedef enum	etype
     none
   }		t_type;
 
+typedef enum	edir
+  {
+    NORTH = 0,
+    EAST,
+    SOUTH,
+    WEST
+  }		t_dir;
+
+typedef struct	s_player
+{
+  int		x;
+  int		y;
+  t_dir		dir;
+}		t_player;
+
 typedef struct	s_client t_client;
 
 struct		s_client
@@ -77,6 +92,7 @@ struct		s_client
   t_ringb	*rb;
   t_queue	*queue;
   char		*teamptr;
+  t_player	*player;
   t_client	*next;
 };
 
