@@ -7,9 +7,11 @@ t_bool	is_number(char c)
 
 t_type	get_type(char *line)
 {
+  int	i;
+
   if (!line[0])
     return (none);
-  for (int i = 0; line[i]; ++i)
+  for (i = 0; line[i]; ++i)
     if (!is_number(line[i]))
       return (string);
   return (number);
