@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Fri Jun 20 13:16:22 2014 luc sinet
+## Last update Fri Jun 20 14:50:30 2014 luc sinet
 ##
 
 CC 		= gcc
@@ -34,7 +34,10 @@ SRC 		= main.c \
 		  epoll.c \
 		  monitoring.c \
 		  parse.c \
-		  parse_type.c
+		  parse_type.c \
+		  player_actions.c \
+		  player_commands.c \
+		  player_movement.c
 
 
 COMMONSRC	= error.c

@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Fri Jun 20 13:16:33 2014 luc sinet
+** Last update Fri Jun 20 15:16:23 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -105,7 +105,7 @@ typedef struct	s_command
   char		*name;
   t_bool       	arg;
   t_type	type;
-  int		(*func)(char *arg);
+  int		(*func)(t_server *server, t_client *client, char *arg);
 }		t_command;
 
 int		parse_option(int opt, t_world *option);
@@ -134,5 +134,22 @@ int		epoll_monitor(struct epoll_event events[],
 int		epoll_event_add(int fd, struct epoll_event *ev);
 int		epoll_event_mod(int fd, struct epoll_event *ev);
 int		epoll_event_del(int fd, struct epoll_event *ev);
+
+/*
+** Player commands
+*/
+
+int		pl_forward(t_server *server, t_client *client, char *arg);
+int		pl_right(t_server *server, t_client *client, char *arg);
+int		pl_left(t_server *server, t_client *client, char *arg);
+int		pl_see(t_server *server, t_client *client, char *arg);
+int		pl_take(t_server *server, t_client *client, char *arg);
+int		pl_put(t_server *server, t_client *client, char *arg);
+int		pl_expulse(t_server *server, t_client *client, char *arg);
+int		pl_broadcast(t_server *server, t_client *client, char *arg);
+int		pl_inventory(t_server *server, t_client *client, char *arg);
+int		pl_incantation(t_server *server, t_client *client, char *arg);
+int		pl_fork(t_server *server, t_client *client, char *arg);
+int		pl_connect_nbr(t_server *server, t_client *client, char *arg);
 
 #endif /* _SERVER_H_ */

@@ -5,25 +5,25 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Thu Jun 19 21:25:10 2014 luc sinet
+** Last update Fri Jun 20 15:20:43 2014 luc sinet
 */
 
 #include "server.h"
 
 static	t_command	g_command[] =
 {
-  {"avance", false, none,  NULL},
-  {"droite", false, none, NULL},
-  {"gauche", false, none, NULL},
-  {"voir", false, none, NULL},
-  {"inventaire", false, none, NULL},
-  {"prend", true, string, NULL},
-  {"pose", true, string, NULL},
-  {"expulse", false, none, NULL},
-  {"broadcast", true, string, NULL},
-  {"incantation", false, none, NULL},
-  {"fork", false, none, NULL},
-  {"connect_nbr", false, none, NULL},
+  {"avance", false, none,  &pl_forward},
+  {"droite", false, none, &pl_right},
+  {"gauche", false, none, &pl_left},
+  {"voir", false, none, &pl_see},
+  {"inventaire", false, none, &pl_inventory},
+  {"prend", true, string, &pl_take},
+  {"pose", true, string, &pl_put},
+  {"expulse", false, none, &pl_expulse},
+  {"broadcast", true, string, &pl_broadcast},
+  {"incantation", false, none, &pl_incantation},
+  {"fork", false, none, &pl_fork},
+  {"connect_nbr", false, none, &pl_connect_nbr},
   {"msz", false, none, NULL},
   {"bct", true, string, NULL},
   {"mct", false, none, NULL},
@@ -72,8 +72,9 @@ int	get_argument(char *line, char *arg, t_bool need_arg)
   return (true);
 }
 
-int	parse_input(char *line, char *command, char *arg)
+int	parse_input(char *line, char *arg)
 {
+  char	command[CMDLEN];
   int	i;
 
   i = 0;
@@ -95,15 +96,13 @@ int	parse_input(char *line, char *command, char *arg)
 
 int	process_input(t_server *server, t_client *cl, char *input)
 {
-  char	command[CMDLEN];
   char	arg[ARGLEN];
   int	idx;
 
-  if ((idx = parse_input(input, command, arg)) == -1)
+  printf("Got input: %s\n", input);
+  if ((idx = parse_input(input, arg)) == -1)
     return (-1);
-  write(1, command, strlen(command));
-  write(1, " ", 1);
-  write(1, arg, strlen(arg));
-  write(1, "\n", 1);
+  if (idx < MSZ)
+    g_command[idx].func(server, cl, arg);
   return (0);
 }
