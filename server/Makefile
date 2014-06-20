@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Fri Jun 20 14:50:30 2014 luc sinet
+## Last update Fri Jun 20 17:56:09 2014 guillaume fillon
 ##
 
 CC 		= gcc
@@ -48,7 +48,7 @@ COBJ		= $(addprefix $(OBJCOMMON), $(COMMONSRC:.c=.o))
 CFLAGS 		+= -g -W -Wall -Wextra -std=gnu99
 CFLAGS		+= -I../include -I./include -I$(COMMONDIR)/$(INCDIR) -I$(LIBSOCKET)/$(INCDIR)
 
-LDFLAGS 	=
+LDFLAGS 	= -Wl,-O2 -L$(LIBSOCKET) -lsocket
 
 dummy := $(shell test -d $(OBJDIR) || mkdir $(OBJDIR)) \
 	 $(shell test -d $(OBJCOMMON) || mkdir $(OBJCOMMON)) \
@@ -64,7 +64,7 @@ $(OBJCOMMON)%.o: $(SRCCOMMON)%.c
 
 $(BINPATH): $(OBJ) $(COBJ)
 	@echo "- linking of: $@ (flag: "$(LDFLAGS)")"
-	@$(CC) -o $(BINPATH) $(OBJ) $(COBJ) $(LIBSOCKET)/libsocket.a $(LDFLAGS)
+	@$(CC) -o $(BINPATH) $(OBJ) $(COBJ) $(LDFLAGS)
 
 all: $(BINPATH)
 
