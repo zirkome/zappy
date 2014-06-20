@@ -24,17 +24,14 @@ end
 
 function avance()
 	X, Y = calc_new_position()
-	print("avan : " .. X .. " " .. Y)
 end
 
 function droite()
 	ORIENTATION = calc_orientation("droite")
 	X, Y = calc_new_position()
-	print("righ : " .. X .. " " .. Y)
 end
 
 function gauche()
 	ORIENTATION = calc_orientation("gauche")
 	X, Y = calc_new_position()
-	print("left : " .. X .. " " .. Y)
 end

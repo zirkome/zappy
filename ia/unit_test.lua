@@ -8,16 +8,23 @@ dofile("get_cmd.lua")
 dofile("update.lua")
 
 function execute_ia(x, y, level, orientation, host, port)
+	X, Y, LEVEL, ORIENTATION = x, y, level, orientation
+
 	local tcp = connect_server(host, port)
+	if (tcp ~= nil) then print("connect_server OK") else print("connect_server FAILED") end
 
-	-- local tab = get_word("")
-	-- local command = get_command()
+	local tab = parse_case("{nourriture 345, sibur 3, phiras 5, deraumere 0, mendiane 0, linemate 0, phiras 0, thystame 0}\n")
+	if (tab ~= nil) then print("parse_case OK");display_2dtab(tab) else print("parse_case FAILED") end
 
-	local tab = parse_case("{nourriture 345, sibur 3, phiras 5, deraumere 0}\n")
-	display_2dtab(tab)
-	update_ressource(tab)
-	local tab = parse_case("{coco coco coco coco coco ,,, phalis,,,, joueur deraumere, genial aussi,,,,,lol}\n")
-	display_2dtab(tab)
+	avance()
+	print("forward : " .. X .. " " .. Y)
+
+	droite()
+	print("right : " .. X .. " " .. Y)
+
+	gauche()
+	print("left : " .. X .. " " .. Y)
+
 	return 0
 end
 

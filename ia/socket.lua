@@ -6,6 +6,8 @@ function is_valid_ipv4(ip)
 			if (tonumber(v) < 0 or tonumber(v) > 255) then return -1 end
 		end
 	else
+		local chunks = {ip:match("%w+")}
+		if (#chunks == 1) then return 0 end
 		return -1
 	end
 	return 0
@@ -23,13 +25,14 @@ function recept_command(tcp)
 end
 
 function send_command(tcp, command)
+	print_bkt("send : ", command)
 	local s = tcp:send(command .. "\n")
 
 	if (s ~= #command + 1) then
 		print_bkt("Error in send_command : ", s .. " bytes send instead of " .. #command + 1)
-		return 0
+		return -1
 	end
-	return -1
+	return 0
 end
 
 function connect_server(host, port)
