@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Fri Jun 20 17:31:19 2014 luc sinet
+** Last update Fri Jun 20 18:10:20 2014 luc sinet
 */
 
 #include "server.h"
@@ -17,6 +17,7 @@ int		init_player(t_client *new)
   new->player->dir = NORTH;
   new->player->x = 0;
   new->player->y = 0;
+  new->player->level = 1;
   return (0);
 }
 

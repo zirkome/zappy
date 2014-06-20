@@ -6,7 +6,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Fri Jun 20 17:33:23 2014 luc sinet
+** Last update Fri Jun 20 18:09:59 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -83,6 +83,7 @@ typedef struct	s_player
   int		x;
   int		y;
   t_dir		dir;
+  int		level;
 }		t_player;
 
 typedef struct	s_client t_client;

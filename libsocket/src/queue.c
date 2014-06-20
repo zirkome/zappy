@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr 20 08:27:21 2014 luc sinet
-** Last update Sat May  3 15:06:55 2014 luc sinet
+** Last update Fri Jun 20 18:13:56 2014 luc sinet
 */
 
 #include <stdlib.h>
@@ -60,7 +60,7 @@ void	shift_msg(char *msg, int pos)
   msg[i] = '\0';
 }
 
-void		queue_erase(t_queue **queue)
+void		queue_clear(t_queue **queue)
 {
   t_queue	*tmp;
   t_queue	*next;

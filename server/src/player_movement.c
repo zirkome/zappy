@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 13:47:25 2014 luc sinet
-** Last update Fri Jun 20 18:00:57 2014 luc sinet
+** Last update Fri Jun 20 18:11:57 2014 luc sinet
 */
 
 #include "server.h"
@@ -18,6 +18,7 @@ int		pl_forward(t_server *server UNUSED, t_client *client,
   pl = client->player;
   pl->x += ((pl->dir == WEST) ? -1 : (pl->dir == EAST) ? 1 : 0);
   pl->y += ((pl->dir == SOUTH) ? -1 : (pl->dir == NORTH) ? 1 : 0);
+  queue_push(&client->queue, "ok\n");
   return (0);
 }
 
