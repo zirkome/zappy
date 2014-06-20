@@ -1,3 +1,4 @@
+
 /*
 ** select.c for select in /home/sinet_l/Documents/project/PSU_2013_myirc/src/fserver
 **
@@ -5,7 +6,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr 20 08:36:48 2014 luc sinet
-** Last update Fri Jun 20 15:58:14 2014 luc sinet
+** Last update Fri Jun 20 17:33:02 2014 luc sinet
 */
 
 #include "server.h"
@@ -50,40 +51,28 @@ int		user_write(t_server *server, t_client *cl)
   return (0);
 }
 
-int		read_state(t_server *server)
+int	read_state(t_server *server, t_client *client)
 {
-  t_client	*tmp;
-  t_client	*tofree;
-  int		ret;
+  int	ret;
 
-  tmp = server->cl;
-  while (tmp)
+  ret = user_read(server, client);
+  if (ret == DISCONNECTED)
     {
-      ret = user_read(server, tmp);
-      if (ret == DISCONNECTED)
-	tofree = tmp;
-      tmp = tmp->next;
-      if (ret == DISCONNECTED)
-	free(tofree);
+      free(client);
+      return (-1);
     }
   return (0);
 }
 
-int		write_state(t_server *server)
+int	write_state(t_server *server, t_client *client)
 {
-  t_client	*tmp;
-  t_client	*tofree;
-  int		ret;
+  int	ret;
 
-  tmp = server->cl;
-  while (tmp)
+  ret = user_write(server, client);
+  if (ret == DISCONNECTED)
     {
-      ret = user_write(server, tmp);
-      if (ret == DISCONNECTED)
-	tofree = tmp;
-      tmp = tmp->next;
-      if (ret == DISCONNECTED)
-	free(tofree);
+      free(client);
+      return (-1);
     }
   return (0);
 }
