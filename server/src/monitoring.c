@@ -5,12 +5,32 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Thu Jun 19 16:25:46 2014 guillaume fillon
+** Last update Fri Jun 20 16:51:31 2014 guillaume fillon
 */
 
 #include <err.h>
 
 #include "server.h"
+
+int		dispatch_fds(t_server *server, struct epoll_event *ev)
+{
+  t_client	*tmp;
+
+  for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
+    {
+      if (tmp->fd == ev->data.fd)
+	break;
+    }
+  if (tmp && tmp->fd != ev->data.fd)
+    return (-1);
+  if (ev->events & EPOLLIN)
+    if (read_state(server, tmp) < 0)
+      return (-1);
+  if (ev->events & EPOLLOUT)
+    if (write_state(server, tmp) < 0)
+      return (-1);
+  return (0);
+}
 
 //TODO: Norme
 int			start_monitoring(t_server *server)
@@ -40,7 +60,7 @@ int			start_monitoring(t_server *server)
 	  if ((events[n].events & EPOLLERR) ||
               (events[n].events & EPOLLHUP))
 	    {
-	      close (events[n].data.fd);
+	      close(events[n].data.fd);
 	      epoll_event_del(events[n].data.fd, NULL);
 	      continue;
 	    }
@@ -48,7 +68,7 @@ int			start_monitoring(t_server *server)
 	    {
 	      if ((fd = connect_new_user(server)) > 0)
 		{
-		  ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
+		  ev.events = EPOLLIN | EPOLLOUT;
 		  ev.data.ptr = NULL;
 		  ev.data.fd = fd;
 		  if (epoll_event_add(fd, &ev) == -1)
@@ -56,12 +76,7 @@ int			start_monitoring(t_server *server)
 		}
 	    }
 	  else
-	    {
-	      if (events[n].events & EPOLLIN)
-	      	read_state(server);
-	      if (events[n].events & EPOLLOUT)
-	      	write_state(server);
-	    }
+	    dispatch_fds(server, &events[n]);
 	}
     }
 }

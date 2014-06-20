@@ -1,3 +1,4 @@
+
 /*
 ** server.h for server in /home/sinet_l/Documents/project/PSU_2013_myirc/src/fserver
 **
@@ -5,7 +6,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Fri Jun 20 15:16:23 2014 luc sinet
+** Last update Fri Jun 20 16:51:03 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
@@ -113,8 +114,8 @@ long		stoi(char *str);
 
 int		init_server(t_server *server);
 void		init_fds(t_server *server);
-int		read_state(t_server *server);
-int		write_state(t_server *server);
+int		read_state(t_server *server, t_client *client);
+int		write_state(t_server *server, t_client *client);
 int		connect_new_user(t_server *server);
 int		disconnect_user(t_server *server, t_client *cl);
 int		add_user(t_client **cl, int fd);
