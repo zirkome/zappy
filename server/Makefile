@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Sun Jun 22 23:27:20 2014 luc sinet
+## Last update Mon Jun 23 15:59:22 2014 guillaume fillon
 ##
 
 CC 		= gcc
@@ -48,7 +48,7 @@ COMMONSRC	= error.c
 OBJ		= $(addprefix $(OBJDIR), $(SRC:.c=.o))
 COBJ		= $(addprefix $(OBJCOMMON), $(COMMONSRC:.c=.o))
 
-CFLAGS 		+= -g -W -Wall -Wextra -std=gnu99
+CFLAGS 		+= -g -W -Wall -Wextra
 CFLAGS		+= -I../include -I./include -I$(COMMONDIR)/$(INCDIR) -I$(LIBSOCKET)/$(INCDIR)
 
 LDFLAGS 	= -Wl,-O2 -L$(LIBSOCKET) -lsocket
