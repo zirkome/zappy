@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Fri Jun 20 19:16:25 2014 guillaume fillon
+## Last update Sat Jun 21 14:01:36 2014 luc sinet
 ##
 
 CC 		= gcc
@@ -37,7 +37,8 @@ SRC 		= main.c \
 		  parse_type.c \
 		  player_actions.c \
 		  player_commands.c \
-		  player_movement.c
+		  player_movement.c \
+		  strings.c
 
 
 COMMONSRC	= error.c
@@ -45,7 +46,7 @@ COMMONSRC	= error.c
 OBJ		= $(addprefix $(OBJDIR), $(SRC:.c=.o))
 COBJ		= $(addprefix $(OBJCOMMON), $(COMMONSRC:.c=.o))
 
-CFLAGS 		+= -g -W -Wall -Wextra
+CFLAGS 		+= -g -W -Wall -Wextra -std=gnu99
 CFLAGS		+= -I../include -I./include -I$(COMMONDIR)/$(INCDIR) -I$(LIBSOCKET)/$(INCDIR)
 
 LDFLAGS 	= -Wl,-O2 -L$(LIBSOCKET) -lsocket

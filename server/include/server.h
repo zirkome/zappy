@@ -6,7 +6,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Fri Jun 20 18:09:59 2014 luc sinet
+** Last update Sun Jun 22 20:15:48 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -23,6 +23,9 @@
 #ifndef MAX_EPOLL_EVENTS
 # define MAX_EPOLL_EVENTS 128
 #endif
+
+# define ALIGN(x, size) ((x + size - 1) &~ (size - 1))
+# define ALLOC_SIZE 64
 
 # define DEFAULT_PORT "6000"
 # define TIMEOUT (5 * 60)
@@ -169,5 +172,7 @@ int		pl_inventory(t_server *server, t_client *client, char *arg);
 int		pl_incantation(t_server *server, t_client *client, char *arg);
 int		pl_fork(t_server *server, t_client *client, char *arg);
 int		pl_connect_nbr(t_server *server, t_client *client, char *arg);
+
+char		*string_append(char *str, char *app, int *str_size);
 
 #endif /* _SERVER_H_ */

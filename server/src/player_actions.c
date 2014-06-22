@@ -5,14 +5,30 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 13:50:31 2014 luc sinet
-** Last update Fri Jun 20 18:11:08 2014 luc sinet
+** Last update Sun Jun 22 20:26:02 2014 luc sinet
 */
 
 #include "server.h"
 
-int	pl_see(t_server *server UNUSED, t_client UNUSED *client UNUSED,
-	       char *arg UNUSED)
+int		pl_see(t_server *server UNUSED, t_client UNUSED *client UNUSED,
+		       char *arg UNUSED)
 {
+  t_player	*pl;
+  int		start;
+  int		str_size;
+  char		*str;
+
+  pl = client->player;
+  str = NULL;
+  str_size = 0;
+  for (int y = 0; y < 4 + pl->level - 1; ++y)
+    {
+      start = -y;
+      for (int x = start; x < start + y * 2 + 1; ++x)
+	str = string_append(str, "a", &str_size);
+    }
+  queue_push(&client->queue, str);
+  free(str);
   return (0);
 }
 
