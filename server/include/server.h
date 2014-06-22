@@ -6,7 +6,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Sun Jun 22 21:31:36 2014 luc sinet
+** Last update Sun Jun 22 23:27:03 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -25,6 +25,7 @@
 # define MAX_EPOLL_EVENTS 128
 #endif
 
+# define MAP_POS(x, y, width) (y + width + x)
 # define ALIGN(x, size) ((x + size - 1) &~ (size - 1))
 # define ALLOC_SIZE 64
 
@@ -39,6 +40,7 @@
 
 # define POP_PROB 40
 # define NB_PROB 6
+# define NB_ELEM 7
 
 enum	e_command
   {
@@ -163,6 +165,7 @@ long		stoi(char *str);
 int		init_server(t_server *server);
 void		init_fds(t_server *server);
 int		generate_map(t_world *world);
+char		*get_element_name(t_world *world, int x, int y);
 
 int		read_state(t_server *server, t_client *client);
 int		write_state(t_server *server, t_client *client);
