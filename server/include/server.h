@@ -6,7 +6,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Sun Jun 22 20:15:48 2014 luc sinet
+** Last update Sun Jun 22 21:31:36 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
+# include <time.h>
 # include <libsocket.h>
 
 # include "errors.h"
@@ -32,8 +33,12 @@
 # define UNUSED __attribute__((unused))
 # define RSIZE 512
 # define DISCONNECTED 2
+
 # define CMDLEN 32
 # define ARGLEN 256
+
+# define POP_PROB 40
+# define NB_PROB 6
 
 enum	e_command
   {
@@ -58,6 +63,28 @@ enum	e_command
     PIN = 19,
     SGT = 20,
     SST = 21
+  };
+
+enum
+  {
+    PLINEMATE = 30,
+    PDERAUMERE = 25,
+    PSIBUR = 30,
+    PMENDIANE = 10,
+    PPHIRAS = 15,
+    PTHYSTAME = 5
+  };
+
+enum
+  {
+    LINEMATE = 0,
+    DERAUMERE,
+    SIBUR,
+    MENDIANE,
+    PHIRAS,
+    THYSTAME,
+    PLAYER,
+    EMPTY
   };
 
 typedef enum	bool
@@ -106,6 +133,7 @@ typedef struct	s_world
   char		*port;
   int		width;
   int		height;
+  char		*map;
   int		max_allowed;
   int		delay;
   char		**teams;
@@ -134,6 +162,8 @@ long		stoi(char *str);
 
 int		init_server(t_server *server);
 void		init_fds(t_server *server);
+int		generate_map(t_world *world);
+
 int		read_state(t_server *server, t_client *client);
 int		write_state(t_server *server, t_client *client);
 int		connect_new_user(t_server *server);

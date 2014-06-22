@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 09:39:44 2014 luc sinet
-** Last update Thu Jun 19 16:43:10 2014 guillaume fillon
+** Last update Sun Jun 22 21:23:30 2014 luc sinet
 */
 
 #include <signal.h>
@@ -18,6 +18,9 @@ int		init_server(t_server *server)
   if ((server->fd = create_inet_server_socket(NULL, server->world.port)) < 0)
     return (-1);
   server->cl = NULL;
+  srand(time(NULL));
+  if (generate_map(&server->world) == -1)
+    return (-1);
   welcome_server(server->world.port);
   return (0);
 }

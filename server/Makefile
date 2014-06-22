@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Sat Jun 21 14:01:36 2014 luc sinet
+## Last update Sun Jun 22 21:23:04 2014 luc sinet
 ##
 
 CC 		= gcc
@@ -26,6 +26,7 @@ LIBSOCKET	= ../libsocket
 SRC 		= main.c \
 		  init.c \
 		  welcome.c \
+		  map.c \
 		  handle_user.c \
 		  events_handling.c \
 		  connection.c \

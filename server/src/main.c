@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 16:42:29 2014 guillaume fillon
-** Last update Thu Jun 19 16:41:26 2014 guillaume fillon
+** Last update Sun Jun 22 21:29:03 2014 luc sinet
 */
 
 #include <signal.h>
@@ -71,6 +71,7 @@ int		main(int argc, char *argv[])
   if (init_server(&server) == -1)
     return (-1);
   start_monitoring(&server);
+  free(server.world.map);
   close(server.fd);
   return (EXIT_SUCCESS);
 }
