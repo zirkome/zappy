@@ -1,4 +1,3 @@
-
 /*
 ** server.h for server in /home/sinet_l/Documents/project/PSU_2013_myirc/src/fserver
 **
@@ -6,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Mon Jun 23 16:31:43 2014 luc sinet
+** Last update Mon Jun 23 18:08:50 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
@@ -131,14 +130,25 @@ struct		s_client
   t_client	*next;
 };
 
+/**
+ * @port TCP port of the server (-p)
+ * @width Width of the map (-x)
+ * @height Height of the map (-y)
+ * @slots Number of clients allowed at the game beginning (-c)
+ * @delay Time delay for executing actions (-t)
+ * @teams Name of the world's teams (-n)
+ * @hflg Help flag (-h)
+ * @unkflg Unknown flag (-?)
+ */
 typedef struct	s_world
 {
   char		*port;
   int		width;
   int		height;
   char		*map;
-  int		max_allowed;
+  int		slots;
   int		delay;
+  int		nb_teams;
   char		**teams;
   int		hflg;
   int		unkflg;
@@ -160,7 +170,7 @@ typedef struct	s_command
   int		(*func)(t_server *server, t_client *client, char *arg);
 }		t_command;
 
-int		parse_option(int opt, t_world *option);
+int		parse_option(int opt, t_world *option, int argc, char *argv[]);
 long		stoi(char *str);
 
 int		init_server(t_server *server);
