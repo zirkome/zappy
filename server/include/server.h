@@ -6,7 +6,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Sun Jun 22 23:27:03 2014 luc sinet
+** Last update Mon Jun 23 16:31:43 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -20,6 +20,7 @@
 # include <libsocket.h>
 
 # include "errors.h"
+# include "strings.h"
 
 #ifndef MAX_EPOLL_EVENTS
 # define MAX_EPOLL_EVENTS 128
@@ -205,7 +206,5 @@ int		pl_inventory(t_server *server, t_client *client, char *arg);
 int		pl_incantation(t_server *server, t_client *client, char *arg);
 int		pl_fork(t_server *server, t_client *client, char *arg);
 int		pl_connect_nbr(t_server *server, t_client *client, char *arg);
-
-char		*string_append(char *str, char *app, int *str_size);
 
 #endif /* _SERVER_H_ */

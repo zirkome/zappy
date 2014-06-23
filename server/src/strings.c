@@ -5,23 +5,29 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sat Jun 21 13:39:46 2014 luc sinet
-** Last update Sun Jun 22 20:18:45 2014 luc sinet
+** Last update Mon Jun 23 10:56:24 2014 luc sinet
 */
 
 #include "server.h"
 
-char		*string_append(char *str, char *app, int *str_size)
+void		string_init(t_string *string)
+{
+  string->content = NULL;
+  string->size = 0;
+}
+
+char		*string_append(t_string *string, char *app)
 {
   int		len;
-  t_bool	init;;
+  t_bool	init;
 
-  init = (str == NULL);
-  len = (init ? 0 : strlen(str)) + strlen(app) + 1;
-  if (len > *str_size)
+  init = (string->content == NULL);
+  len = (init ? 0 : strlen(string->content)) + strlen(app) + 1;
+  if (len > string->size)
     {
-      *str_size = ALIGN(len, ALLOC_SIZE);
-      if ((str = realloc(str, *str_size)) == NULL)
+      string->size = ALIGN(len, ALLOC_SIZE);
+      if ((string->content = realloc(string->content, string->size)) == NULL)
 	return (NULL);
     }
-  return (init ? strcpy(str, app) : strcat(str, app));
+  return (init ? strcpy(string->content, app) : strcat(string->content, app));
 }

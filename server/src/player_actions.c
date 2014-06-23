@@ -5,43 +5,50 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 13:50:31 2014 luc sinet
-** Last update Sun Jun 22 23:47:55 2014 luc sinet
+** Last update Mon Jun 23 16:47:31 2014 luc sinet
 */
 
 #include "server.h"
+
+int	get_view(t_world *world, t_player *pl, t_string *string)
+{
+  char	*elem;
+  int	start;
+  int	x;
+  int	y;
+
+  for (y = 0; y < 4 + pl->level - 1; ++y)
+    {
+      start = -y;
+      for (x = start; x < start + y * 2 + 1; ++x)
+	{
+	  if ((elem = get_element_name(world, pl->x + x, pl->y + y)) != NULL)
+	    if ((string_append(string, elem)) == NULL)
+	      return (iperror("get_view: malloc", -1));
+	  if (x + 1 < start + y * 2 + 1)
+	    if (string_append(string, ",") == NULL)
+	      return (iperror("get_view: malloc", -1));
+	  free(elem);
+	}
+    }
+  return (0);
+}
 
 int		pl_see(t_server *server, t_client *client,
 		       char *arg UNUSED)
 {
   t_player	*pl;
-  int		start;
-  int		str_size;
-  char		*elem;
-  char		*str;
+  t_string	string;
 
   pl = client->player;
-  str = NULL;
-  str_size = 0;
-  if ((str = string_append(str, "{", &str_size)) == NULL)
+  string_init(&string);
+  if (string_append(&string, "{") == NULL)
     return (iperror("pl_see: malloc", -1));
-  for (int y = 0; y < 4 + pl->level - 1; ++y)
-    {
-      start = -y;
-      for (int x = start; x < start + y * 2 + 1; ++x)
-	{
-	  if ((elem = get_element_name(&server->world, x, y)) != NULL)
-	    if ((str = string_append(str, elem, &str_size)) == NULL)
-	      return (iperror("pl_see: malloc", -1));
-	  if (x + 1 < start + y * 2 + 1)
-	    if ((str = string_append(str, ",", &str_size)) == NULL)
-	      return (iperror("pl_see: malloc", -1));
-	  free(elem);
-	}
-    }
-  if ((str = string_append(str, "}\n", &str_size)) == NULL)
+  get_view(&server->world, pl, &string);
+  if (string_append(&string, "}\n") == NULL)
     return (iperror("pl_see: malloc", -1));
-  queue_push(&client->queue, str);
-  free(str);
+  queue_push(&client->queue, string.content);
+  free(string.content);
   return (0);
 }
 
@@ -59,12 +66,6 @@ int	pl_put(t_server *server UNUSED, t_client *client UNUSED,
 
 int	pl_expulse(t_server *server UNUSED, t_client *client UNUSED,
 		   char *arg UNUSED)
-{
-  return (0);
-}
-
-int	pl_broadcast(t_server *server UNUSED, t_client *client UNUSED,
-		     char *arg UNUSED)
 {
   return (0);
 }
