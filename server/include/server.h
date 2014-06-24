@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Mon Jun 23 18:08:50 2014 guillaume fillon
+** Last update Tue Jun 24 09:51:52 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -28,6 +28,7 @@
 # define MAP_POS(x, y, width) (y + width + x)
 # define ALIGN(x, size) ((x + size - 1) &~ (size - 1))
 # define ALLOC_SIZE 64
+# define AV_MAP 8
 
 # define DEFAULT_PORT "6000"
 # define TIMEOUT (5 * 60)
@@ -38,8 +39,8 @@
 # define CMDLEN 32
 # define ARGLEN 256
 
-# define POP_PROB 40
-# define NB_PROB 6
+# define CASE_PROB 5
+# define ITEM_PROB 6
 # define NB_ELEM 7
 
 enum	e_command
@@ -75,6 +76,15 @@ enum
     PMENDIANE = 10,
     PPHIRAS = 15,
     PTHYSTAME = 5
+  };
+
+enum
+  {
+    PFIRST_CASE = 50,
+    PSECOND_CASE = 30,
+    PTHIRD_CASE = 20,
+    PFOURTH_CASE = 10,
+    PFIFTH_CASE = 5
   };
 
 enum
@@ -145,7 +155,7 @@ typedef struct	s_world
   char		*port;
   int		width;
   int		height;
-  char		*map;
+  t_string	**map;
   int		slots;
   int		delay;
   int		nb_teams;
@@ -176,7 +186,8 @@ long		stoi(char *str);
 int		init_server(t_server *server);
 void		init_fds(t_server *server);
 int		generate_map(t_world *world);
-char		*get_element_name(t_world *world, int x, int y);
+char		*get_element_name(t_world *world, int x, int y,
+				  unsigned int pos);
 
 int		read_state(t_server *server, t_client *client);
 int		write_state(t_server *server, t_client *client);

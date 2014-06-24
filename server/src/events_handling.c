@@ -1,4 +1,3 @@
-
 /*
 ** select.c for select in /home/sinet_l/Documents/project/PSU_2013_myirc/src/fserver
 **
@@ -6,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr 20 08:36:48 2014 luc sinet
-** Last update Fri Jun 20 17:33:02 2014 luc sinet
+** Last update Mon Jun 23 21:43:31 2014 luc sinet
 */
 
 #include "server.h"

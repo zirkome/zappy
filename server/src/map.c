@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Jun 22 20:33:00 2014 luc sinet
-** Last update Mon Jun 23 16:50:06 2014 luc sinet
+** Last update Tue Jun 24 11:54:11 2014 luc sinet
 */
 
 #include "server.h"
@@ -20,22 +20,28 @@ void		scale_to_percent(double * const tab, int size)
   for (i = 0; i < size; ++i)
     total += tab[i];
   ratio = total / 100.0;
+  if (ratio == 0)
+    return ;
   for (i = 0; i < size; ++i)
     tab[i] /= ratio;
 }
 
-void		init_probs(double * const tab)
+void		init_probs(double * const item, double * const drop)
 {
-  tab[0] = PLINEMATE;
-  tab[1] = PDERAUMERE;
-  tab[2] = PSIBUR;
-  tab[3] = PMENDIANE;
-  tab[4] = PPHIRAS;
-  tab[5] = PTHYSTAME;
+  item[0] = PLINEMATE;
+  item[1] = PDERAUMERE;
+  item[2] = PSIBUR;
+  item[3] = PMENDIANE;
+  item[4] = PPHIRAS;
+  item[5] = PTHYSTAME;
+  drop[0] = PFIRST_CASE;
+  drop[1] = PSECOND_CASE;
+  drop[2] = PTHIRD_CASE;
+  drop[3] = PFOURTH_CASE;
+  drop[4] = PFIFTH_CASE;
 }
 
-void	generate_item(char * const box,
-		      const double * const item_prob)
+int	generate_item(const double * const item_prob, int prob_size)
 {
   int	start;
   int	randnum;
@@ -43,34 +49,56 @@ void	generate_item(char * const box,
 
   start = 0;
   randnum = rand() % 100;
-  if (rand() % 100 < POP_PROB)
+  for (i = 0; i < prob_size; ++i)
     {
-      for (i = 0; i < NB_PROB; ++i)
-	{
-	  if (start + item_prob[i] > randnum)
-	    {
-	      *box = i;
-	      break ;
-	    }
-	  start += item_prob[i];
-	}
+      if (start + item_prob[i] > randnum)
+	return (i);
+      start += item_prob[i];
     }
-  else
-    *box = EMPTY;
+  return (0);
+}
+
+int		generate_boxes(t_string **box,
+			       const double * const case_prob,
+			       const double * const item_prob)
+{
+  t_string	*string;
+  char		item[2];
+  int		nb_obj;
+  int		i;
+
+  item[1] = '\0';
+  nb_obj = generate_item(case_prob, CASE_PROB);
+  if ((string = malloc(sizeof(t_string))) == NULL)
+    return (-1);
+  string_init(string);
+  for (i = 0; i < nb_obj; --nb_obj)
+    {
+      item[0] = generate_item(item_prob, ITEM_PROB);
+      if (string_append(string, item, AV_MAP) == NULL)
+	return (-1);
+    }
+  *box = string;
+  return (0);
 }
 
 int		generate_map(t_world *world)
 {
-  int		size;
-  double	item_prob[NB_PROB];
+  double	item_prob[ITEM_PROB];
+  double	case_prob[CASE_PROB];
+  int		map_size;
   int		i;
 
-  size = world->height * world->width;
-  if ((world->map = malloc(size)) == NULL)
+  map_size = world->height * world->width;
+  if ((world->map = malloc(map_size * sizeof(t_string *))) == NULL)
     return (iperror("generate_map: malloc", -1));
-  init_probs(item_prob);
-  scale_to_percent(item_prob, NB_PROB);
-  for (i = 0; i < size; ++i)
-    generate_item(&world->map[i], item_prob);
+  init_probs(item_prob, case_prob);
+  scale_to_percent(item_prob, ITEM_PROB);
+  scale_to_percent(case_prob, CASE_PROB);
+  for (i = 0; i < map_size; ++i)
+    {
+      if (generate_boxes(&world->map[i], case_prob, item_prob) == -1)
+	return (-1);
+    }
   return (0);
 }

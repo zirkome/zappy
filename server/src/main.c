@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 16:42:29 2014 guillaume fillon
-** Last update Mon Jun 23 18:10:26 2014 guillaume fillon
+** Last update Tue Jun 24 11:53:45 2014 luc sinet
 */
 
 #include <signal.h>
@@ -51,6 +51,20 @@ static void	handle_signal(int sig)
     g_sigint = 1;
 }
 
+static void	clear_server(t_server *server)
+{
+  int		i;
+  int		map_size;
+
+  map_size = server->world.height * server->world.width;
+  close(server->fd);
+  for (i = 0; i < map_size; ++i)
+    {
+      free(server->world.map[i]);
+    }
+  free(server->world.map);
+}
+
 int		main(int argc, char *argv[])
 {
   t_server	server;
@@ -71,7 +85,6 @@ int		main(int argc, char *argv[])
   if (init_server(&server) == -1)
     return (-1);
   start_monitoring(&server);
-  free(server.world.map);
-  close(server.fd);
+  clear_server(&server);
   return (EXIT_SUCCESS);
 }
