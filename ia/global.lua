@@ -22,12 +22,12 @@ DIR = {
 	["west"] = 4
 }
 
-RESSOURCES = {
-	{["nourriture"] = 0},
-	{["linemate"] = 0},
-	{["deraumere"] = 0},
-	{["sibur"] = 0},
-	{["mendiane"] = 0},
-	{["phiras"] = 0},
-	{["thystame"] = 0}
+ITEM = {
+	{["name"] = "nourriture", ["qte"] = 0},
+	{["name"] = "linemate", ["qte"] = 0},
+	{["name"] = "deraumere", ["qte"] = 0},
+	{["name"] = "sibur", ["qte"] = 0},
+	{["name"] = "mendiane", ["qte"] = 0},
+	{["name"] = "phiras", ["qte"] = 0},
+	{["name"] = "thystame", ["qte"] = 0},
 }

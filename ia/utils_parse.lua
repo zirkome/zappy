@@ -18,9 +18,10 @@ function parse_case(str)
 				i = i + 1;
 				table.insert(tab, {})
 			else
-				table.insert(tab[i], w)
+				table.insert(tab[i], w:match("%a+"))
 			end
 		end
 	end
+	table.remove(tab, #tab)
 	return tab
 end

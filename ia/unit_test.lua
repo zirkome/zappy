@@ -1,6 +1,6 @@
 dofile("global.lua")
 dofile("socket.lua")
-dofile("utils.lua")
+dofile("utils_display.lua")
 dofile("utils_math.lua")
 dofile("utils_parse.lua")
 dofile("movements.lua")
