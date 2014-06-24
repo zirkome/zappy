@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 11:11:11 2014 guillaume fillon
-** Last update Sun May  4 17:07:26 2014 guillaume fillon
+** Last update Mon Jun 23 18:16:08 2014 guillaume fillon
 */
 
 #include <stdlib.h>
@@ -15,19 +15,45 @@
 
 #include "server.h"
 
-int	parse_option(int opt, t_world *option)
+//TODO: Norme
+int	parse_option(int opt, t_world *option, int argc, char *argv[])
 {
   if (opt == 'h')
     option->hflg = 1;
+  if (opt == 'c')
+    option->slots = stoi(optarg);
+  if (opt == 't')
+    option->delay = stoi(optarg);
   if (opt == 'p')
     option->port = optarg;
   if (opt == 'x')
     option->width = stoi(optarg);
   if (opt == 'y')
     option->height = stoi(optarg);
+  if (opt == 'n')
+    {
+      int index = optind - 1;
+
+      while (index < argc)
+	{
+	  if (argv[index][0] != '-')
+	    {
+	      ++option->nb_teams;
+	      option->teams =
+		realloc(option->teams, option->nb_teams * sizeof(char *));
+	      if (option->teams == NULL)
+		return (iperror("getopt: malloc", -1));
+	      option->teams[option->nb_teams - 1] = argv[index];
+	    }
+	  else
+	    break;
+	  index++;
+	}
+    }
   if (opt == 'v')
     {
-      puts("Zappy server daemon v1.42");
+      puts("Copyright (C) 2014 Guillaume Fillon, Luc Sinet\n\n" \
+	   "Written by Guillaume Fillon and Luc Sinet.");
       exit(EXIT_SUCCESS);
     }
   if (opt == '?')

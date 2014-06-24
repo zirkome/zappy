@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sat May  3 13:44:23 2014 luc sinet
-** Last update Sat May  3 15:33:23 2014 luc sinet
+** Last update Fri Jun 20 18:14:32 2014 luc sinet
 */
 
 #ifndef _QUEUE_H_
@@ -22,7 +22,7 @@ struct		s_queue
 int	queue_push(t_queue **queue, char *msg);
 void	queue_pop(t_queue **queue);
 void	shift_msg(char *msg, int pos);
-void	queue_erase(t_queue **queue);
+void	queue_clear(t_queue **queue);
 char	*queue_back(t_queue *queue);
 char	*queue_front(t_queue *queue);
 int	queue_empty(t_queue *queue);
