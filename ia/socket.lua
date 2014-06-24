@@ -29,7 +29,7 @@ function send_command(tcp, command)
 	local s = tcp:send(command .. "\n")
 
 	if (s ~= #command + 1) then
-		print_bkt("Error in send_command : ", s .. " bytes send instead of " .. #command + 1)
+		print_bkt("Error in send_command : ", s ," bytes send instead of " .. #command + 1)
 		return -1
 	end
 	return 0

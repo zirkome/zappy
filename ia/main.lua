@@ -1,10 +1,10 @@
 dofile("global.lua")
 dofile("socket.lua")
-dofile("utils_display.lua")
-dofile("utils_math.lua")
-dofile("utils_parse.lua")
+dofile("utils/utils_display.lua")
+dofile("utils/utils_spec.lua")
+dofile("utils/utils_parse.lua")
 dofile("movements.lua")
-dofile("get_cmd.lua")
+dofile("commands.lua")
 dofile("update.lua")
 
 function execute_ia(x, y, level, orientation, host, port)
@@ -14,6 +14,7 @@ function execute_ia(x, y, level, orientation, host, port)
 	display_2dtab(tab)
 	update_ressource(tab)
 	display_item()
+	close_server(tcp)
 	return 0
 end
 

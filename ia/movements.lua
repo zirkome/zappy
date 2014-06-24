@@ -21,17 +21,3 @@ function calc_orientation(where)
 	}
 	return what_orientation[ORIENTATION][where]
 end
-
-function avance()
-	X, Y = calc_new_position()
-end
-
-function droite()
-	ORIENTATION = calc_orientation("droite")
-	X, Y = calc_new_position()
-end
-
-function gauche()
-	ORIENTATION = calc_orientation("gauche")
-	X, Y = calc_new_position()
-end

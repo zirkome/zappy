@@ -1,10 +1,10 @@
 dofile("global.lua")
 dofile("socket.lua")
-dofile("utils_display.lua")
-dofile("utils_math.lua")
-dofile("utils_parse.lua")
+dofile("utils/utils_display.lua")
+dofile("utils/utils_spec.lua")
+dofile("utils/utils_parse.lua")
 dofile("movements.lua")
-dofile("get_cmd.lua")
+dofile("commands.lua")
 dofile("update.lua")
 
 function execute_ia(x, y, level, orientation, host, port)
@@ -16,15 +16,29 @@ function execute_ia(x, y, level, orientation, host, port)
 	local tab = parse_case("{nourriture 345, sibur 3, phiras 5, deraumere 0, mendiane 0, linemate 0, phiras 0, thystame 0}\n")
 	if (tab ~= nil) then print("parse_case OK");display_2dtab(tab) else print("parse_case FAILED") end
 
-	avance()
-	print("forward : " .. X .. " " .. Y)
-
-	droite()
-	print("right : " .. X .. " " .. Y)
-
-	gauche()
-	print("left : " .. X .. " " .. Y)
-
+	recept_command(tcp)
+	send_command(tcp, "toto")
+	recept_command(tcp)
+	recept_command(tcp)
+	while (1) do
+		avance(tcp)
+		print("forward : " .. X .. " " .. Y)
+		droite(tcp)
+		print("right : " .. X .. " " .. Y)
+		avance(tcp)
+		print("forward : " .. X .. " " .. Y)
+		avance(tcp)
+		print("forward : " .. X .. " " .. Y)
+		avance(tcp)
+		print("forward : " .. X .. " " .. Y)
+		gauche(tcp)
+		print("right : " .. X .. " " .. Y)
+		avance(tcp)
+		print("forward : " .. X .. " " .. Y)
+		avance(tcp)
+		print("forward : " .. X .. " " .. Y)
+	end
+	close_server(tcp)
 	return 0
 end
 

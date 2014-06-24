@@ -1,5 +1,6 @@
 function print_bkt(title, inner)
-	print(title .. "[" .. inner .. "]")
+	if (inner ~= nil) then print(title .. "[" .. inner .. "]") 
+	else print("Error : print_bkt : inner is nil") end
 end
 
 function display_2dtab(tab)
