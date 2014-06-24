@@ -5,13 +5,14 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Fri Jun 20 15:20:43 2014 luc sinet
+** Last update Tue Jun 24 14:03:03 2014 guillaume fillon
 */
 
 #include "server.h"
 
 static	t_command	g_command[] =
 {
+  /* {"GRAPHIC", false, none, &client_set_type} */
   {"avance", false, none,  &pl_forward},
   {"droite", false, none, &pl_right},
   {"gauche", false, none, &pl_left},
@@ -24,15 +25,15 @@ static	t_command	g_command[] =
   {"incantation", false, none, &pl_incantation},
   {"fork", false, none, &pl_fork},
   {"connect_nbr", false, none, &pl_connect_nbr},
-  {"msz", false, none, NULL},
-  {"bct", true, string, NULL},
-  {"mct", false, none, NULL},
-  {"tna", false, none, NULL},
-  {"ppo", true, number, NULL},
-  {"plv", true, number, NULL},
-  {"pin", true, number, NULL},
-  {"sgt", false, none, NULL},
-  {"sst", true, number, NULL},
+  {"msz", false, none, &gui_msz},
+  {"bct", true, string, &gui_bct},
+  {"mct", false, none, &gui_mct},
+  {"tna", false, none, &gui_tna},
+  {"ppo", true, number, &gui_ppo},
+  {"plv", true, number, &gui_plv},
+  {"pin", true, number, &gui_pin},
+  {"sgt", false, none, &gui_sgt},
+  {"sst", true, number, &gui_sst},
   {NULL, false, none, NULL}
 };
 
