@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Tue Jun 24 16:13:09 2014 guillaume fillon
+** Last update Tue Jun 24 16:32:40 2014 guillaume fillon
 */
 
 #include <err.h>
@@ -68,14 +68,12 @@ int			start_monitoring(t_server *server)
       warn("epoll_ctl: listen_sock");
       return (-1);
     }
-  int i = 0;
   for (;;)
     {
       update_fds_to_epoll(server);
-      nfds = epoll_monitor(events, MAX_EPOLL_EVENTS, 1000);
+      nfds = epoll_monitor(events, MAX_EPOLL_EVENTS, 1000 / server->world.delay);
       if (nfds == -1)
 	return (iperror("epoll_wait", -1));
-      printf("%d %d\n", nfds, i++);
       for (n = 0; n < nfds; ++n)
 	{
 	  if ((events[n].events & EPOLLERR) ||
