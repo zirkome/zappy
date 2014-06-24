@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr 20 08:36:48 2014 luc sinet
-** Last update Mon Jun 23 21:43:31 2014 luc sinet
+** Last update Tue Jun 24 16:15:05 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -31,25 +31,6 @@ int		user_read(t_server *server, t_client *cl)
   return (0);
 }
 
-int		user_write(t_server *server, t_client *cl)
-{
-  ssize_t	wsize;
-  ssize_t	msglen;
-  char		*msg;
-
-  msg = queue_front(cl->queue);
-  if (msg == NULL)
-    return (-1);
-  msglen = strlen(msg);
-  if ((wsize = write(cl->fd, msg, msglen)) <= 0)
-    return (disconnect_user(server, cl));
-  if (wsize < msglen)
-    shift_msg(msg, wsize);
-  else
-    queue_pop(&cl->queue);
-  return (0);
-}
-
 int	read_state(t_server *server, t_client *client)
 {
   int	ret;
@@ -63,10 +44,32 @@ int	read_state(t_server *server, t_client *client)
   return (0);
 }
 
+int		user_write(t_server *server, t_client *cl)
+{
+  ssize_t	wsize;
+  ssize_t	msglen;
+  char		*msg;
+
+  msg = queue_front(cl->queue);
+  msglen = strlen(msg);
+  if ((wsize = write(cl->fd, msg, msglen)) <= 0)
+    {
+      perror("");
+      return (disconnect_user(server, cl));
+    }
+  if (wsize < msglen)
+    shift_msg(msg, wsize);
+  else
+    queue_pop(&cl->queue);
+  return (0);
+}
+
 int	write_state(t_server *server, t_client *client)
 {
   int	ret;
 
+  if (queue_empty(client->queue))
+    return (-1);
   ret = user_write(server, client);
   if (ret == DISCONNECTED)
     {

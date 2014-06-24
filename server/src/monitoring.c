@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Fri Jun 20 16:51:31 2014 guillaume fillon
+** Last update Tue Jun 24 16:32:40 2014 guillaume fillon
 */
 
 #include <err.h>
@@ -24,12 +24,30 @@ int		dispatch_fds(t_server *server, struct epoll_event *ev)
   if (tmp && tmp->fd != ev->data.fd)
     return (-1);
   if (ev->events & EPOLLIN)
-    if (read_state(server, tmp) < 0)
-      return (-1);
-  if (ev->events & EPOLLOUT)
-    if (write_state(server, tmp) < 0)
-      return (-1);
+    {
+      if (read_state(server, tmp) < 0)
+	return (-1);
+    }
+  if (write_state(server, tmp) < 0)
+    return (-1);
   return (0);
+}
+
+static void		update_fds_to_epoll(t_server *server)
+{
+  struct epoll_event	ev;
+  t_client		*tmp;
+
+  for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
+    {
+      ev.events = EPOLLIN | EPOLLONESHOT;
+      if (!queue_empty(tmp->queue))
+	ev.events |= EPOLLOUT;
+      ev.data.ptr = NULL;
+      ev.data.fd = tmp->fd;
+      if (epoll_event_mod(tmp->fd, &ev) == -1)
+	iperror("epoll_ctl: client", -1);
+    }
 }
 
 //TODO: Norme
@@ -52,7 +70,8 @@ int			start_monitoring(t_server *server)
     }
   for (;;)
     {
-      nfds = epoll_monitor(events, MAX_EPOLL_EVENTS, -1);
+      update_fds_to_epoll(server);
+      nfds = epoll_monitor(events, MAX_EPOLL_EVENTS, 1000 / server->world.delay);
       if (nfds == -1)
 	return (iperror("epoll_wait", -1));
       for (n = 0; n < nfds; ++n)
@@ -68,7 +87,7 @@ int			start_monitoring(t_server *server)
 	    {
 	      if ((fd = connect_new_user(server)) > 0)
 		{
-		  ev.events = EPOLLIN | EPOLLOUT;
+		  ev.events = EPOLLIN | EPOLLONESHOT;
 		  ev.data.ptr = NULL;
 		  ev.data.fd = fd;
 		  if (epoll_event_add(fd, &ev) == -1)

@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Tue Jun 24 09:51:52 2014 luc sinet
+** Last update Tue Jun 24 14:07:01 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
@@ -214,7 +214,6 @@ int		epoll_event_del(int fd, struct epoll_event *ev);
 /*
 ** Player commands
 */
-
 int		pl_forward(t_server *server, t_client *client, char *arg);
 int		pl_right(t_server *server, t_client *client, char *arg);
 int		pl_left(t_server *server, t_client *client, char *arg);
@@ -227,5 +226,18 @@ int		pl_inventory(t_server *server, t_client *client, char *arg);
 int		pl_incantation(t_server *server, t_client *client, char *arg);
 int		pl_fork(t_server *server, t_client *client, char *arg);
 int		pl_connect_nbr(t_server *server, t_client *client, char *arg);
+
+/*
+** GUI commands
+*/
+int		gui_msz(t_server *server, t_client *client, char *arg);
+int		gui_bct(t_server *server, t_client *client, char *arg);
+int		gui_mct(t_server *server, t_client *client, char *arg);
+int		gui_tna(t_server *server, t_client *client, char *arg);
+int		gui_ppo(t_server *server, t_client *client, char *arg);
+int		gui_plv(t_server *server, t_client *client, char *arg);
+int		gui_pin(t_server *server, t_client *client, char *arg);
+int		gui_sgt(t_server *server, t_client *client, char *arg);
+int		gui_sst(t_server *server, t_client *client, char *arg);
 
 #endif /* _SERVER_H_ */
