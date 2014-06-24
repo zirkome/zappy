@@ -5,7 +5,7 @@
 ## Login   <fritsc_h@epitech.net>
 ##
 ## Started on  Sun May  4 15:17:27 2014 Harold Fritsch
-## Last update Thu Jun 19 17:04:04 2014 Adrien Della Maggiora
+## Last update Tue Jun 24 12:03:19 2014 Adrien Della Maggiora
 ##
 
 CC 		=	g++
@@ -25,14 +25,15 @@ SRC 		=	main.cpp \
 			ATransformation.cpp \
 			Camera.cpp \
 			Cube.cpp \
-			Exception.cpp
+			Exception.cpp \
+			GNetwork.cpp
 
 OBJ		=	$(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 
 CXXFLAGS 	+=	-W -Wall -Wextra
 
 LDFLAGS		+=	-L$(LIBGDL)/libs/ -lgdl_gl -lGLEW -lGL -lfbxsdk -lSDL2 -lpthread -lm -ldl -lrt
-LDFLAGS		+=	-L$(LIBSOCKET)/ -lsocket
+LDFLAGS		+=	-Wl,-O2 -L$(LIBSOCKET)/ -lsocket
 
 
 dummy := $(shell test -d $(OBJDIR) || mkdir $(OBJDIR))

@@ -8,13 +8,14 @@
 # include <BasicShader.hh>
 # include <Input.hh>
 # include <Clock.hh>
+# include "GNetwork.hpp"
 # include "Camera.hpp"
 # include "Cube.hpp"
 
 class GameEngine : public gdl::Game
 {
 public:
-  GameEngine();
+  GameEngine(GNetwork *);
   virtual ~GameEngine();
 
   virtual bool update();
@@ -28,6 +29,8 @@ private:
   gdl::BasicShader _shader;
   Cube             _cube;
   Camera	   _cam;
+  bool		   _isPlaying;
+  GNetwork	   *_socket;
 };
 
 #endif /* _GAMEENGINE_HPP_ */
