@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Mon Jun 16 10:59:09 2014 guillaume fillon
+** Last update Fri Jun 20 18:14:58 2014 luc sinet
 */
 
 #include "server.h"
@@ -26,14 +26,16 @@ int			connect_new_user(t_server *server)
   while (cl->next)
     cl = cl->next;
   queue_push(&cl->queue, "BIENVENUE\n");
-  return (0);
+  return (fd);
 }
 
 void		erase_client(t_client *cl)
 {
   printf("Client disconnected\n");
+  queue_clear(&cl->queue);
   free(cl->rb->buf);
   free(cl->rb);
+  free(cl->player);
   close(cl->fd);
 }
 
