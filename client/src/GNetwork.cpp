@@ -28,29 +28,29 @@ bool GNetwork::close()
 
 void GNetwork::update(/* Map &map */)
 {
-  char buf[512];
-  char aligned[_buffer.size + 1];
-  char *tmp;
-  ssize_t retv;
-  fd_set rds;
+  // char buf[512];
+  // char aligned[_buffer.size + 1];
+  // char *tmp;
+  // ssize_t retv;
+  // fd_set rds;
 
-  FD_ZERO(&rds);
-  FD_SET(_fd, &rds);
+  // FD_ZERO(&rds);
+  // FD_SET(_fd, &rds);
 
-  if (select(_fd + 1, &rds, NULL, NULL, NULL) == -1)
-    return ;
-  if (FD_ISSET(_fd, &rds))
-    {
-      tmp = aligned;
-      if ((retv = read(_fd, buf, 512)) <= 0)
-	throw(Exception("Server disconnected"));
-      fill_ringbuffer(&_buffer, buf, retv);
-      align_ringbuffer(&_buffer, aligned, sizeof(aligned));
-      while ((retv = get_char_pos(&_buffer, tmp, '\n')) != -1)
-	{
-	  tmp[retv] = '\0';
-	  std::cout << "Cmd => " << tmp << std::endl;
-	  tmp = &tmp[retv + 1];
-	}
-    }
+  // if (select(_fd + 1, &rds, NULL, NULL, NULL) == -1)
+  //   return ;
+  // if (FD_ISSET(_fd, &rds))
+  //   {
+  //     tmp = aligned;
+  //     if ((retv = read(_fd, buf, 512)) <= 0)
+  // 	throw(Exception("Server disconnected"));
+  //     fill_ringbuffer(&_buffer, buf, retv);
+  //     align_ringbuffer(&_buffer, aligned, sizeof(aligned));
+  //     while ((retv = get_char_pos(&_buffer, tmp, '\n')) != -1)
+  // 	{
+  // 	  tmp[retv] = '\0';
+  // 	  std::cout << "Cmd => " << tmp << std::endl;
+  // 	  tmp = &tmp[retv + 1];
+  // 	}
+  //   }
 }
