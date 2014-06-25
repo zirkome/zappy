@@ -19,7 +19,7 @@ public:
 
 private:
   int		_fd;
-  t_ringb	_buffer;
+  t_ringb	*_buffer;
 };
 
 #endif /* _GNETWORK_HPP_ */

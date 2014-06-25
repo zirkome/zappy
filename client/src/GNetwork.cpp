@@ -2,7 +2,8 @@
 
 GNetwork::GNetwork(): _fd(-1)
 {
-
+  if ((_buffer = create_ringbuffer(1024)) == NULL)
+    throw(Exception("Cannot create the ring buffer"));
 }
 
 GNetwork::~GNetwork()
@@ -29,7 +30,7 @@ bool GNetwork::close()
 void GNetwork::update(/* Map &map */)
 {
   char buf[512];
-  char aligned[_buffer.size + 1];
+  char aligned[_buffer->size + 1];
   char *tmp;
   ssize_t retv;
   fd_set rds;
@@ -44,9 +45,9 @@ void GNetwork::update(/* Map &map */)
       tmp = aligned;
       if ((retv = read(_fd, buf, 512)) <= 0)
 	throw(Exception("Server disconnected"));
-      fill_ringbuffer(&_buffer, buf, retv);
-      align_ringbuffer(&_buffer, aligned, sizeof(aligned));
-      while ((retv = get_char_pos(&_buffer, tmp, '\n')) != -1)
+      fill_ringbuffer(_buffer, buf, retv);
+      align_ringbuffer(_buffer, aligned, sizeof(aligned));
+      while ((retv = get_char_pos(_buffer, tmp, '\n')) != -1)
 	{
 	  tmp[retv] = '\0';
 	  std::cout << "Cmd => " << tmp << std::endl;
