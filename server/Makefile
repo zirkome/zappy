@@ -5,13 +5,13 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Sun May  4 17:04:15 2014 guillaume fillon
+## Last update Tue Jun 24 13:53:46 2014 guillaume fillon
 ##
 
 CC 		= gcc
 
 BINDIR		= ../bin/
-NAME 		= server
+NAME 		= zappyd
 BINPATH		= $(addprefix $(BINDIR), $(NAME))
 
 COMMON		= common
@@ -26,22 +26,36 @@ LIBSOCKET	= ../libsocket
 SRC 		= main.c \
 		  init.c \
 		  welcome.c \
+		  map.c \
+		  map_box.c \
 		  handle_user.c \
-		  select.c \
+		  events_handling.c \
 		  connection.c \
 		  getopt.c \
 		  util.c \
-		  pars.c
+		  epoll.c \
+		  monitoring.c \
+		  parse.c \
+		  parse_type.c \
+		  player_actions.c \
+		  player_commands.c \
+		  player_movement.c \
+		  strings.c \
+		  gui_map.c \
+		  gui_player.c \
+		  gui_time.c \
+		  player_broadcast.c
+
 
 COMMONSRC	= error.c
 
 OBJ		= $(addprefix $(OBJDIR), $(SRC:.c=.o))
 COBJ		= $(addprefix $(OBJCOMMON), $(COMMONSRC:.c=.o))
 
-CFLAGS 		+= -g -W -Wall -Wextra -I../include -I$(LIBSOCKET)/$(INCDIR) \
-		   -I./include -I$(COMMONDIR)/$(INCDIR)
+CFLAGS 		+= -g -W -Wall -Wextra
+CFLAGS		+= -I../include -I./include -I$(COMMONDIR)/$(INCDIR) -I$(LIBSOCKET)/$(INCDIR)
 
-LDFLAGS 	=
+LDFLAGS 	= -Wl,-O2 -L$(LIBSOCKET) -lsocket
 
 dummy := $(shell test -d $(OBJDIR) || mkdir $(OBJDIR)) \
 	 $(shell test -d $(OBJCOMMON) || mkdir $(OBJCOMMON)) \
@@ -57,7 +71,7 @@ $(OBJCOMMON)%.o: $(SRCCOMMON)%.c
 
 $(BINPATH): $(OBJ) $(COBJ)
 	@echo "- linking of: $@ (flag: "$(LDFLAGS)")"
-	@$(CC) -o $(BINPATH) $(OBJ) $(COBJ) $(LIBSOCKET)/libsocket.a $(LDFLAGS)
+	@$(CC) -o $(BINPATH) $(OBJ) $(COBJ) $(LDFLAGS)
 
 all: $(BINPATH)
 
