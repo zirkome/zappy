@@ -5,14 +5,13 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Tue Jun 24 14:03:03 2014 guillaume fillon
+** Last update Thu Jun 26 16:40:23 2014 guillaume fillon
 */
 
 #include "server.h"
 
 static	t_command	g_command[] =
 {
-  /* {"GRAPHIC", false, none, &client_set_type} */
   {"avance", false, none,  &pl_forward},
   {"droite", false, none, &pl_right},
   {"gauche", false, none, &pl_left},
@@ -100,6 +99,8 @@ int	process_input(t_server *server, t_client *cl, char *input)
   char	arg[ARGLEN];
   int	idx;
 
+  /* if (cl->type == UNKNOWN) */
+  /*   return (authenticate_user(server, cl, input)); */
   printf("Got input: %s\n", input);
   if ((idx = parse_input(input, arg)) == -1)
     return (-1);

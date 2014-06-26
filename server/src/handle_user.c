@@ -5,12 +5,12 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Fri Jun 20 18:10:20 2014 luc sinet
+** Last update Thu Jun 26 15:05:03 2014 guillaume fillon
 */
 
 #include "server.h"
 
-int		init_player(t_client *new)
+static int	init_player(t_client *new)
 {
   if ((new->player = malloc(sizeof(t_player))) == NULL)
     return (iperror("init_player: malloc", -1));
@@ -19,6 +19,15 @@ int		init_player(t_client *new)
   new->player->y = 0;
   new->player->level = 1;
   return (0);
+}
+
+static void	init_client(t_client *client, int fd)
+{
+  client->fd = fd;
+  client->type = UNKNOWN;
+  client->queue = queue_init();
+  client->teamptr = NULL;
+  client->next = NULL;
 }
 
 int		add_user(t_client **cl, int fd)
@@ -32,10 +41,7 @@ int		add_user(t_client **cl, int fd)
   else if ((new->rb = create_ringbuffer(1024)) == NULL ||
 	   init_player(new) == -1)
     return (-1);
-  new->queue = queue_init();
-  new->fd = fd;
-  new->teamptr = NULL;
-  new->next = NULL;
+  init_client(new, fd);
   if (*cl == NULL)
     {
       *cl = new;
