@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 16:42:29 2014 guillaume fillon
-** Last update Tue Jun 24 16:59:55 2014 luc sinet
+** Last update Thu Jun 26 13:18:42 2014 guillaume fillon
 */
 
 #include <signal.h>
@@ -63,6 +63,7 @@ static void	clear_server(t_server *server)
       free(server->world.map[i]->content);
       free(server->world.map[i]);
     }
+  free(server->world.teams);
   free(server->world.map);
 }
 

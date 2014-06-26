@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Tue Jun 24 14:07:01 2014 guillaume fillon
+** Last update Thu Jun 26 13:52:44 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
@@ -105,14 +105,20 @@ typedef enum	bool
     true
   }		t_bool;
 
-typedef enum	etype
+typedef enum	e_arg_type
   {
     string = 0,
     number,
     none
-  }		t_type;
+  }		t_arg_type;
 
-typedef enum	edir
+typedef enum	e_client_type
+  {
+    GRAPHIC,
+    IA
+  }		t_client_type;
+
+typedef enum	e_dir
   {
     NORTH = 0,
     EAST,
@@ -128,11 +134,14 @@ typedef struct	s_player
   int		level;
 }		t_player;
 
+
+
 typedef struct	s_client t_client;
 
 struct		s_client
 {
   int		fd;
+  t_client_type	type;
   t_ringb	*rb;
   t_queue	*queue;
   char		*teamptr;
@@ -176,7 +185,7 @@ typedef struct	s_command
 {
   char		*name;
   t_bool       	arg;
-  t_type	type;
+  t_arg_type	type;
   int		(*func)(t_server *server, t_client *client, char *arg);
 }		t_command;
 
