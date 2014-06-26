@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Fri Jun 20 18:14:58 2014 luc sinet
+** Last update Thu Jun 26 20:54:14 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -32,6 +32,8 @@ int			connect_new_user(t_server *server)
 void		erase_client(t_client *cl)
 {
   printf("Client disconnected\n");
+  if (cl->teamptr != NULL)
+    ++cl->teamptr->slots;
   queue_clear(&cl->queue);
   free(cl->rb->buf);
   free(cl->rb);
@@ -39,7 +41,7 @@ void		erase_client(t_client *cl)
   close(cl->fd);
 }
 
-int		disconnect_user(t_server *server, t_client *cl)
+int	kick_user(t_server *server, t_client *cl)
 {
   t_client	*list;
 
@@ -59,4 +61,10 @@ int		disconnect_user(t_server *server, t_client *cl)
       return (2);
     }
   return (ierror("Can't disconnect client\n", -1));
+}
+
+int	disconnect_user(UNUSED t_server *server, t_client *cl)
+{
+  cl->ghost = true;
+  return (0);
 }

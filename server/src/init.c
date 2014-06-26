@@ -5,12 +5,22 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 09:39:44 2014 luc sinet
-** Last update Tue Jun 24 16:41:22 2014 guillaume fillon
+** Last update Thu Jun 26 16:39:21 2014 guillaume fillon
 */
 
 #include <signal.h>
 
 #include "server.h"
+
+static void	init_teams_slots(t_server *server)
+{
+  int		i;
+  t_world	w;
+
+  w = server->world;
+  for (i = 0; i < w.nb_teams; ++i)
+    w.teams[i].slots = w.slots;
+}
 
 int		init_server(t_server *server)
 {
@@ -20,8 +30,11 @@ int		init_server(t_server *server)
     return (-1);
   if (server->world.delay == 0)
     server->world.delay = 1;
+  if (server->world.slots == 0)
+    server->world.slots = 1;
   server->cl = NULL;
   srand(time(NULL));
+  init_teams_slots(server);
   if (generate_map(&server->world) == -1)
     return (-1);
   welcome_server(server->world.port);

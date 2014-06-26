@@ -5,13 +5,35 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 17:02:27 2014 guillaume fillon
-** Last update Sun May  4 17:05:04 2014 guillaume fillon
+** Last update Thu Jun 26 19:22:51 2014 guillaume fillon
 */
 
 #include <err.h>
 #include <errno.h>
+#include <stdarg.h>
+#include <stdio.h>
 
 #include "server.h"
+
+char	*vcnprintf(size_t size, const char *format, va_list ap)
+{
+  char	buf[BUFSIZ];
+
+  if (vsnprintf(buf, size, format, ap) < 0)
+    return (NULL);
+  return (strdup(buf));
+}
+
+char		*cnprintf(size_t size, const char *format, ...)
+{
+  char		*str;
+  va_list	ap;
+
+  va_start(ap, format);
+  str = vcnprintf(size, format, ap);
+  va_end(ap);
+  return (str);
+}
 
 long		stoi(char *str)
 {

@@ -5,14 +5,13 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Tue Jun 24 14:03:03 2014 guillaume fillon
+** Last update Thu Jun 26 16:44:36 2014 guillaume fillon
 */
 
 #include "server.h"
 
 static	t_command	g_command[] =
 {
-  /* {"GRAPHIC", false, none, &client_set_type} */
   {"avance", false, none,  &pl_forward},
   {"droite", false, none, &pl_right},
   {"gauche", false, none, &pl_left},
@@ -37,9 +36,9 @@ static	t_command	g_command[] =
   {NULL, false, none, NULL}
 };
 
-t_bool	get_command(char *line, char *command)
+static t_bool	get_command(char *line, char *command)
 {
-  int	i;
+  int		i;
 
   i = 0;
   while (line[i] && line[i] != ' ' && i < CMDLEN)
@@ -53,10 +52,10 @@ t_bool	get_command(char *line, char *command)
   return (true);
 }
 
-int	get_argument(char *line, char *arg, t_bool need_arg)
+static int	get_argument(char *line, char *arg, t_bool need_arg)
 {
-  int	i;
-  int	j;
+  int		i;
+  int		j;
 
   i = 0;
   j = 0;
@@ -73,10 +72,10 @@ int	get_argument(char *line, char *arg, t_bool need_arg)
   return (true);
 }
 
-int	parse_input(char *line, char *arg)
+static int	parse_input(char *line, char *arg)
 {
-  char	command[CMDLEN];
-  int	i;
+  char		command[CMDLEN];
+  int		i;
 
   i = 0;
   if (get_command(line, command) == false)
@@ -100,6 +99,8 @@ int	process_input(t_server *server, t_client *cl, char *input)
   char	arg[ARGLEN];
   int	idx;
 
+  if (cl->type == UNKNOWN)
+    return (authenticate_user(server, cl, input));
   printf("Got input: %s\n", input);
   if ((idx = parse_input(input, arg)) == -1)
     return (-1);
