@@ -39,7 +39,7 @@ void	AWidget::onDisplay(const std::list<std::string> &/*text*/, int /*filePos*/)
 {
 }
 
-void	AWidget::init(const Settings * const /*set*/)
+void	AWidget::init()
 {
 }
 

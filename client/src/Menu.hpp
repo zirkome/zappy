@@ -5,17 +5,13 @@
 # include <SdlContext.hh>
 # include <vector>
 # include <algorithm>
-# include "Settings.hpp"
+# include <Clock.hh>
 # include "Input.hpp"
 # include "GameEngine.hpp"
+# include "Settings.hpp"
 # include "Text.hpp"
-# include "Sound.hpp"
 # include "AWidget.hpp"
-# include "Console.hpp"
-# include "Intro.hpp"
-# include "Chicken.hpp"
 
-# define SCORE_PATH "./.scores"
 # define MAPS_PATH "./Save/Maps/"
 # define GAMES_PATH "./Save/Games/"
 
@@ -29,28 +25,24 @@ public:
   bool	update();
   void	draw();
   void	launch();
-  void	launchGame(const std::string &file, int load);
+  void	launchGame();
   void	textInput(std::string &buf, unsigned int maxlen);
-
+  void	setDone(bool done = true);
 private:
   bool	textFillBuf(std::string &buf, unsigned int maxlen, Keycode key);
   void	handleClock(int &frame, double &time, double fps);
-  void	freePanel(AWidget *background, AWidget *title,
-		  AWidget *back, std::vector<AWidget *> &panel);
+  void	freePanel(std::vector<AWidget *> &panel);
 
   gdl::SdlContext	_win;
   gdl::BasicShader	_textShader;
-  bool			_done;
-  bool			_multi;
-  t_gameinfo		_gameInfo;
-  GameEngine		_gameEngine;
   int			_frames;
+  bool			_done;
   Cube			_cube;
-  unsigned int		 _filePos;
-  std::list<std::string> _filename;
+  Input			*_input;
+  Settings		*_set;
+  GameEngine		_gameEngine;
+  gdl::Clock		*_clock;
   std::vector<AWidget *> _mainPanel;
-  Player		 *_player1;
-  Player		 *_player2;
 };
 
 #endif /* _MENU_HPP_ */
