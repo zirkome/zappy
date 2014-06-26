@@ -5,10 +5,57 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Jun 26 14:48:57 2014 luc sinet
-** Last update Thu Jun 26 14:52:35 2014 luc sinet
+** Last update Thu Jun 26 21:21:27 2014 luc sinet
 */
 
 #include "server.h"
+
+void	apply_map_looping(int *x, int *y, int wdx, int wdy)
+{
+  if (*x >= wdx)
+    *x %= wdx;
+  else if (*x < 0)
+    {
+      *x = ABS(*x);
+      if (*x > wdx)
+	*x %= wdx;
+      *x = wdx - *x;
+    }
+  if (*y >= wdy)
+    *y %= wdy;
+  else if (*y < 0)
+    {
+      *y = ABS(*y);
+      if (*y > wdy)
+	*y %= wdy;
+      *y = wdy - *y;
+    }
+}
+
+void	apply_point_rotation(t_dir dir, int *x, int *y)
+{
+  int	save;
+
+  if (dir == NORTH)
+    return ;
+  if (dir == EAST)
+    {
+      save = *x;
+      *x = *y;
+      *y = -save;
+    }
+  else if (dir == SOUTH)
+    {
+      *x = -(*x);
+      *y = -(*y);
+    }
+  else
+    {
+      save = *x;
+      *x = -(*y);
+      *y = save;
+    }
+}
 
 int	append_from_view(t_world *world, t_player *pl,
 			 t_string *string, int *idx)
@@ -18,11 +65,14 @@ int	append_from_view(t_world *world, t_player *pl,
   int	y;
   char	*elem;
 
-  x = ((pl->dir == EAST || pl->dir == SOUTH) ? -idx[0] : idx[0]);
-  y = ((pl->dir == SOUTH || pl->dir == WEST) ? -idx[1] : idx[1]);
-  printf("%d %d\n", x, y);
-  for (i = 0; (elem = get_element_name(world, pl->x + x,
-				       pl->y + y, i)) != NULL; ++i)
+  x = idx[0];
+  y = idx[1];
+  apply_point_rotation(pl->dir, &x, &y);
+  x += pl->x;
+  y += pl->y;
+  apply_map_looping(&x, &y, world->width, world->height);
+  printf("After: %d %d\n", x, y);
+  for (i = 0; (elem = get_element_name(world, x, y, i)) != NULL; ++i)
     {
       if ((i > 0 && string_append(string, " ", ALLOC_SIZE) == NULL) ||
 	  string_append(string, elem, ALLOC_SIZE) == NULL)
@@ -37,14 +87,14 @@ int	get_view(t_world *world, t_player *pl, t_string *string)
   int	start;
   int	idx[2];
 
-  for (idx[1] = 0; idx[1] < 4 + pl->level - 1; ++idx[1])
+  for (idx[1] = 0; idx[1] < pl->level + 1; ++idx[1])
     {
       start = -idx[1];
       for (idx[0] = start; idx[0] < start + idx[1] * 2 + 1; ++idx[0])
 	{
 	  if (append_from_view(world, pl, string, idx) == -1)
 	    return (-1);
-	  if (idx[0] + 1 < start + idx[1] * 2 + 1)
+	  if (idx[0] + 1 < start + pl->level * 2 + 1)
 	    if (string_append(string, ",", ALLOC_SIZE) == NULL)
 	      return (iperror("get_view: malloc", -1));
 	}

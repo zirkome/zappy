@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Thu Jun 26 20:35:09 2014 guillaume fillon
+** Last update Thu Jun 26 21:29:28 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -27,6 +27,7 @@
 # define MAX_EPOLL_EVENTS 128
 #endif
 
+# define ABS(x) ((x) < 0 ? -(x) : (x))
 # define MAP_POS(x, y, width) (y + width + x)
 # define ALIGN(x, size) ((x + size - 1) &~ (size - 1))
 # define ALLOC_SIZE 64
