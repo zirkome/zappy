@@ -1,4 +1,5 @@
 #include "GameEngine.hpp"
+#include "Input.hpp"
 
 GameEngine::GameEngine(GNetwork *socket): _win(), _input(), _cube("./assets/wall.tga"),
 					  _socket(socket), _map()
@@ -47,10 +48,13 @@ bool GameEngine::update()
 {
   double fps = 1000.0f / 60.0f;
   double time;
+  Input  input;
+  l_Keycit    beg;
+  l_Keycit    end;
 
-  _win.updateInputs(_input);
   _win.updateClock(_clock);
   _socket->update(_map);
+  input.getInput();
   if (_input.getKey(SDLK_ESCAPE) || _input.getInput(SDL_QUIT))
     return (false);
   if ((time = _clock.getElapsed()) < fps)
