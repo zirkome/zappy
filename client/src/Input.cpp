@@ -7,11 +7,20 @@ Input::Input() : _mutex()
   std::memset(&_mouse, 0, sizeof(_mouse));
   std::memset(&_window, 0, sizeof(_window));
   _key = 0;
+  _links[SDLK_AMPERSAND] = SDLK_1;
+  _links[0xE9] = SDLK_2;
+  _links[SDLK_QUOTEDBL] = SDLK_3;
+  _links[SDLK_QUOTE] = SDLK_4;
+  _links[SDLK_LEFTPAREN] = SDLK_5;
+  _links[SDLK_MINUS] = SDLK_6;
+  _links[0xE8] = SDLK_7;
+  _links[SDLK_UNDERSCORE] = SDLK_8;
+  _links[0xE7] = SDLK_9;
+  _links[0xE0] = SDLK_0;
 }
 
 Input::~Input()
 {
-
 }
 
 /*
@@ -20,16 +29,32 @@ Input::~Input()
 ** What we care off is just the key pressed
 */
 
+Keycode		Input::toAscii(Keycode key) const
+{
+  if (key >= SDLK_KP_1 && key <= SDLK_KP_0)
+    key = '0' + (key == SDLK_KP_0 ? (key - 10) : key) - SDLK_KP_1 + 1;
+  if (!(key >= 0 && key < 128))
+    return (-1);
+  return (key);
+}
+
 void	Input::pressKey(const SDL_Event &event)
 {
   Scopelock	<Mutex>sc(_mutex);
   bool		size = false;
   l_Keycit	it;
 
-  if (_key < 128 && isalpha(_key))
+  if ((size ^= (event.key.keysym.mod & (KMOD_SHIFT | KMOD_CAPS))))
     {
-      size ^= (event.key.keysym.mod & (KMOD_SHIFT | KMOD_CAPS));
-      _key -= (size * 32);
+      if (_key < 128 && isalpha(_key))
+	_key -= (size * 32);
+      else
+	{
+	  m_Linkcit it;
+
+	  if ((it = _links.find(_key)) != _links.end())
+	    _key = it->second;
+	}
     }
   if ((it = std::find(_keyPressed.begin(), _keyPressed.end(), _key)) == _keyPressed.end())
     _keyPressed.push_back(_key);

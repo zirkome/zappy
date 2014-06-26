@@ -3,6 +3,7 @@
 
 # include <SDL.h>
 # include <list>
+# include <map>
 # include <algorithm>
 # include "Mutex.hpp"
 # include "Scopelock.hpp"
@@ -39,9 +40,10 @@ typedef struct	s_window
   int		y;
 }		t_window;
 
-typedef std::list<SDL_Keycode>::const_iterator	l_Keycit;
-typedef std::list<SDL_Keycode>::iterator       	l_Keyit;
 typedef int	Keycode;
+typedef std::list<SDL_Keycode>::const_iterator		l_Keycit;
+typedef std::list<SDL_Keycode>::iterator		l_Keyit;
+typedef std::map<Keycode, Keycode>::const_iterator	m_Linkcit;
 
 class Input
 {
@@ -51,6 +53,7 @@ public:
 
   void	getInput();
   bool	isPressed(Keycode key);
+  Keycode toAscii(Keycode key) const;
   const l_Keycit	getPressedBeg() const;
   const l_Keycit	getPressedEnd() const;
   bool	operator[](t_mouse &key) const;
@@ -66,6 +69,7 @@ private:
 
   Mutex				_mutex;
   std::list<Keycode>		_keyPressed;
+  std::map<Keycode, Keycode>   	_links;
   Keycode			_key;
   t_mouse			_mouse;
   t_window			_window;
