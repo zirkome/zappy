@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Thu Jun 26 15:05:03 2014 guillaume fillon
+** Last update Thu Jun 26 21:49:29 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -24,6 +24,7 @@ static int	init_player(t_client *new)
 static void	init_client(t_client *client, int fd)
 {
   client->fd = fd;
+  client->ghost = false;
   client->type = UNKNOWN;
   client->queue = queue_init();
   client->teamptr = NULL;
