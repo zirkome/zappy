@@ -1,3 +1,21 @@
+function execute_cmd(tcp, str, arg)
+	local tab = {
+		["avance"] = avance,
+		["droite"] = droite,
+		["gauche"] = gauche,
+		["voir"] = voir,
+		["inventaire"] = inventaire,
+		["prend"] = prend_objet,
+		["expulse"] = expulse,
+		["broadcast"] = broadcast_text,
+		["incantation"] = incantation,
+		["fork"] = fork,
+		["connect_nbr"] = connect_nbr
+	}
+	if (tab[str] == nil) then print(str .. " isn't valid command.")
+	else return tab[str](tcp, arg) end
+end
+
 function avance(tcp)
 	X, Y = calc_new_position()
 	send_command(tcp, "avance")
@@ -57,4 +75,3 @@ function connect_nbr(tcp)
 	send_command(tcp, "connect_nbr")
 	return recept_command(tcp)
 end
-

@@ -4,11 +4,18 @@ dofile("utils/utils_display.lua")
 dofile("utils/utils_spec.lua")
 dofile("utils/utils_parse.lua")
 dofile("movements.lua")
-dofile("commands.lua")
+dofile("execute_commands.lua")
+dofile("analyse_reception.lua")
 dofile("update.lua")
 
 function execute_ia(x, y, level, orientation, host, port)
 	X, Y, LEVEL, ORIENTATION = x, y, level, orientation
+
+	local tab = parse_case("{nourriture 345, sibur 3, phiras 5, deraumere 0}\n")
+
+	display_2dtab(tab)
+	update_ressource(tab)
+	display_tab(ITEM)
 
 	local tcp = connect_server(host, port)
 	if (tcp ~= nil) then print("connect_server OK") else print("connect_server FAILED") end
@@ -21,22 +28,18 @@ function execute_ia(x, y, level, orientation, host, port)
 	recept_command(tcp)
 	recept_command(tcp)
 	while (1) do
-		avance(tcp)
-		print("forward : " .. X .. " " .. Y)
-		droite(tcp)
-		print("right : " .. X .. " " .. Y)
-		avance(tcp)
-		print("forward : " .. X .. " " .. Y)
-		avance(tcp)
-		print("forward : " .. X .. " " .. Y)
-		avance(tcp)
-		print("forward : " .. X .. " " .. Y)
-		gauche(tcp)
-		print("right : " .. X .. " " .. Y)
-		avance(tcp)
-		print("forward : " .. X .. " " .. Y)
-		avance(tcp)
-		print("forward : " .. X .. " " .. Y)
+		if (avance(tcp) == -42) then break end
+		if (avance(tcp) == -42) then break end
+		if (avance(tcp) == -42) then break end
+		if (gauche(tcp) == -42) then break end
+		if (avance(tcp) == -42) then break end
+		if (avance(tcp) == -42) then break end
+		if (avance(tcp) == -42) then break end
+		if (droite(tcp) == -42) then break end
+		if (avance(tcp) == -42) then break end
+		if (avance(tcp) == -42) then break end
+		if (avance(tcp) == -42) then break end
+		if (droite(tcp) == -42) then break end
 	end
 	close_server(tcp)
 	return 0

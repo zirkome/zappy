@@ -18,7 +18,7 @@ function recept_command(tcp)
 
 	if (s ~= nil) then
 		print_bkt("Received : ", s)
-		return s
+		return analyse_command(s)
 	end
 	print_bkt("Error in recept_command : ", status)
 	return nil

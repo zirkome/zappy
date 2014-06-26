@@ -16,9 +16,3 @@ function display_tab(tab)
 		print(k, v)
 	end
 end
-
-function display_item()
-	for k, v in pairs(ITEM) do
-		print_bkt(v["name"], v["qte"])
-	end
-end

@@ -4,15 +4,12 @@ dofile("utils/utils_display.lua")
 dofile("utils/utils_spec.lua")
 dofile("utils/utils_parse.lua")
 dofile("movements.lua")
-dofile("commands.lua")
+dofile("execute_commands.lua")
+dofile("analyse_reception.lua")
 dofile("update.lua")
 
 function execute_ia(x, y, level, orientation, host, port)
 	local tcp = connect_server(host, port)
-	local tab = parse_case("{nourriture 345, sibur 3, phiras 5, deraumere 0}\n")
-
-	display_2dtab(tab)
-	update_ressource(tab)
 	display_item()
 	close_server(tcp)
 	return 0

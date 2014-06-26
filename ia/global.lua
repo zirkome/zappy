@@ -1,6 +1,7 @@
 -- CHARACTER ATTRIBUTES --
 
-LEVEL = 0
+TEAM = ""
+LEVEL = 1
 
 TIME_T = 100
 TIME_SURVEY = 1260 * 1 / TIME_T
@@ -23,11 +24,11 @@ DIR = {
 }
 
 ITEM = {
-	{["name"] = "nourriture", ["qte"] = 0},
-	{["name"] = "linemate", ["qte"] = 0},
-	{["name"] = "deraumere", ["qte"] = 0},
-	{["name"] = "sibur", ["qte"] = 0},
-	{["name"] = "mendiane", ["qte"] = 0},
-	{["name"] = "phiras", ["qte"] = 0},
-	{["name"] = "thystame", ["qte"] = 0},
+	["nourriture"] = 0,
+	["linemate"] = 0,
+	["deraumere"] = 0,
+	["sibur"] = 0,
+	["mendiane"] = 0,
+	["phiras"] = 0,
+	["thystame"] = 0
 }
