@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 09:39:44 2014 luc sinet
-** Last update Thu Jun 26 16:39:21 2014 guillaume fillon
+** Last update Thu Jun 26 21:54:10 2014 guillaume fillon
 */
 
 #include <signal.h>
@@ -24,6 +24,12 @@ static void	init_teams_slots(t_server *server)
 
 int		init_server(t_server *server)
 {
+  if (server->world.nb_teams < 2)
+    {
+      fputs("You must precise two teams name minimum with -n option" \
+	    "(e.g: -n team1 team2)\n", stderr);
+      return (-1);
+    }
   if (server->world.port == NULL)
     server->world.port = DEFAULT_PORT;
   if ((server->fd = create_inet_server_socket(NULL, server->world.port)) < 0)
