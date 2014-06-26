@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Jun 26 14:48:57 2014 luc sinet
-** Last update Thu Jun 26 21:21:27 2014 luc sinet
+** Last update Thu Jun 26 21:51:56 2014 luc sinet
 */
 
 #include "server.h"
@@ -71,7 +71,6 @@ int	append_from_view(t_world *world, t_player *pl,
   x += pl->x;
   y += pl->y;
   apply_map_looping(&x, &y, world->width, world->height);
-  printf("After: %d %d\n", x, y);
   for (i = 0; (elem = get_element_name(world, x, y, i)) != NULL; ++i)
     {
       if ((i > 0 && string_append(string, " ", ALLOC_SIZE) == NULL) ||
