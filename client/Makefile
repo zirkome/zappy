@@ -5,7 +5,7 @@
 ## Login   <fritsc_h@epitech.net>
 ##
 ## Started on  Sun May  4 15:17:27 2014 Harold Fritsch
-## Last update Wed Jun 25 10:23:46 2014 Adrien Della Maggiora
+## Last update Thu Jun 26 12:47:09 2014 Adrien Della Maggiora
 ##
 
 CC 		=	g++
@@ -26,7 +26,9 @@ SRC 		=	main.cpp \
 			Camera.cpp \
 			Cube.cpp \
 			Exception.cpp \
-			GNetwork.cpp
+			GNetwork.cpp \
+			Protocol.cpp \
+			Map.cpp
 
 OBJ		=	$(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 

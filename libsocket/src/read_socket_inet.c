@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun Apr 13 18:28:56 2014 guillaume fillon
-** Last update Thu May  1 16:21:05 2014 luc sinet
+** Last update Thu Jun 26 13:11:20 2014 Adrien Della Maggiora
 */
 
 #include <stdio.h>
@@ -29,6 +29,5 @@ ssize_t		read_socket_inet(int fd, char *buf, size_t size)
       return ((ssize_t)-1);
     }
   buf[ret] = 0;
-  write(1, buf, ret);
   return (ret);
 }

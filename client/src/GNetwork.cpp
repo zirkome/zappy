@@ -1,6 +1,6 @@
 #include "GNetwork.hpp"
 
-GNetwork::GNetwork(): _fd(-1)
+GNetwork::GNetwork(): _fd(-1), _proto()
 {
   if ((_buffer = create_ringbuffer(1024)) == NULL)
     throw(Exception("Cannot create the ring buffer"));
@@ -8,7 +8,7 @@ GNetwork::GNetwork(): _fd(-1)
 
 GNetwork::~GNetwork()
 {
-
+  delete _buffer;
 }
 
 bool GNetwork::open(const std::string &ip, const std::string &port)
@@ -27,13 +27,14 @@ bool GNetwork::close()
   return (true);
 }
 
-void GNetwork::update(/* Map &map */)
+void GNetwork::update(Map &map)
 {
   char buf[512];
   char aligned[_buffer->size + 1];
   char *tmp;
   ssize_t retv;
   fd_set rds;
+  std::string msg;
 
   FD_ZERO(&rds);
   FD_SET(_fd, &rds);
@@ -43,15 +44,28 @@ void GNetwork::update(/* Map &map */)
   if (FD_ISSET(_fd, &rds))
     {
       tmp = aligned;
-      if ((retv = read(_fd, buf, 512)) <= 0)
-	throw(Exception("Server disconnected"));
+      if ((retv = read_socket_inet(_fd, buf, 512)) <= 0)
+	throw(Exception("Connection Lost"));
       fill_ringbuffer(_buffer, buf, retv);
       align_ringbuffer(_buffer, aligned, sizeof(aligned));
       while ((retv = get_char_pos(_buffer, tmp, '\n')) != -1)
 	{
 	  tmp[retv] = '\0';
-	  std::cout << "Cmd => " << tmp << std::endl;
+	  msg = _proto.parseCmd(std::string(tmp), map);
+	  send(msg);
 	  tmp = &tmp[retv + 1];
 	}
+    }
+}
+
+void GNetwork::send(const std::string &msg)
+{
+  if (!msg.empty())
+    {
+      int tmp;
+      for (unsigned int i = 0;i < msg.size() &&
+	     (tmp = write(_fd, &(msg.c_str())[i], msg.size() - i)) > 0;i += tmp);
+      if (tmp <= 0)
+	throw(Exception("Connection Lost"));
     }
 }

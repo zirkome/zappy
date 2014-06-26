@@ -11,6 +11,7 @@
 # include "GNetwork.hpp"
 # include "Camera.hpp"
 # include "Cube.hpp"
+# include "Map.hpp"
 
 class GameEngine : public gdl::Game
 {
@@ -31,6 +32,7 @@ private:
   Camera	   _cam;
   bool		   _isPlaying;
   GNetwork	   *_socket;
+  Map		   _map;
 };
 
 #endif /* _GAMEENGINE_HPP_ */
