@@ -45,7 +45,8 @@ SRC 		= main.c \
 		  strings.c \
 		  gui_map.c \
 		  gui_player.c \
-		  gui_time.c
+		  gui_time.c \
+		  authentication.c
 
 COMMONSRC	= error.c
 

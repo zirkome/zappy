@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Thu Jun 26 16:35:55 2014 guillaume fillon
+** Last update Thu Jun 26 20:35:09 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <string.h>
 # include <time.h>
+# include <stdarg.h>
 # include <libsocket.h>
 
 # include "enums.h"
@@ -92,6 +93,7 @@ struct		s_client
 {
   int		fd;
   t_client_type	type;
+  t_bool	ghost;
   t_ringb	*rb;
   t_queue	*queue;
   t_team	*teamptr;
@@ -139,8 +141,15 @@ typedef struct	s_command
   int		(*func)(t_server *server, t_client *client, char *arg);
 }		t_command;
 
-int		parse_option(int opt, t_world *option, int argc, char *argv[]);
+/*
+** Util
+*/
 long		stoi(char *str);
+__attribute__((format (printf, 2, 3)))
+char		*cnprintf(size_t size, const char *format, ...);
+char		*vcnprintf(size_t size, const char *format, va_list ap);
+
+int		parse_option(int opt, t_world *option, int argc, char *argv[]);
 
 int		init_server(t_server *server);
 void		init_fds(t_server *server);
@@ -151,6 +160,7 @@ char		*get_element_name(t_world *world, int x, int y,
 int		read_state(t_server *server, t_client *client);
 int		write_state(t_server *server, t_client *client);
 int		connect_new_user(t_server *server);
+int		kick_user(t_server *server, t_client *cl);
 int		disconnect_user(t_server *server, t_client *cl);
 int		add_user(t_client **cl, int fd);
 
@@ -169,6 +179,11 @@ int		epoll_monitor(struct epoll_event events[],
 int		epoll_event_add(int fd, struct epoll_event *ev);
 int		epoll_event_mod(int fd, struct epoll_event *ev);
 int		epoll_event_del(int fd, struct epoll_event *ev);
+
+/*
+** Authentication
+*/
+int	authenticate_user(t_server *server, t_client *cl, char *input);
 
 /*
 ** Player commands
