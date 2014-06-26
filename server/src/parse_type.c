@@ -5,9 +5,9 @@ t_bool	is_number(char c)
   return (c >= '0' && c <= '9');
 }
 
-t_type	get_type(char *line)
+t_arg_type	get_type(char *line)
 {
-  int	i;
+  int		i;
 
   if (!line[0])
     return (none);
