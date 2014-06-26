@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Tue Jun 24 13:53:46 2014 guillaume fillon
+## Last update Thu Jun 26 14:49:55 2014 luc sinet
 ##
 
 CC 		= gcc
@@ -40,12 +40,12 @@ SRC 		= main.c \
 		  player_actions.c \
 		  player_commands.c \
 		  player_movement.c \
+		  player_broadcast.c \
+		  player_view.c \
 		  strings.c \
 		  gui_map.c \
 		  gui_player.c \
-		  gui_time.c \
-		  player_broadcast.c
-
+		  gui_time.c
 
 COMMONSRC	= error.c
 
