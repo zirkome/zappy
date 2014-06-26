@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 09:39:44 2014 luc sinet
-** Last update Thu Jun 26 21:54:10 2014 guillaume fillon
+** Last update Thu Jun 26 22:12:48 2014 guillaume fillon
 */
 
 #include <signal.h>
@@ -35,7 +35,7 @@ int		init_server(t_server *server)
   if ((server->fd = create_inet_server_socket(NULL, server->world.port)) < 0)
     return (-1);
   if (server->world.delay == 0)
-    server->world.delay = 1;
+    server->world.delay = 100;
   if (server->world.slots == 0)
     server->world.slots = 1;
   server->cl = NULL;
