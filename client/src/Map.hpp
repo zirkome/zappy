@@ -3,12 +3,8 @@
 
 # include <iostream>
 # include <list>
-
-typedef struct	s_coord
-{
-  int		x;
-  int		y;
-}		t_coord;
+# include "Exception.hpp"
+# include "Entity.hpp"
 
 class Map
 {
@@ -17,12 +13,16 @@ public:
   virtual ~Map();
 
   void createMap(int, int);
-  char operator[](int) const;
+  char &operator[](int) const;
   int getSize() const;
+  void addPlayer(t_player *player);
+  void addEgg(t_egg *egg);
+  void display() const;
 
 private:
   char *_map;
-  std::list<t_coord> _player;
+  std::list<t_player *> _player;
+  std::list<t_egg *> _egg;
   int  _x;
   int  _y;
 };
