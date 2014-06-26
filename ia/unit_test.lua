@@ -28,18 +28,22 @@ function execute_ia(x, y, level, orientation, host, port)
 	recept_command(tcp)
 	recept_command(tcp)
 	while (1) do
-		if (avance(tcp) == -42) then break end
-		if (avance(tcp) == -42) then break end
-		if (avance(tcp) == -42) then break end
-		if (gauche(tcp) == -42) then break end
-		if (avance(tcp) == -42) then break end
-		if (avance(tcp) == -42) then break end
-		if (avance(tcp) == -42) then break end
-		if (droite(tcp) == -42) then break end
-		if (avance(tcp) == -42) then break end
-		if (avance(tcp) == -42) then break end
-		if (avance(tcp) == -42) then break end
-		if (droite(tcp) == -42) then break end
+		if (execute_cmd(tcp, "avance") == -42) then break end
+		if (execute_cmd(tcp, "avance") == -42) then break end
+		if (execute_cmd(tcp, "gauche") == -42) then break end
+		if (execute_cmd(tcp, "avance") == -42) then break end
+		if (execute_cmd(tcp, "avance") == -42) then break end
+		if (execute_cmd(tcp, "droite") == -42) then break end
+		if (execute_cmd(tcp, "avance") == -42) then break end
+		if (execute_cmd(tcp, "avance") == -42) then break end
+		if (execute_cmd(tcp, "gauche") == -42) then break end
+		if (execute_cmd(tcp, "avance") == -42) then break end
+		if (execute_cmd(tcp, "avance") == -42) then break end
+		if (execute_cmd(tcp, "droite") == -42) then break end
+		if (execute_cmd(tcp, "avance") == -42) then break end
+		if (execute_cmd(tcp, "avance") == -42) then break end
+		if (execute_cmd(tcp, "avance") == -42) then break end
+		if (execute_cmd(tcp, "avance") == -42) then break end
 	end
 	close_server(tcp)
 	return 0
