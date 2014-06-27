@@ -5,11 +5,11 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Mon Jun 23 10:51:02 2014 luc sinet
-** Last update Tue Jun 24 09:06:15 2014 luc sinet
+** Last update Fri Jun 27 13:53:51 2014 luc sinet
 */
 
-#ifndef _STRING_H_
-# define _STRING_H_
+#ifndef _STRINGS_H_
+#define _STRINGS_H_
 
 typedef struct	s_string
 {
@@ -19,5 +19,6 @@ typedef struct	s_string
 
 void		string_init(t_string *string);
 char		*string_append(t_string *string, char *app, int align_size);
+int		string_clear(t_string *string, int type);
 
-#endif /* _STRING_H_ */
+#endif /* _STRINGS_H_ */

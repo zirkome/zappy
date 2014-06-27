@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Thu Jun 26 21:29:28 2014 luc sinet
+** Last update Fri Jun 27 13:57:13 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -158,13 +158,15 @@ void		init_fds(t_server *server);
 int		generate_map(t_world *world);
 char		*get_element_name(t_world *world, int x, int y,
 				  unsigned int pos);
+int		add_to_world(t_world *world, int type, int x, int y);
+int		remove_from_world(t_world *world, int type, int x, int y);
 
 int		read_state(t_server *server, t_client *client);
 int		write_state(t_server *server, t_client *client);
 int		connect_new_user(t_server *server);
 int		kick_user(t_server *server, t_client *cl);
 int		disconnect_user(t_server *server, t_client *cl);
-int		add_user(t_client **cl, int fd);
+int		add_user(t_client **cl, t_world *world, int fd);
 
 int		process_input(t_server *server, t_client *cl, char *input);
 t_bool		check_argument_type(char *arg, t_command *cmds, int idx);

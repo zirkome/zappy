@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Thu Jun 26 20:54:14 2014 guillaume fillon
+** Last update Thu Jun 26 21:55:08 2014 luc sinet
 */
 
 #include "server.h"
@@ -20,7 +20,7 @@ int			connect_new_user(t_server *server)
   size = sizeof(struct sockaddr_in);
   if ((fd = accept(server->fd, (struct sockaddr *)&client, &size)) == -1)
     return (iperror("accept", -1));
-  if (add_user(&server->cl, fd) == -1)
+  if (add_user(&server->cl, &server->world, fd) == -1)
     return (-1);
   cl = server->cl;
   while (cl->next)

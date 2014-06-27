@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Fri Jun 27 11:06:40 2014 guillaume fillon
+** Last update Fri Jun 27 13:59:36 2014 luc sinet
 */
 
 #include "server.h"
@@ -34,7 +34,7 @@ static void	init_client(t_client *client, int fd)
   client->next = NULL;
 }
 
-int		add_user(t_client **cl, int fd)
+int		add_user(t_client **cl, t_world *world, int fd)
 {
   t_client	*new;
   t_client	*tmp;
@@ -54,5 +54,5 @@ int		add_user(t_client **cl, int fd)
   while (tmp->next)
     tmp = tmp->next;
   tmp->next = new;
-  return (0);
+  return (add_to_world(world, PLAYER, tmp->player->x, tmp->player->y));
 }
