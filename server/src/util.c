@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 17:02:27 2014 guillaume fillon
-** Last update Thu Jun 26 19:22:51 2014 guillaume fillon
+** Last update Fri Jun 27 23:58:50 2014 guillaume fillon
 */
 
 #include <err.h>
@@ -19,7 +19,9 @@ char	*vcnprintf(size_t size, const char *format, va_list ap)
 {
   char	buf[BUFSIZ];
 
-  if (vsnprintf(buf, size, format, ap) < 0)
+  if (size > BUFSIZ)
+    return (NULL);
+  if (vsnprintf(buf, size - 1, format, ap) < 0)
     return (NULL);
   return (strdup(buf));
 }
