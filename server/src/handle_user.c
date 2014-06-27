@@ -5,10 +5,12 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Thu Jun 26 21:49:29 2014 guillaume fillon
+** Last update Fri Jun 27 11:06:40 2014 guillaume fillon
 */
 
 #include "server.h"
+
+static int	g_increment = 1;
 
 static int	init_player(t_client *new)
 {
@@ -18,6 +20,8 @@ static int	init_player(t_client *new)
   new->player->x = 0;
   new->player->y = 0;
   new->player->level = 1;
+  new->player->id = g_increment++;
+  new->player->teamptr = NULL;
   return (0);
 }
 
@@ -27,7 +31,6 @@ static void	init_client(t_client *client, int fd)
   client->ghost = false;
   client->type = UNKNOWN;
   client->queue = queue_init();
-  client->teamptr = NULL;
   client->next = NULL;
 }
 

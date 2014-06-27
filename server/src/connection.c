@@ -32,8 +32,8 @@ int			connect_new_user(t_server *server)
 void		erase_client(t_client *cl)
 {
   printf("Client disconnected\n");
-  if (cl->teamptr != NULL)
-    ++cl->teamptr->slots;
+  if (cl->player->teamptr != NULL)
+    ++cl->player->teamptr->slots;
   queue_clear(&cl->queue);
   free(cl->rb->buf);
   free(cl->rb);

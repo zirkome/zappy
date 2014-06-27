@@ -45,7 +45,7 @@ int		authenticate_user(t_server *server, t_client *cl, char *input)
       for (i = 0; i < w.nb_teams; ++i)
 	if (strcmp(command, w.teams[i].name) == 0 && w.teams[i].slots > 0)
 	  {
-	    cl->teamptr = &w.teams[i];
+	    cl->player->teamptr = &w.teams[i];
 	    cl->type = IA;
 	    --w.teams[i].slots;
 	    queue_push(&cl->queue, cnprintf(10, "%d\n", w.teams[i].slots));

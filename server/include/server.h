@@ -82,10 +82,12 @@ typedef struct	s_team
 
 typedef struct	s_player
 {
+  int		id;
   int		x;
   int		y;
   t_dir		dir;
   int		level;
+  t_team	*teamptr;
 }		t_player;
 
 typedef struct	s_client t_client;
@@ -97,7 +99,6 @@ struct		s_client
   t_bool	ghost;
   t_ringb	*rb;
   t_queue	*queue;
-  t_team	*teamptr;
   t_player	*player;
   t_client	*next;
 };
