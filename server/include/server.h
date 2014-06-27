@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Fri Jun 27 23:01:40 2014 luc sinet
+** Last update Fri Jun 27 23:21:30 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -160,6 +160,7 @@ int		generate_map(t_world *world);
 char		*get_element_name(t_world *world, int x, int y,
 				  unsigned int pos);
 int		get_element_id(char *name);
+char		*get_name_from_id(int id);
 int		add_to_world(t_world *world, int type, int x, int y);
 int		remove_from_world(t_world *world, int type, int x, int y);
 

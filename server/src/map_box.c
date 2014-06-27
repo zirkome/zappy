@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Jun 22 23:10:38 2014 luc sinet
-** Last update Fri Jun 27 23:02:35 2014 luc sinet
+** Last update Fri Jun 27 23:19:49 2014 luc sinet
 */
 
 #include "server.h"
@@ -29,6 +29,13 @@ char		*get_element_name(t_world *world, int x, int y,
   if (elem < FOOD || elem > PLAYER)
     return (NULL);
   return (strdup(g_names[elem - 1]));
+}
+
+char	*get_name_from_id(int id)
+{
+  if (id < FOOD || id > PLAYER)
+    return (NULL);
+  return (strdup(g_names[id - 1]));
 }
 
 int	get_element_id(char *name)
