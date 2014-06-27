@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Jun 22 20:33:00 2014 luc sinet
-** Last update Fri Jun 27 16:58:35 2014 luc sinet
+** Last update Fri Jun 27 23:00:09 2014 luc sinet
 */
 
 #include "server.h"
@@ -28,12 +28,13 @@ void		scale_to_percent(double * const tab, int size)
 
 void		init_probs(double * const item, double * const drop)
 {
-  item[0] = PLINEMATE;
-  item[1] = PDERAUMERE;
-  item[2] = PSIBUR;
-  item[3] = PMENDIANE;
-  item[4] = PPHIRAS;
-  item[5] = PTHYSTAME;
+  item[0] = PFOOD;
+  item[1] = PLINEMATE;
+  item[2] = PDERAUMERE;
+  item[3] = PSIBUR;
+  item[4] = PMENDIANE;
+  item[5] = PPHIRAS;
+  item[6] = PTHYSTAME;
   drop[0] = PFIRST_CASE;
   drop[1] = PSECOND_CASE;
   drop[2] = PTHIRD_CASE;

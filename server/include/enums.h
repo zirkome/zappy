@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Jun 26 14:59:43 2014 luc sinet
-** Last update Fri Jun 27 16:56:22 2014 luc sinet
+** Last update Fri Jun 27 22:58:59 2014 luc sinet
 */
 
 #ifndef _ENUMS_H_
@@ -38,6 +38,7 @@ enum	e_command
 
 enum
   {
+    PFOOD = 20,
     PLINEMATE = 30,
     PDERAUMERE = 25,
     PSIBUR = 30,
@@ -57,7 +58,8 @@ enum
 
 enum
   {
-    LINEMATE = 1,
+    FOOD = 1,
+    LINEMATE,
     DERAUMERE,
     SIBUR,
     MENDIANE,

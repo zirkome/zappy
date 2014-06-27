@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Fri Jun 27 22:51:33 2014 luc sinet
+** Last update Fri Jun 27 23:01:40 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -43,7 +43,7 @@
 # define ARGLEN 256
 
 # define CASE_PROB 5
-# define ITEM_PROB 6
+# define ITEM_PROB THYSTAME
 # define NB_ELEM (EMPTY - 1)
 
 typedef enum	bool
