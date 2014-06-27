@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 26 15:24:27 2014 guillaume fillon
-** Last update Thu Jun 26 20:52:30 2014 guillaume fillon
+** Last update Fri Jun 27 09:20:00 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -49,6 +49,7 @@ int		authenticate_user(t_server *server, t_client *cl, char *input)
 	    cl->type = IA;
 	    --w.teams[i].slots;
 	    queue_push(&cl->queue, cnprintf(10, "%d\n", w.teams[i].slots));
+	    queue_push(&cl->queue, cnprintf(10, "%d %d\n", w.width, w.height));
 	    return (0);
 	  }
     }
