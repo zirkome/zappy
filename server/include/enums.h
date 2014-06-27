@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Jun 26 14:59:43 2014 luc sinet
-** Last update Fri Jun 27 22:58:59 2014 luc sinet
+** Last update Fri Jun 27 23:28:54 2014 guillaume fillon
 */
 
 #ifndef _ENUMS_H_

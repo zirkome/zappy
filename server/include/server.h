@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Fri Jun 27 23:21:30 2014 luc sinet
+** Last update Sat Jun 28 00:00:08 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
@@ -182,7 +182,6 @@ int		remove_from_inventory(t_player *player, int type, int amount);
 /*
 ** epoll/monitoring
 */
-
 int		start_monitoring(t_server *server);
 int		epoll_create_monitor();
 int		epoll_monitor(struct epoll_event events[],
@@ -215,6 +214,7 @@ int		pl_connect_nbr(t_server *server, t_client *client, char *arg);
 /*
 ** GUI commands
 */
+int		gui_welcome(t_server *server, t_client *client);
 int		gui_msz(t_server *server, t_client *client, char *arg);
 int		gui_bct(t_server *server, t_client *client, char *arg);
 int		gui_mct(t_server *server, t_client *client, char *arg);

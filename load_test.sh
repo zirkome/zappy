@@ -22,5 +22,5 @@ fi
 
 for i in `seq 1 $max`
 do
-    nc "$ip" "$port" < $file > /dev/null &
+    nc "$ip" "$port" < $file &#> /dev/null &
 done

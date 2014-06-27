@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 26 15:24:27 2014 guillaume fillon
-** Last update Fri Jun 27 09:20:00 2014 guillaume fillon
+** Last update Fri Jun 27 11:30:18 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -28,6 +28,7 @@ static t_bool	get_command(char *line, char *command)
 
 int		authenticate_user(t_server *server, t_client *cl, char *input)
 {
+  char		*msg;
   char		command[CMDLEN];
   int		i;
   t_world	w;
@@ -36,7 +37,7 @@ int		authenticate_user(t_server *server, t_client *cl, char *input)
   if (strcmp(command, "GRAPHIC") == 0)
     {
       cl->type = GRAPHIC;
-      /* gui_welcome(server, cl); */
+      gui_welcome(server, cl);
       return (0);
     }
   else
@@ -48,8 +49,12 @@ int		authenticate_user(t_server *server, t_client *cl, char *input)
 	    cl->player->teamptr = &w.teams[i];
 	    cl->type = IA;
 	    --w.teams[i].slots;
-	    queue_push(&cl->queue, cnprintf(10, "%d\n", w.teams[i].slots));
-	    queue_push(&cl->queue, cnprintf(10, "%d %d\n", w.width, w.height));
+	    msg = cnprintf(10, "%d\n", w.teams[i].slots);
+	    queue_push(&cl->queue, msg);
+	    free(msg);
+	    msg = cnprintf(10, "%d %d\n", w.width, w.height);
+	    queue_push(&cl->queue, msg);
+	    free(msg);
 	    return (0);
 	  }
     }

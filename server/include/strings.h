@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Mon Jun 23 10:51:02 2014 luc sinet
-** Last update Fri Jun 27 17:45:17 2014 luc sinet
+** Last update Fri Jun 27 23:28:25 2014 guillaume fillon
 */
 
 #ifndef _STRINGS_H_

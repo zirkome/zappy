@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Thu Jun 26 20:42:38 2014 guillaume fillon
+** Last update Fri Jun 27 13:49:25 2014 guillaume fillon
 */
 
 #include <err.h>
@@ -37,14 +37,21 @@ static void		update_fds_to_epoll(t_server *server)
 {
   struct epoll_event	ev;
   t_client		*tmp;
+  t_client		*tofree;
 
-  for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
+  for (tmp = server->cl, tofree = NULL; tmp != NULL; tmp = tmp->next)
     {
+      if (tofree != NULL)
+	{
+	  free(tofree);
+	  tofree = NULL;
+	}
       if (tmp->ghost == true && queue_empty(tmp->queue))
 	{
 	  if (epoll_event_del(tmp->fd, NULL) == -1)
 	    iperror("epoll_ctl: client", -1);
 	  kick_user(server, tmp);
+	  tofree = tmp;
 	  continue ;
 	}
       ev.events = EPOLLIN | EPOLLONESHOT;
