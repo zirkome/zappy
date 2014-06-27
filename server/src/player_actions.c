@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 13:50:31 2014 luc sinet
-** Last update Fri Jun 27 22:35:05 2014 luc sinet
+** Last update Fri Jun 27 22:54:06 2014 luc sinet
 */
 
 #include "server.h"
@@ -20,19 +20,31 @@ int		pl_take(t_server *server, t_client *client,
   pl = client->player;
   pos = MAP_POS(pl->x, pl->y, server->world.width);
   if ((elem_id = get_element_id(arg)) == -1 ||
-      string_erase(server->world.map[pos], elem_id) == -1)
+      string_erase(server->world.map[pos], elem_id) == -1 ||
+      add_to_inventory(pl, elem_id, 1) == -1)
     {
       queue_push(&client->queue, "ko\n");
       return (-1);
     }
-  add_to_inventory(pl, elem_id, 1);
   queue_push(&client->queue, "ok\n");
   return (0);
 }
 
-int	pl_put(t_server *server UNUSED, t_client *client UNUSED,
-	       char *arg UNUSED)
+int		pl_put(t_server *server, t_client *client,
+		       char *arg)
 {
+  t_player	*pl;
+  int		elem_id;
+
+  pl = client->player;
+  if ((elem_id = get_element_id(arg)) == -1 ||
+      remove_from_inventory(pl, elem_id, 1) == -1 ||
+      add_to_world(&server->world, elem_id, pl->x, pl->y))
+    {
+      queue_push(&client->queue, "ko\n");
+      return (-1);
+    }
+  queue_push(&client->queue, "ok\n");
   return (0);
 }
 
