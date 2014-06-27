@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Jun 26 14:59:43 2014 luc sinet
-** Last update Thu Jun 26 15:00:07 2014 luc sinet
+** Last update Fri Jun 27 16:56:22 2014 luc sinet
 */
 
 #ifndef _ENUMS_H_
@@ -57,7 +57,7 @@ enum
 
 enum
   {
-    LINEMATE = 0,
+    LINEMATE = 1,
     DERAUMERE,
     SIBUR,
     MENDIANE,

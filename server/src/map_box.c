@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Jun 22 23:10:38 2014 luc sinet
-** Last update Fri Jun 27 13:57:17 2014 luc sinet
+** Last update Fri Jun 27 17:20:35 2014 luc sinet
 */
 
 #include "server.h"
@@ -24,9 +24,9 @@ char		*get_element_name(t_world *world, int x, int y,
       slot >= strlen(world->map[pos]->content))
     return (NULL);
   elem = world->map[pos]->content[slot];
-  if (elem >= NB_ELEM || elem < 0)
+  if (elem < LINEMATE || elem > PLAYER)
     return (NULL);
-  return (strdup(names[elem]));
+  return (strdup(names[elem - 1]));
 }
 
 int	add_to_world(t_world *world, int type, int x, int y)
@@ -34,10 +34,11 @@ int	add_to_world(t_world *world, int type, int x, int y)
   int	pos;
   char	tab[2];
 
+  tab[1] = '\0';
   pos = MAP_POS(x, y, world->width);
-  if (type >= NB_ELEM)
+  if (type > PLAYER)
     return (-1);
-  snprintf(tab, 1, "%d", type);
+  tab[0] = type;
   return (string_append(world->map[pos], tab, AV_MAP) == NULL ? -1 : 0);
 }
 

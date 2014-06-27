@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Jun 22 20:33:00 2014 luc sinet
-** Last update Tue Jun 24 11:54:11 2014 luc sinet
+** Last update Fri Jun 27 16:58:35 2014 luc sinet
 */
 
 #include "server.h"
@@ -48,14 +48,14 @@ int	generate_item(const double * const item_prob, int prob_size)
   int	i;
 
   start = 0;
-  randnum = rand() % 100;
+  randnum = rand() % 101;
   for (i = 0; i < prob_size; ++i)
     {
       if (start + item_prob[i] > randnum)
-	return (i);
+	return (i + 1);
       start += item_prob[i];
     }
-  return (0);
+  return (1);
 }
 
 int		generate_boxes(t_string **box,
