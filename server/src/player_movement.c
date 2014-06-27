@@ -5,19 +5,21 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 13:47:25 2014 luc sinet
-** Last update Thu Jun 26 17:16:04 2014 luc sinet
+** Last update Fri Jun 27 19:41:09 2014 luc sinet
 */
 
 #include "server.h"
 
-int		pl_forward(t_server *server UNUSED, t_client *client,
+int		pl_forward(t_server *server, t_client *client,
 			   char *arg UNUSED)
 {
   t_player	*pl;
 
   pl = client->player;
+  remove_from_world(&server->world, PLAYER, pl->x, pl->y);
   pl->x += ((pl->dir == WEST) ? -1 : (pl->dir == EAST) ? 1 : 0);
   pl->y += ((pl->dir == SOUTH) ? -1 : (pl->dir == NORTH) ? 1 : 0);
+  add_to_world(&server->world, PLAYER, pl->x, pl->y);
   queue_push(&client->queue, "ok\n");
   return (0);
 }

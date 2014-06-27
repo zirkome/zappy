@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Jun 22 23:10:38 2014 luc sinet
-** Last update Fri Jun 27 17:20:35 2014 luc sinet
+** Last update Fri Jun 27 19:32:59 2014 luc sinet
 */
 
 #include "server.h"
@@ -47,7 +47,8 @@ int	remove_from_world(t_world *world, int type, int x, int y)
   int	pos;
 
   pos = MAP_POS(x, y, world->width);
-  if (type >= NB_ELEM)
+  if (type > PLAYER || type < LINEMATE)
     return (-1);
-  return (string_clear(world->map[pos], type));
+  string_erase(world->map[pos], type);
+  return (0);
 }

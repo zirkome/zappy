@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Fri Jun 27 13:57:13 2014 luc sinet
+** Last update Fri Jun 27 19:39:32 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -28,7 +28,7 @@
 #endif
 
 # define ABS(x) ((x) < 0 ? -(x) : (x))
-# define MAP_POS(x, y, width) (y + width + x)
+# define MAP_POS(x, y, width) (y * width + x)
 # define ALIGN(x, size) ((x + size - 1) &~ (size - 1))
 # define ALLOC_SIZE 64
 # define AV_MAP 8
@@ -176,6 +176,7 @@ void		welcome_server(char *port);
 /*
 ** epoll/monitoring
 */
+
 int		start_monitoring(t_server *server);
 int		epoll_create_monitor();
 int		epoll_monitor(struct epoll_event events[],
@@ -187,7 +188,7 @@ int		epoll_event_del(int fd, struct epoll_event *ev);
 /*
 ** Authentication
 */
-int	authenticate_user(t_server *server, t_client *cl, char *input);
+int		authenticate_user(t_server *server, t_client *cl, char *input);
 
 /*
 ** Player commands
