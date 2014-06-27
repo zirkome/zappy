@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Fri Jun 27 19:39:32 2014 luc sinet
+** Last update Fri Jun 27 21:56:02 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -87,6 +87,7 @@ typedef struct	s_player
   int		y;
   t_dir		dir;
   int		level;
+  int		inventory[NB_ELEM];
   t_team	*teamptr;
 }		t_player;
 
@@ -158,6 +159,7 @@ void		init_fds(t_server *server);
 int		generate_map(t_world *world);
 char		*get_element_name(t_world *world, int x, int y,
 				  unsigned int pos);
+int		get_element_id(char *name);
 int		add_to_world(t_world *world, int type, int x, int y);
 int		remove_from_world(t_world *world, int type, int x, int y);
 
@@ -172,6 +174,9 @@ int		process_input(t_server *server, t_client *cl, char *input);
 t_bool		check_argument_type(char *arg, t_command *cmds, int idx);
 
 void		welcome_server(char *port);
+
+int		add_to_inventory(t_player *player, int type, int amount);
+int		remove_from_inventory(t_player *player, int type, int amount);
 
 /*
 ** epoll/monitoring

@@ -5,17 +5,19 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Jun 22 23:10:38 2014 luc sinet
-** Last update Fri Jun 27 19:32:59 2014 luc sinet
+** Last update Fri Jun 27 22:39:34 2014 luc sinet
 */
 
 #include "server.h"
 
+static char	*g_names[NB_ELEM] = {"linemate", "deraumere",
+				     "sibur", "mendiane",
+				     "phiras", "thystame",
+				     "joueur"};
+
 char		*get_element_name(t_world *world, int x, int y,
 				  unsigned int slot)
 {
-  static char	*names[NB_ELEM] = {"linemate", "deraumere", "sibur",
-				   "mendiane", "phiras", "thystame",
-				   "joueur"};
   int		pos;
   int		elem;
 
@@ -26,7 +28,15 @@ char		*get_element_name(t_world *world, int x, int y,
   elem = world->map[pos]->content[slot];
   if (elem < LINEMATE || elem > PLAYER)
     return (NULL);
-  return (strdup(names[elem - 1]));
+  return (strdup(g_names[elem - 1]));
+}
+
+int	get_element_id(char *name)
+{
+  int	i;
+
+  for (i = 0; i < NB_ELEM && strcmp(name, g_names[i]) != 0; ++i);
+  return (i < NB_ELEM ? i + 1 : -1);
 }
 
 int	add_to_world(t_world *world, int type, int x, int y)

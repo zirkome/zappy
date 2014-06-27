@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Fri Jun 27 17:14:12 2014 luc sinet
+** Last update Fri Jun 27 20:52:20 2014 luc sinet
 */
 
 #include "server.h"
@@ -22,6 +22,7 @@ static int	init_player(t_client *new)
   new->player->level = 1;
   new->player->id = g_increment++;
   new->player->teamptr = NULL;
+  memset(new->player->inventory, 0, sizeof(new->player->inventory));
   return (0);
 }
 
