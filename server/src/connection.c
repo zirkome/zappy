@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Fri Jun 27 20:32:12 2014 guillaume fillon
+** Last update Sat Jun 28 13:04:08 2014 luc sinet
 */
 
 #include "server.h"
@@ -29,9 +29,12 @@ int			connect_new_user(t_server *server)
   return (fd);
 }
 
-void		erase_client(t_client *cl)
+void		erase_client(t_world *world, t_client *cl)
 {
-  printf("Client disconnected\n");
+  int		pos;
+
+  pos = MAP_POS(cl->player->x, cl->player->y, world->width);
+  string_erase(world->map[pos], PLAYER);
   if (cl->player->teamptr != NULL)
     ++cl->player->teamptr->slots;
   queue_clear(&cl->queue);
@@ -39,6 +42,7 @@ void		erase_client(t_client *cl)
   free(cl->rb);
   free(cl->player);
   close(cl->fd);
+  printf("Client disconnected\n");
 }
 
 int	kick_user(t_server *server, t_client *cl)
@@ -49,7 +53,7 @@ int	kick_user(t_server *server, t_client *cl)
   if (server->cl == cl)
     {
       server->cl = cl->next;
-      erase_client(cl);
+      erase_client(&server->world, cl);
       return (2);
     }
   while (list->next && list->next != cl)
@@ -57,7 +61,7 @@ int	kick_user(t_server *server, t_client *cl)
   if (list->next)
     {
       list->next = cl->next;
-      erase_client(cl);
+      erase_client(&server->world, cl);
       return (2);
     }
   return (ierror("Can't disconnect client\n", -1));
