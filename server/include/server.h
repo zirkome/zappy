@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Sat Jun 28 00:00:08 2014 guillaume fillon
+** Last update Sat Jun 28 11:03:18 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -163,6 +163,9 @@ int		get_element_id(char *name);
 char		*get_name_from_id(int id);
 int		add_to_world(t_world *world, int type, int x, int y);
 int		remove_from_world(t_world *world, int type, int x, int y);
+t_client       	*get_client_by_pos(t_client *cl, t_world *world,
+				   int x, int y);
+int		count_type_on_box(t_world *world, int type, int x, int y);
 
 int		read_state(t_server *server, t_client *client);
 int		write_state(t_server *server, t_client *client);

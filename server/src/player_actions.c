@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 13:50:31 2014 luc sinet
-** Last update Fri Jun 27 22:54:06 2014 luc sinet
+** Last update Sat Jun 28 11:27:10 2014 luc sinet
 */
 
 #include "server.h"
@@ -48,8 +48,41 @@ int		pl_put(t_server *server, t_client *client,
   return (0);
 }
 
-int	pl_expulse(t_server *server UNUSED, t_client *client UNUSED,
-		   char *arg UNUSED)
+void		expulse_player(t_world *world, t_client *client, t_dir dir)
 {
+  t_player	*pl;
+
+  pl = client->player;
+  remove_from_world(world, PLAYER, pl->x, pl->y);
+  pl->x += ((dir == WEST) ? -1 : (dir == EAST) ? 1 : 0);
+  pl->y += ((dir == SOUTH) ? -1 : (dir == NORTH) ? 1 : 0);
+  add_to_world(world, PLAYER, pl->x, pl->y);
+  queue_push(&client->queue, "deplacement: K\n");
+}
+
+int		pl_expulse(t_server *server, t_client *client,
+			   char *arg UNUSED)
+{
+  int		to_expulse;
+  t_client	*tmp;
+
+  to_expulse = count_type_on_box(&server->world, PLAYER,
+				 client->player->x, client->player->y) - 1;
+  if (to_expulse > 0)
+    {
+      for (tmp = server->cl; tmp != NULL && to_expulse > 0; tmp = tmp->next)
+	{
+	  if (tmp != client &&
+	      tmp->player->x == client->player->x &&
+	      tmp->player->y == client->player->y)
+	    {
+	      expulse_player(&server->world, tmp, client->player->dir);
+	      --to_expulse;
+	    }
+	}
+      return (queue_push(&client->queue, "ok\n"));
+    }
+  else
+    return (queue_push(&client->queue, "ko\n"));
   return (0);
 }
