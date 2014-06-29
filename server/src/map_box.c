@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Jun 22 23:10:38 2014 luc sinet
-** Last update Fri Jun 27 23:19:49 2014 luc sinet
+** Last update Sun Jun 29 13:48:35 2014 luc sinet
 */
 
 #include "server.h"
@@ -56,6 +56,7 @@ int	add_to_world(t_world *world, int type, int x, int y)
   if (type > PLAYER)
     return (-1);
   tab[0] = type;
+  printf("pos: %d %d -> %d\n", x, y, pos);
   return (string_append(world->map[pos], tab, AV_MAP) == NULL ? -1 : 0);
 }
 

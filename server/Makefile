@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Sat Jun 28 11:20:43 2014 luc sinet
+## Last update Sun Jun 29 13:43:37 2014 luc sinet
 ##
 
 CC 		= gcc
@@ -44,6 +44,7 @@ SRC 		= main.c \
 		  player_broadcast.c \
 		  player_view.c \
 		  player_inventory.c \
+		  geometry.c \
 		  strings.c \
 		  gui_misc.c \
 		  gui_map.c \
@@ -59,7 +60,7 @@ COBJ		= $(addprefix $(OBJCOMMON), $(COMMONSRC:.c=.o))
 CFLAGS 		+= -g -W -Wall -Wextra
 CFLAGS		+= -I../include -I./include -I$(COMMONDIR)/$(INCDIR) -I$(LIBSOCKET)/$(INCDIR)
 
-LDFLAGS 	= -Wl,-O2 -L$(LIBSOCKET) -lsocket
+LDFLAGS 	= -Wl,-O2 -L$(LIBSOCKET) -lsocket -lm
 
 dummy := $(shell test -d $(OBJDIR) || mkdir $(OBJDIR)) \
 	 $(shell test -d $(OBJCOMMON) || mkdir $(OBJCOMMON)) \
