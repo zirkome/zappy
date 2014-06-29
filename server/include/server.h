@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Sat Jun 28 13:11:43 2014 luc sinet
+** Last update Sun Jun 29 13:52:49 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -165,6 +165,7 @@ int		add_to_world(t_world *world, int type, int x, int y);
 int		remove_from_world(t_world *world, int type, int x, int y);
 t_client       	*get_client_by_pos(t_client *cl, t_world *world,
 				   int x, int y);
+void		apply_map_looping(int *x, int *y, int wdx, int wdy);
 int		count_type_on_box(t_world *world, int type, int x, int y);
 int		count_player_in_team(t_client *cl, t_team *team);
 
