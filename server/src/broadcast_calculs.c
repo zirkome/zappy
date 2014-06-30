@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Mon Jun 30 10:25:32 2014 luc sinet
-** Last update Mon Jun 30 10:33:40 2014 luc sinet
+** Last update Mon Jun 30 15:36:09 2014 luc sinet
 */
 
 #include "server.h"
@@ -68,7 +68,7 @@ int		get_case_pos(double ax, double ay,
 				 {-0.5, -1.5},
 				 {-0.5, -0.5},
 				 {-0.5, 0.5},
-				 {0.5, -0.5},
+				 {0.5, 0.5},
 				 {1.5, 0.5},
 				 {1.5, -0.5},
 				 {1.5, -1.5}};

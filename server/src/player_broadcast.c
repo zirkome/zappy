@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Mon Jun 23 10:40:26 2014 luc sinet
-** Last update Mon Jun 30 11:30:08 2014 luc sinet
+** Last update Mon Jun 30 15:36:12 2014 luc sinet
 */
 
 #include "server.h"
@@ -25,8 +25,11 @@ int		send_broadcast(t_geometry *geo, t_client *client, char *arg)
   else
     x = ((y - geo->b) / geo->a);
   pos = get_case_pos(geo->bx, geo->by, x, y);
-  pos = (pos + client->player->dir * 2);
-  pos = (pos > 8) ? (pos - 8) : pos;
+  if (pos != 0)
+    {
+      pos = (pos + client->player->dir * 2);
+      pos = (pos > 8) ? (pos - 8) : pos;
+    }
   snprintf(tab, 64, "message %d,", pos);
   string_append(&string, tab, ALLOC_SIZE);
   string_append(&string, arg, ALLOC_SIZE);
@@ -49,6 +52,8 @@ int		find_player_dir(t_player *pla, t_client *client,
   geo.by = plb->y + 0.5;
   geo.p_dist = point_distance(geo.ax, geo.ay, geo.bx, geo.by);
   translate_point(&geo, world, 0);
+  if (geo.ax == geo.bx && geo.ay != geo.by)
+    geo.bx += 0.1;
   geo.a = calc_director_coef(geo.ax, geo.ay, geo.bx, geo.by);
   geo.b = get_origin_coor(geo.ax, geo.ay, geo.a);
   return (send_broadcast(&geo, client, arg));
