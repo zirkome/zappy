@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 14:03:33 2014 luc sinet
-** Last update Sat Jun 28 13:17:09 2014 luc sinet
+** Last update Mon Jun 30 20:42:24 2014 luc sinet
 */
 
 #include "server.h"
@@ -19,6 +19,7 @@ int	pl_incantation(t_server *server UNUSED, t_client *client UNUSED,
 int	pl_fork(t_server *server UNUSED, t_client *client UNUSED,
 		char *arg UNUSED)
 {
+
   return (0);
 }
 

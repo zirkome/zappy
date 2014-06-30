@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Mon Jun 30 15:19:19 2014 guillaume fillon
+** Last update Mon Jun 30 20:37:59 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -61,6 +61,7 @@ typedef enum	e_client_type
   {
     GRAPHIC,
     IA,
+    EGG,
     UNKNOWN
   }		t_client_type;
 
