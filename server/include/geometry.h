@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sat Jun 28 18:02:43 2014 luc sinet
-** Last update Sun Jun 29 22:57:34 2014 luc sinet
+** Last update Mon Jun 30 10:33:14 2014 luc sinet
 */
 
 #ifndef _GEOMETRY_H_

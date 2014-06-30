@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Sun Jun 29 13:43:37 2014 luc sinet
+## Last update Mon Jun 30 10:26:39 2014 luc sinet
 ##
 
 CC 		= gcc
@@ -45,6 +45,7 @@ SRC 		= main.c \
 		  player_view.c \
 		  player_inventory.c \
 		  geometry.c \
+		  broadcast_calculs.c \
 		  strings.c \
 		  gui_misc.c \
 		  gui_map.c \

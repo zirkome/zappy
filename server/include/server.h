@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Sun Jun 29 13:52:49 2014 luc sinet
+** Last update Mon Jun 30 10:38:35 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -22,6 +22,7 @@
 # include "enums.h"
 # include "errors.h"
 # include "strings.h"
+# include "geometry.h"
 
 #ifndef MAX_EPOLL_EVENTS
 # define MAX_EPOLL_EVENTS 128
@@ -29,9 +30,6 @@
 
 # define ABS(x) ((x) < 0 ? -(x) : (x))
 # define MAP_POS(x, y, width) (y * width + x)
-# define ALIGN(x, size) ((x + size - 1) &~ (size - 1))
-# define ALLOC_SIZE 64
-# define AV_MAP 8
 
 # define DEFAULT_PORT "6000"
 # define TIMEOUT (5 * 60)
@@ -183,6 +181,11 @@ void		welcome_server(char *port);
 
 int		add_to_inventory(t_player *player, int type, int amount);
 int		remove_from_inventory(t_player *player, int type, int amount);
+
+void		translate_point(t_geometry *geo, t_world *world, int dist);
+int		find_case(t_geometry *geo, double *x, double *y);
+int		get_case_pos(double ax, double ay,
+			     double x, double y);
 
 /*
 ** epoll/monitoring
