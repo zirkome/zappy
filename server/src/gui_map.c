@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Tue Jun 24 13:18:45 2014 guillaume fillon
-** Last update Mon Jun 30 15:09:52 2014 guillaume fillon
+** Last update Mon Jun 30 15:34:03 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -32,11 +32,42 @@ int	gui_msz(t_server *server, t_client *client, UNUSED char *arg)
   return (0);
 }
 
-int	gui_bct(UNUSED t_server *server, UNUSED t_client *client, UNUSED char *arg)
+//TODO: Norme
+int		gui_bct(t_server *server, t_client *client, char *arg)
 {
+  int		x;
+  int		y;
+  int		i;
+  t_string	**map;
+  char		*msg;
+  char		*x_str;
+  char		*y_str;
+
+  x_str = strtok(arg, " \t");
+  y_str = strtok(NULL, " \t");
+  if (x_str == NULL || y_str == NULL)
+    {
+      queue_push(&client->queue, "sbp\n");
+      return (-1);
+    }
+  x = stoi(x_str);
+  y = stoi(y_str);
+  i = y * server->world.width + x;
+  map = server->world.map;
+  msg = cnprintf(BUFSIZ, "bct %d %d %d %d %d %d %d %d %d\n", x, y,
+		 count_resource(map[i], FOOD),
+		 count_resource(map[i], LINEMATE),
+		 count_resource(map[i], DERAUMERE),
+		 count_resource(map[i], SIBUR),
+		 count_resource(map[i], MENDIANE),
+		 count_resource(map[i], PHIRAS),
+		 count_resource(map[i], THYSTAME));
+  queue_push(&client->queue, msg);
+  free(msg);
   return (0);
 }
 
+//TODO: Norme
 int		gui_mct(t_server *server, t_client *client, UNUSED char *arg)
 {
   char		*msg;
