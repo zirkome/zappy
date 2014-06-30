@@ -11,7 +11,8 @@ t_arg_type	get_type(char *line)
 
   if (!line[0])
     return (none);
-  for (i = 0; line[i]; ++i)
+  for (i = 0; line[i] == '-'; ++i);
+  for (; line[i]; ++i)
     if (!is_number(line[i]))
       return (string);
   return (number);
