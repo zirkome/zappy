@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Mon Jun 30 10:38:35 2014 luc sinet
+** Last update Mon Jun 30 15:19:19 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
@@ -175,7 +175,7 @@ int		disconnect_user(t_server *server, t_client *cl);
 int		add_user(t_client **cl, t_world *world, int fd);
 
 int		process_input(t_server *server, t_client *cl, char *input);
-t_bool		check_argument_type(char *arg, t_command *cmds, int idx);
+t_bool		check_argument_type(char *arg, t_command *cmd);
 
 void		welcome_server(char *port);
 
