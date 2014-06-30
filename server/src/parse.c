@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Thu Jun 26 16:44:36 2014 guillaume fillon
+** Last update Mon Jun 30 15:27:02 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -84,11 +84,11 @@ static int	parse_input(char *line, char *arg)
     ++i;
   if (g_command[i].name == NULL ||
       get_argument(&line[strlen(command)], arg, g_command[i].arg) == false ||
-      check_argument_type(arg, g_command, i) == false)
+      check_argument_type(arg, &g_command[i]) == false)
     return (-1);
   if (g_command[i].arg == true && i != BROADCAST)
     {
-      if (check_argument_type(arg, g_command, i) == false)
+      if (check_argument_type(arg, &g_command[i]) == false)
 	return (-1);
     }
   return (i);
@@ -104,7 +104,6 @@ int	process_input(t_server *server, t_client *cl, char *input)
   printf("Got input: %s\n", input);
   if ((idx = parse_input(input, arg)) == -1)
     return (-1);
-  if (idx < MSZ)
-    g_command[idx].func(server, cl, arg);
+  g_command[idx].func(server, cl, arg);
   return (0);
 }
