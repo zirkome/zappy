@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Mon Jun 30 15:19:19 2014 guillaume fillon
+** Last update Mon Jun 30 16:44:41 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
@@ -119,7 +119,7 @@ typedef struct	s_world
   int		height;
   t_string	**map;
   int		slots;
-  int		delay;
+  time_t	delay;
   int		nb_teams;
   t_team	*teams;
   int		hflg;
