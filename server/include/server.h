@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Tue Jul  1 13:57:53 2014 luc sinet
+** Last update Tue Jul  1 15:06:40 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
