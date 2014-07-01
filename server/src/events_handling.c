@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr 20 08:36:48 2014 luc sinet
-** Last update Fri Jun 27 13:56:21 2014 guillaume fillon
+** Last update Tue Jul  1 09:36:10 2014 luc sinet
 */
 
 #include "server.h"
@@ -19,7 +19,7 @@ int		user_read(t_server *server, t_client *cl)
 
   tmp = aligned;
   if ((retv = read(cl->fd, buf, RSIZE)) <= 0)
-    return (kick_user(server, cl));
+    return (kick_user(&server->cl, cl, &server->world));
   fill_ringbuffer(cl->rb, buf, retv);
   align_ringbuffer(cl->rb, aligned, sizeof(aligned));
   while ((retv = get_char_pos(cl->rb, tmp, '\n')) != -1)
@@ -59,7 +59,7 @@ int		user_write(t_server *server, t_client *cl)
   if ((wsize = write(cl->fd, msg, msglen)) <= 0)
     {
       perror("");
-      return (kick_user(server, cl));
+      return (kick_user(&server->cl, cl, &server->world));
     }
   if (wsize < msglen)
     shift_msg(msg, wsize);

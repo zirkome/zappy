@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Sat Jun 28 13:04:08 2014 luc sinet
+** Last update Tue Jul  1 09:34:30 2014 luc sinet
 */
 
 #include "server.h"
@@ -45,23 +45,23 @@ void		erase_client(t_world *world, t_client *cl)
   printf("Client disconnected\n");
 }
 
-int	kick_user(t_server *server, t_client *cl)
+int		kick_user(t_client **list, t_client *cl, t_world *world)
 {
-  t_client	*list;
+  t_client	*tmp;
 
-  list = server->cl;
-  if (server->cl == cl)
+  tmp = *list;
+  if (tmp == cl)
     {
-      server->cl = cl->next;
-      erase_client(&server->world, cl);
+      *list = cl->next;
+      erase_client(world, cl);
       return (2);
     }
-  while (list->next && list->next != cl)
-    list = list->next;
-  if (list->next)
+  while (tmp->next && tmp->next != cl)
+    tmp = tmp->next;
+  if (tmp->next)
     {
-      list->next = cl->next;
-      erase_client(&server->world, cl);
+      tmp->next = cl->next;
+      erase_client(world, cl);
       return (2);
     }
   return (ierror("Can't disconnect client\n", -1));

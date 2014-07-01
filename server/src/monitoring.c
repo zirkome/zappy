@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Mon Jun 30 16:44:00 2014 guillaume fillon
+** Last update Tue Jul  1 09:36:23 2014 luc sinet
 */
 
 #include <err.h>
@@ -50,7 +50,7 @@ static void		update_fds_to_epoll(t_server *server)
 	{
 	  if (epoll_event_del(tmp->fd, NULL) == -1)
 	    iperror("epoll_ctl: client", -1);
-	  kick_user(server, tmp);
+	  kick_user(&server->cl, tmp, &server->world);
 	  tofree = tmp;
 	  continue ;
 	}
