@@ -57,7 +57,30 @@ int		gui_plv(t_server *server, t_client *client, char *arg)
   return (-1);
 }
 
-int	gui_pin(UNUSED t_server *server, UNUSED t_client *client, UNUSED char *arg)
+int		gui_pin(t_server *server, t_client *client, char *arg)
 {
-  return (0);
+  t_player	*pl;
+  char		*msg;
+  t_client	*tmp;
+  int		id;
+
+  id = stoi(arg);
+  for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
+    {
+      pl = tmp->player;
+      if (pl->id == id)
+	{
+	  msg = cnprintf(BUFSIZ, "pin %d %d %d %d %d %d %d %d %d %d\n",
+			 pl->id, pl->x, pl->y,
+			 pl->inventory[0], pl->inventory[1],
+			 pl->inventory[2], pl->inventory[3],
+			 pl->inventory[4], pl->inventory[5],
+			 pl->inventory[6]);
+	  queue_push(&client->queue, msg);
+	  free(msg);
+	  return (0);
+	}
+    }
+  queue_push(&client->queue, "sbp\n");
+  return (-1);
 }
