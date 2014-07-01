@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sat Jun 28 10:52:08 2014 luc sinet
-** Last update Sat Jun 28 13:15:46 2014 luc sinet
+** Last update Tue Jul  1 16:22:13 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -26,15 +26,15 @@ int	count_type_on_box(t_world *world, int type, int x, int y)
   return (count);
 }
 
-int		count_player_in_team(t_client *cl, t_team *team)
+int		count_player_in_team(t_list list, t_team *team)
 {
-  t_client	*tmp;
+  t_node	*tmp;
   int		counter;
 
   counter = 0;
-  for (tmp = cl; tmp != NULL; tmp = tmp->next)
+  for (tmp = list; tmp != NULL; tmp = tmp->next)
     {
-      if (tmp->player->teamptr == team)
+      if (((t_client*)tmp->value)->player->teamptr == team)
 	++counter;
     }
   return (counter);

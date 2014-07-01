@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 26 15:24:27 2014 guillaume fillon
-** Last update Tue Jul  1 09:36:47 2014 luc sinet
+** Last update Tue Jul  1 17:26:20 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -26,25 +26,23 @@ static t_bool	get_command(char *line, char *command)
   return (true);
 }
 
-void		clone_if_egg(t_client *list, t_client *cl, t_world *world)
+void		clone_if_egg(t_list *list, t_client *cl, t_world *world)
 {
-  t_client	*it;
+  t_node	*it;
 
-  it = list;
-  while (it != NULL)
+  for (it = *list; it != NULL; it = it->next)
     {
-      if (it->type == EGG)
+      if (((t_client*)it->value)->type == EGG)
 	{
-	  it->type = UNKNOWN;
-	  *(cl->player) = *(it->player);
-	  kick_user(&list, it, world);
+	  ((t_client*)it->value)->type = UNKNOWN;
+	  *(cl->player) = *(((t_client*)it->value)->player);
+	  kick_user(list, (t_client*)it->value, world);
 	  break ;
 	}
-      it = it->next;
     }
 }
 
-int    	check_remaining_slots(t_world *w, t_client *list,
+int    	check_remaining_slots(t_world *w, t_list *list,
 			      t_client *cl, char *command)
 {
   int	i;
@@ -80,6 +78,6 @@ int	authenticate_user(t_server *server, t_client *cl, char *input)
       return (0);
     }
   else
-    return (check_remaining_slots(&server->world, server->cl, cl, command));
+    return (check_remaining_slots(&server->world, &server->cl, cl, command));
   return (-2);
 }

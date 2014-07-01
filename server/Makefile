@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Tue Jul  1 13:24:50 2014 luc sinet
+## Last update Tue Jul  1 17:26:35 2014 guillaume fillon
 ##
 
 CC 		= gcc
@@ -24,12 +24,13 @@ OBJCOMMON	= $(COMMONDIR)/$(OBJDIR)
 LIBSOCKET	= ../libsocket
 
 SRC 		= main.c \
+		  generic_list.c \
 		  init.c \
 		  welcome.c \
 		  map.c \
 		  map_box.c \
 		  map_player.c \
-		  handle_user.c \
+		  client.c \
 		  events_handling.c \
 		  connection.c \
 		  getopt.c \

@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Tue Jun 24 13:50:43 2014 guillaume fillon
-** Last update Tue Jul  1 14:55:41 2014 guillaume fillon
+** Last update Tue Jul  1 17:22:55 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -13,18 +13,19 @@
 int		gui_ppo(t_server *server, t_client *client, char *arg)
 {
   char		*msg;
-  t_client	*tmp;
+  t_node	*tmp;
   int		id;
 
   id = stoi(arg);
   for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
     {
-      if (tmp->player->id == id)
+      if (((t_client*)tmp->value)->player->id == id)
 	{
 	  msg = cnprintf(BUFSIZ, "ppo %d %d %d %d\n",
-			 tmp->player->id,
-			 tmp->player->x, tmp->player->y,
-			 tmp->player->dir);
+			 ((t_client*)tmp->value)->player->id,
+			 ((t_client*)tmp->value)->player->x,
+			 ((t_client*)tmp->value)->player->y,
+			 ((t_client*)tmp->value)->player->dir);
 	  queue_push(&client->queue, msg);
 	  free(msg);
 	  return (0);
@@ -37,17 +38,17 @@ int		gui_ppo(t_server *server, t_client *client, char *arg)
 int		gui_plv(t_server *server, t_client *client, char *arg)
 {
   char		*msg;
-  t_client	*tmp;
+  t_node	*tmp;
   int		id;
 
   id = stoi(arg);
   for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
     {
-      if (tmp->player->id == id)
+      if (((t_client*)tmp->value)->player->id == id)
 	{
 	  msg = cnprintf(BUFSIZ, "plv %d %d\n",
-			 tmp->player->id,
-			 tmp->player->level);
+			 ((t_client*)tmp->value)->player->id,
+			 ((t_client*)tmp->value)->player->level);
 	  queue_push(&client->queue, msg);
 	  free(msg);
 	  return (0);
@@ -61,13 +62,13 @@ int		gui_pin(t_server *server, t_client *client, char *arg)
 {
   t_player	*pl;
   char		*msg;
-  t_client	*tmp;
+  t_node	*tmp;
   int		id;
 
   id = stoi(arg);
   for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
     {
-      pl = tmp->player;
+      pl = ((t_client*)tmp->value)->player;
       if (pl->id == id)
 	{
 	  msg = cnprintf(BUFSIZ, "pin %d %d %d %d %d %d %d %d %d %d\n",

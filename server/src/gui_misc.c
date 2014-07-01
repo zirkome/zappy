@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 26 21:14:01 2014 guillaume fillon
-** Last update Sat Jun 28 15:57:26 2014 guillaume fillon
+** Last update Tue Jul  1 17:21:41 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -13,7 +13,7 @@
 int		gui_welcome(t_server *server, t_client *client)
 {
   char		*msg;
-  t_client	*tmp;
+  t_node	*tmp;
   t_player	*pl;
   int		ret;
 
@@ -23,9 +23,9 @@ int		gui_welcome(t_server *server, t_client *client)
   ret |= gui_tna(server, client, NULL);
   for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
     {
-      if (tmp->type == IA)
+      if (((t_client*)tmp->value)->type == IA)
 	{
-	  pl = tmp->player;
+	  pl = ((t_client*)tmp->value)->player;
 	  msg = cnprintf(BUFSIZ, "pnw #%d %d %d %d %d %s\n",
 			 pl->id, pl->x, pl->y,
 			 pl->dir, pl->level, pl->teamptr->name);

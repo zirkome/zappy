@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Mon Jun 23 10:40:26 2014 luc sinet
-** Last update Mon Jun 30 15:36:12 2014 luc sinet
+** Last update Tue Jul  1 17:21:13 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -63,11 +63,11 @@ int		pl_broadcast(t_server *server, t_client *client,
 			     char *arg)
 {
   t_player	*pl;
-  t_client	*tmp;
+  t_node	*tmp;
 
   pl = client->player;
   for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
-    if (tmp != client)
-      find_player_dir(pl, tmp, &server->world, arg);
+    if ((t_client*)tmp->value != client)
+      find_player_dir(pl, (t_client*)tmp->value, &server->world, arg);
   return (queue_push(&client->queue, "ok\n"));
 }

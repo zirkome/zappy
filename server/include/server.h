@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Tue Jul  1 15:06:40 2014 guillaume fillon
+** Last update Tue Jul  1 17:08:29 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
@@ -19,6 +19,7 @@
 # include <stdarg.h>
 # include <libsocket.h>
 
+# include "generic_list.h"
 # include "enums.h"
 # include "errors.h"
 # include "strings.h"
@@ -44,12 +45,6 @@
 # define CASE_PROB 5
 # define ITEM_PROB THYSTAME
 # define NB_ELEM (EMPTY - 1)
-
-typedef enum	bool
-  {
-    false = 0,
-    true
-  }		t_bool;
 
 typedef enum	e_arg_type
   {
@@ -91,9 +86,7 @@ typedef struct	s_player
   t_team	*teamptr;
 }		t_player;
 
-typedef struct	s_client t_client;
-
-struct		s_client
+typedef struct	s_client
 {
   int		fd;
   t_client_type	type;
@@ -101,8 +94,7 @@ struct		s_client
   t_ringb	*rb;
   t_queue	*queue;
   t_player	*player;
-  t_client	*next;
-};
+}		t_client;
 
 /**
  * @port TCP port of the server (-p)
@@ -134,7 +126,7 @@ typedef struct		s_server
   int			fd;
   struct epoll_event	events[MAX_EPOLL_EVENTS];
   t_world		world;
-  t_client		*cl;
+  t_list		cl;
 }			t_server;
 
 typedef struct	s_command
@@ -168,14 +160,18 @@ t_client       	*get_client_by_pos(t_client *cl, t_world *world,
 				   int x, int y);
 void		apply_map_looping(int *x, int *y, int wdx, int wdy);
 int		count_type_on_box(t_world *world, int type, int x, int y);
-int		count_player_in_team(t_client *cl, t_team *team);
+int		count_player_in_team(t_list cl, t_team *team);
 
 int		read_state(t_server *server, t_client *client);
 int		write_state(t_server *server, t_client *client);
 int		connect_new_user(t_server *server);
-int		kick_user(t_client **list, t_client *cl, t_world *world);
+int		kick_user(t_list *list, t_client *cl, t_world *world);
 int		disconnect_user(t_server *server, t_client *cl);
-int		add_user(t_client **cl, t_world *world, int fd);
+
+/*
+** Client
+*/
+t_client	*client_new(int fd);
 
 int		process_input(t_server *server, t_client *cl, char *input);
 t_bool		check_argument_type(char *arg, t_command *cmd);
