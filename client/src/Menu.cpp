@@ -3,51 +3,39 @@
 #include <sstream>
 #include <sys/types.h>
 #include <dirent.h>
+#include <Clock.hh>
 #include "Menu.hpp"
-#include "NavigationWidget.hpp"
+#include "Settings.hpp"
 #include "ImageWidget.hpp"
+#include "QuitWidget.hpp"
 
-Menu::Menu()
+Menu::Menu(): _done(false), _gameEngine(NULL/* put a GNetwork*/)
 {
-
+  _set = new Settings();
+  _clock = new gdl::Clock();
 }
 
 Menu::~Menu()
 {
-  AWidget	*background;
-  AWidget	*title;
-  AWidget	*quit;
-
-  background = *_newGamePanelSolo.begin();
-  title = *(_newGamePanelSolo.begin() + 1);
-  quit = *(_newGamePanelSolo.begin() + 2);
-  delete background;
-  delete title;
-  delete back;
-  freePanel(background, title, back, _mainPanel);
+  freePanel(_mainPanel);
 }
 
-void	Menu::freePanel(AWidget *background, AWidget *title,
-			AWidget *quit, std::vector<AWidget *> &panel)
+void	Menu::freePanel(std::vector<AWidget *> &panel)
 {
   std::vector<AWidget *>::iterator	it;
   std::vector<AWidget *>::iterator	end;
 
   for (it = panel.begin(), end = panel.end(); it != end; ++it)
-    {
-      if (*it != quit && *it != title && *it != background)
-	delete (*it);
-    }
+    if (*it != NULL)
+      delete (*it);
 }
 
 bool  Menu::initialize()
 {
-  int x = _gameInfo.set->getVar(W_WIDTH), y = _gameInfo.set->getVar(W_HEIGHT);
+  int x = _set->getVar(W_WIDTH), y = _set->getVar(W_HEIGHT);
 
   if (!_win.start(x, y, "Zappy", SDL_INIT_EVERYTHING, SDL_WINDOW_OPENGL))
     throw(Exception("Cannot open window"));
-  if (!_gameEngine.initialize())
-    return (false);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -55,7 +43,8 @@ bool  Menu::initialize()
       !_textShader.load("./Shaders/text.vp", GL_VERTEX_SHADER) ||
       !_textShader.build())
     return (false);
-
+  if (!_gameEngine.initialize())
+    return (false);
   ImageWidget	*background = new ImageWidget(0, 0, y, x,
 					      "./assets/background.tga");
   ImageWidget	*title = new ImageWidget(x / 8, y / 1.43f, y / 4.8f, x / 1.3f,
@@ -71,28 +60,27 @@ bool  Menu::initialize()
 bool		Menu::update()
 {
   double	time;
-  double	fps = (1000 / _gameInfo.set->getVar(FPS));
-  int		y = _gameInfo.set->getVar(W_HEIGHT);
+  double	fps = (1000 / _set->getVar(FPS));
+  int		y = _set->getVar(W_HEIGHT);
   t_window	win;
   t_mouse	mouse;
 
-  _gameEngine.resetAlreadyPlayed();
-  _gameInfo.input->getInput(*(_gameInfo.set));
-  (*(_gameInfo.input))[mouse];
-  (*_gameInfo.input)[win];
+  _input->getInput();
+  (*_input)[mouse];
+  (*_input)[win];
   if (mouse.event == BUTTONUP)
     for (std::vector<AWidget *>::iterator it = _mainPanel.begin(),
 	   endit = _mainPanel.end(); it != endit ; ++it)
       if ((*it)->isClicked(mouse.x, y - mouse.y))
 	{
-	  (*it)->onClick(_gameInfo, (*this));
+	  (*it)->onClick((*this));
 	  break;
 	}
-  _win.updateClock(*(_gameInfo.clock));
-  if (_gameInfo.input->isPressed(SDLK_ESCAPE) || win.event == WIN_QUIT)
+  _win.updateClock(*_clock);
+  if (_input->isPressed(SDLK_ESCAPE) || win.event == WIN_QUIT)
     return (false);
   _frames++;
-  if ((time = _gameInfo.clock->getElapsed()) < fps)
+  if ((time = _clock->getElapsed()) < fps)
     {
       _frames = 0;
       usleep((fps - time) * 1000);
@@ -102,7 +90,7 @@ bool		Menu::update()
 
 void	Menu::draw()
 {
-  float x = _gameInfo.set->getVar(W_WIDTH), y = _gameInfo.set->getVar(W_HEIGHT);
+  float x = _set->getVar(W_WIDTH), y = _set->getVar(W_HEIGHT);
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glViewport(0, 0, x, y);
@@ -115,12 +103,12 @@ void	Menu::draw()
   for (std::vector<AWidget *>::iterator it = _mainPanel.begin(),
 	 endit = _mainPanel.end(); it != endit ; ++it)
     {
-      (*it)->onDisplay(_filename, _filePos);
+      //      (*it)->onDisplay(_filename, _filePos); // wat iz diz shit
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-      (*it)->draw(_textShader, *_gameInfo.clock);
+      (*it)->draw(_textShader, *_clock);
     }
   glEnable(GL_DEPTH_TEST);
   _win.flush();
@@ -128,11 +116,11 @@ void	Menu::draw()
 
 void	Menu::handleClock(int &frame, double &time, double fps)
 {
-  time = _gameInfo.clock->getElapsed();
+  time = _clock->getElapsed();
   if (time < fps)
     usleep((fps - time) * 1000);
   frame = (frame >= 100) ? 100 : frame + 1;
-  _win.updateClock(*_gameInfo.clock);
+  _win.updateClock(*_clock);
 }
 
 bool	Menu::textFillBuf(std::string &buf, unsigned int maxlen, Keycode key)
@@ -165,16 +153,16 @@ void	Menu::textInput(std::string &buf, unsigned int maxlen)
   int		frame = -1;
   Keycode	key = 0;
   Keycode	save = -1;
-  Input		*input = _gameInfo.input;
+  Input		*input = _input;
 
   buf.clear();
   buf.push_back('|');
   while (key != 27)
     {
-      input->getInput(*(_gameInfo.set));
+      _input->getInput();
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      l_Keycit beg = input->getPressedBeg();
-      l_Keycit end = input->getPressedEnd();
+      l_Keycit beg = _input->getPressedBeg();
+      l_Keycit end = _input->getPressedEnd();
       if (beg != end && *beg == SDLK_LSHIFT)
 	++beg;
       if (beg != end)
@@ -208,24 +196,18 @@ void	Menu::textInput(std::string &buf, unsigned int maxlen)
     }
 }
 
-void	Menu::launchGame(const std::string &file, int load)
+void	Menu::launchGame()
 {
-  Map map(*(_gameInfo.set));
-  _gameInfo.map = &map;
   bool	done = true;
 
-  _gameEngine.setShutdown(false);
   while ((done = _gameEngine.update()))
     _gameEngine.draw();
-  _gameInfo.map = NULL;
 }
 
 void	Menu::launch()
 {
-  Intro intro;
-
   if (!initialize())
-      return ;
+    return ;
   while (!_done)
     {
       if (update() == false)
