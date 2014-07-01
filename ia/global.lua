@@ -2,6 +2,7 @@
 
 TEAM = ""
 LEVEL = 1
+NUM_CLT = 0
 
 TIME_T = 100
 TIME_SURVEY = 1260 * 1 / TIME_T
@@ -12,7 +13,7 @@ MAP_YMAX = 10
 X = 0
 Y = 0
 
-ORIENTATION = 0
+ORIENTATION = 1
 
 -- UTILS ATTRIBUTES --
 
@@ -24,7 +25,8 @@ DIR = {
 }
 
 ITEM = {
-	["nourriture"] = 0,
+	["joueur"] = 1,
+	["nourriture"] = 10,
 	["linemate"] = 0,
 	["deraumere"] = 0,
 	["sibur"] = 0,
@@ -32,3 +34,6 @@ ITEM = {
 	["phiras"] = 0,
 	["thystame"] = 0
 }
+
+COMMANDS = {{["send"] = "", ["response"] = ""}
+BROADCAST = {}
