@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Tue Jul  1 09:35:33 2014 luc sinet
+** Last update Tue Jul  1 10:27:16 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -22,6 +22,7 @@
 # include "enums.h"
 # include "errors.h"
 # include "strings.h"
+# include "vectors.h"
 # include "geometry.h"
 
 #ifndef MAX_EPOLL_EVENTS
