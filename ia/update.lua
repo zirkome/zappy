@@ -8,7 +8,6 @@ function update_ressource_if(tab_case)
 	for i = 1, #tab_case do
 		for j = 1, #tab_case[i] do
 			if (is_required_at(tab_case[i][j]) == true) then
-				print("i've found and am need " .. tab_case[i][j])
 				return tab_case[i][j], i
 			end
 		end

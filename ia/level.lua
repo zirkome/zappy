@@ -57,10 +57,10 @@ function determine_way_broadcast(tcp)
 	if (CURRENT_K ~= nil) then
 		local tab = {
 			[1] = av,
-			[2] = ga_av,
-			[3] = ga_av,
+			[2] = ga_av,
+			[3] = ga_av,
 			[4] = ga_av,
-			[5] = ga_ga,
+			[5] = ga_ga,
 			[6] = dr_av,
 			[7] = dr_av,
 			[8] = dr_av
@@ -68,7 +68,7 @@ function determine_way_broadcast(tcp)
 		if (CURRENT_K ~= 0) then
 			return tab[CURRENT_K](tcp)
 		else
-			KO
+			return KO
 		end
 	end
 	return KO
@@ -138,7 +138,7 @@ function moove_to_food(tcp)
 	if (case ~= false and where ~= nil) then
 		return moove[where]
 	else
-		KO
+		return KO
 	end
 end
 
@@ -195,7 +195,7 @@ function moove_to_stone(tcp)
 	if (case ~= false and where ~= nil) then
 		return moove[where]
 	else
-		KO
+		return KO
 	end
 end
 

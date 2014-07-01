@@ -56,7 +56,7 @@ FUNCTION_STATEMENT = {
 	need_to_fork,				-- 21
 	fork_p,						-- 22
 	team_message,				-- 23
-	same_level					-- 24
+	same_level,					-- 24
 }
 
 WALKTROUGHT_STATEMENT = {
@@ -66,10 +66,10 @@ WALKTROUGHT_STATEMENT = {
 	[4] = {20, 2},
 	[5] = {6, 14},
 	[6] = {1, 6},
-	[7] = {8, 9},
+	[7] = {8, 9},
 	[8] = {10, 11},
 	[9] = {7, 9},
-	[10] = {1, 10},
+	[10] = {1, 10},
 	[11] = {7, 11},
 	[12] = {23, 13},
 	[13] = {16, 15},
