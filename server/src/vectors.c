@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Tue Jul  1 09:57:48 2014 luc sinet
-** Last update Tue Jul  1 13:47:11 2014 luc sinet
+** Last update Tue Jul  1 18:02:39 2014 luc sinet
 */
 
 #include "server.h"
@@ -34,7 +34,6 @@ int	vector_append(t_vector *vector, void *ent, int align_size)
       vector->size = new_size;
     }
   vector->tab[pos] = ent;
-  printf("tab[%d] = %p => %d\n", pos, ent, *((int *)(vector->tab[pos])));
   vector->tab[pos + 1] = NULL;
   return (0);
 }
