@@ -1,10 +1,11 @@
 #include "GameEngine.hpp"
 #include "Input.hpp"
 
-GameEngine::GameEngine(GNetwork *socket): _win(), _input(), _cube("./assets/wall.tga"),
-					  _socket(socket), _map()
+GameEngine::GameEngine(GNetwork *socket): _win(), _input(),
+					  _ground("./assets/wall.tga"),
+					  _socket(socket)
 {
-  _isPlaying = false;
+  _display.loading = true;
 }
 
 GameEngine::~GameEngine()
@@ -16,7 +17,7 @@ bool GameEngine::initialize()
 {
   if (!_win.start(1600, 900, "-- Zappy --"))
     return (false);
-  if (!_cube.initialize())
+  if (!_ground.initialize())
     return (false);
   if (!_shader.load("./Shaders/basic.fp", GL_FRAGMENT_SHADER)
       || !_shader.load("./Shaders/basic.vp", GL_VERTEX_SHADER)
@@ -27,6 +28,7 @@ bool GameEngine::initialize()
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  // _resources.push_back(new Model());
   return (true);
 }
 
@@ -40,7 +42,15 @@ void GameEngine::draw()
   _shader.setUniform("nbLight", 0);
   _shader.setUniform("isFog", 0);
   _shader.setUniform("isLight", 0);
-  _cube.draw(_shader, _clock);
+  if (!_display.loading)
+    {
+      _ground.setScale(glm::vec3(_display.map.getX(), -0.5, _display.map.getY()));
+      _ground.draw(_shader, _clock);
+    }
+  else
+    {
+
+    }
   _win.flush();
 }
 
@@ -48,14 +58,14 @@ bool GameEngine::update()
 {
   double fps = 1000.0f / 60.0f;
   double time;
-  Input  input;
+  t_window win;
   l_Keycit    beg;
   l_Keycit    end;
 
   _win.updateClock(_clock);
-  _socket->update(_map);
-  input.getInput();
-  if (_input.getKey(SDLK_ESCAPE) || _input.getInput(SDL_QUIT))
+  _socket->update(_display);
+  _input.getInput();
+  if (_input.isPressed(SDLK_ESCAPE) || (_input[win] && win.event == WIN_QUIT))
     return (false);
   if ((time = _clock.getElapsed()) < fps)
     usleep((fps - time) * 1000);

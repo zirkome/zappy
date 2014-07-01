@@ -13,12 +13,12 @@ Map::~Map()
 
 void Map::createMap(int x, int y)
 {
-  _map = new char[x * y];
+  _map = new unsigned char[x * y];
   _x = x;
   _y = y;
 }
 
-char &Map::operator[](int coord) const
+unsigned char &Map::operator[](int coord) const
 {
   if (_map != NULL && coord >= 0 && coord <= _x * _y)
     return (_map[coord]);
@@ -30,6 +30,16 @@ int Map::getSize() const
   return (_x * _y);
 }
 
+int Map::getX() const
+{
+  return (_x);
+}
+
+int Map::getY() const
+{
+  return (_y);
+}
+
 void Map::addPlayer(t_player *player)
 {
   if (player->nb < 0 || (player->x < 0 || player->x > _x)
@@ -38,6 +48,44 @@ void Map::addPlayer(t_player *player)
     delete player;
   else
     _player.push_back(player);
+}
+
+void Map::updatePlayerPos(int nb, int x, int y, int orient)
+{
+  if ((x < 0 || x > _x) || (y < 0 || y > _y)
+      || (orient < NORTH || orient > WEST))
+    return ;
+  for (std::list<t_player *>::iterator it = _player.begin();it != _player.end();++it)
+    if ((*it)->nb == nb)
+      {
+	(*it)->x = x;
+	(*it)->y = y;
+	(*it)->orient = orient;
+	return ;
+      }
+}
+
+
+void Map::updatePlayerLvl(int nb, int lvl)
+{
+  if (lvl < 0 || lvl > 8)
+    return ;
+  for (std::list<t_player *>::iterator it = _player.begin();it != _player.end();++it)
+    if ((*it)->nb == nb)
+      {
+	(*it)->lvl = lvl;
+	return ;
+      }
+}
+
+void Map::updatePlayerAction(int nb, Action act)
+{
+  for (std::list<t_player *>::iterator it = _player.begin();it != _player.end();++it)
+    if ((*it)->nb == nb)
+      {
+	(*it)->cuAction = act;
+	return ;
+      }
 }
 
 void Map::addEgg(t_egg *egg)
@@ -56,7 +104,7 @@ void Map::display() const
     {
       for (int y = 0;y < _y;++y)
 	{
-	  std::cout << _map[x * _y + y];
+	  std::cout << static_cast<int>(_map[x * _y + y]) << "\t";
 	}
       std::cout << std::endl;
     }

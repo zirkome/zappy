@@ -1,3 +1,4 @@
+#include "GameEngine.hpp"
 #include "GNetwork.hpp"
 
 GNetwork::GNetwork(): _fd(-1), _proto()
@@ -27,7 +28,7 @@ bool GNetwork::close()
   return (true);
 }
 
-void GNetwork::update(Map &map)
+void GNetwork::update(t_display &map)
 {
   char buf[512];
   char aligned[_buffer->size + 1];
@@ -35,11 +36,14 @@ void GNetwork::update(Map &map)
   ssize_t retv;
   fd_set rds;
   std::string msg;
+  struct timeval time;
 
   FD_ZERO(&rds);
   FD_SET(_fd, &rds);
+  time.tv_sec = 0;
+  time.tv_usec = 1000;
 
-  if (select(_fd + 1, &rds, NULL, NULL, NULL) == -1)
+  if (select(_fd + 1, &rds, NULL, NULL, &time) == -1)
     return ;
   if (FD_ISSET(_fd, &rds))
     {
@@ -62,6 +66,7 @@ void GNetwork::send(const std::string &msg)
 {
   if (!msg.empty())
     {
+      std::cout << "TOTO" << std::endl;
       int tmp;
       for (unsigned int i = 0;i < msg.size() &&
 	     (tmp = write(_fd, &(msg.c_str())[i], msg.size() - i)) > 0;i += tmp);

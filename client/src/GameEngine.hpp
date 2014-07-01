@@ -6,12 +6,21 @@
 # include <Game.hh>
 # include <SdlContext.hh>
 # include <BasicShader.hh>
-# include <Input.hh>
 # include <Clock.hh>
 # include "GNetwork.hpp"
 # include "Camera.hpp"
 # include "Cube.hpp"
 # include "Map.hpp"
+# include "Input.hpp"
+
+typedef struct	s_display
+{
+  Map			   map;
+  std::vector<std::string> team;
+  std::string		   win;
+  int			   time;
+  bool			   loading;
+}		t_display;
 
 class GameEngine : public gdl::Game
 {
@@ -24,15 +33,16 @@ public:
   virtual void draw();
 
 private:
-  gdl::SdlContext  _win;
-  gdl::Input	   _input;
-  gdl::Clock	   _clock;
-  gdl::BasicShader _shader;
-  Cube             _cube;
-  Camera	   _cam;
-  bool		   _isPlaying;
-  GNetwork	   *_socket;
-  Map		   _map;
+  gdl::SdlContext		_win;
+  Input				_input;
+  gdl::Clock			_clock;
+  gdl::BasicShader	        _shader;
+  Cube				_ground;
+  // Square			_loading;
+  std::vector<IObject *>	_resources;
+  Camera			_cam;
+  GNetwork			*_socket;
+  t_display			 _display;
 };
 
 #endif /* _GAMEENGINE_HPP_ */

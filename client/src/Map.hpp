@@ -13,14 +13,20 @@ public:
   virtual ~Map();
 
   void createMap(int, int);
-  char &operator[](int) const;
-  int getSize() const;
+  unsigned char &operator[](int) const;
   void addPlayer(t_player *player);
+  void updatePlayerPos(int nb, int x, int y, int orient);
+  void updatePlayerLvl(int nb, int lvl);
+  void updatePlayerAction(int nb, Action act);
   void addEgg(t_egg *egg);
   void display() const;
 
+  int getSize() const;
+  int getX() const;
+  int getY() const;
+
 private:
-  char *_map;
+  unsigned char *_map;
   std::list<t_player *> _player;
   std::list<t_egg *> _egg;
   int  _x;

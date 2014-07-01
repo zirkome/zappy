@@ -17,17 +17,20 @@ enum
     THYSTAME = 64,
   };
 
-enum ACTION
+enum Action
   {
     NOTHING = 0,
     LAY = 1,
     LEVELUP = 2,
+    DROP = 3,
+    LOOT = 4,
   };
 
 typedef struct	s_egg
 {
-  s_egg(int posX, int posY, int number): x(posX), y(posY), nb(number) {};
+  s_egg(int posX, int posY, int number): isAlive(true), x(posX), y(posY), nb(number) {};
 
+  bool		isAlive;
   int		x;
   int		y;
   int		nb;
@@ -36,15 +39,16 @@ typedef struct	s_egg
 typedef struct	s_player
 {
   s_player(int number, int posX, int posY, int cuLevel, int o, std::string t)
-    : nb(number), x(posX), y(posY), lvl(cuLevel), orient(o),
+    : isAlive(true), nb(number), x(posX), y(posY), lvl(cuLevel), orient(o),
       cuAction(NOTHING), team(t) {};
 
+  bool		isAlive;
   int		nb;
   int		x;
   int		y;
   int		lvl;
   int		orient;
-  ACTION	cuAction;
+  Action	cuAction;
   std::string   team;
 }		t_player;
 

@@ -2,10 +2,13 @@
 # define _GNETWORK_HPP_
 
 # include <iostream>
+# include <sys/time.h>
 # include <libsocket.h>
 # include "Exception.hpp"
 # include "Map.hpp"
 # include "Protocol.hpp"
+
+typedef s_display t_display;
 
 class GNetwork
 {
@@ -17,7 +20,7 @@ public:
   bool close();
   void send(const std::string &msg);
 
-  void update(Map &map);
+  void update(t_display &map);
 
 private:
   int		_fd;
