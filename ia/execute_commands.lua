@@ -12,8 +12,11 @@ function execute_cmd(tcp, str, arg)
 		["fork"] = fork,
 		["connect_nbr"] = connect_nbr
 	}
-	if (tab[str] == nil) then print(str .. " isn't valid command.")
-	else return tab[str](tcp, arg) end
+	if (tab[str] == nil) then
+		print("command is nil.")
+	else 
+		return tab[str](tcp, arg)
+	end
 end
 
 function avance(tcp)

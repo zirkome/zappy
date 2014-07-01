@@ -3,9 +3,7 @@ function special_case(str)
 end
 
 function analyse_command(str)
-	-- message K: msg (k = case nb), ok, ko, elevation en cours, niveau actuel : K, mort, {, deplacement : K
-
-	local cut = get_word(str)
+	local cut = parse_word(str)
 	local tab = {
 		["message"] = get_message,
 		["ok"] = all_right,
@@ -15,7 +13,8 @@ function analyse_command(str)
 		["mort"] = exit_program,
 		["deplacement"] = get_expulse,
 	}
-	if (tab[cut[1]] == nil) then return special_case(str)
+	if (tab[cut[1]] == nil) then
+		return special_case(str)
 	else
 		return tab[cut[1]](cut)
 	end
@@ -30,7 +29,7 @@ function all_right(cut)
 end
 
 function all_bad(cut)
-	return -42
+	print("receive KO")
 end
 
 function growing(cut)
@@ -43,7 +42,7 @@ end
 
 function exit_program(cut)
 	print("i'm dead !")
-	return -42
+	os.exit(1)
 end
 
 function get_expulse(cut)
