@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Tue Jul  1 18:46:13 2014 luc sinet
+** Last update Wed Jul  2 00:39:58 2014 luc sinet
 */
 
 #include "server.h"
@@ -35,13 +35,14 @@ void		erase_client(t_world *world, t_client *cl)
 
   pos = MAP_POS(cl->player->x, cl->player->y, world->width);
   string_erase(world->map[pos], PLAYER);
-  if (cl->player->teamptr != NULL)
+  if (cl->player->teamptr != NULL && cl->type != EGG)
     ++cl->player->teamptr->slots;
   queue_clear(&cl->queue);
   free(cl->rb->buf);
   free(cl->rb);
   free(cl->player);
-  close(cl->fd);
+  if (cl->type != EGG)
+    close(cl->fd);
   printf("Client disconnected\n");
 }
 

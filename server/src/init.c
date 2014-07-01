@@ -5,12 +5,11 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 09:39:44 2014 luc sinet
-** Last update Tue Jul  1 20:03:35 2014 guillaume fillon
+** Last update Wed Jul  2 00:06:41 2014 luc sinet
 */
 
 #include <signal.h>
 #include "server.h"
-#include "egg.h"
 
 static void	init_teams_slots(t_server *server)
 {
@@ -43,10 +42,8 @@ int		init_server(t_server *server)
   server->sched = NULL;
   srand(time(NULL));
   init_teams_slots(server);
-  if ((server->world.egg = malloc(sizeof(t_egg))) == NULL ||
-      generate_map(&server->world) == -1)
+  if (generate_map(&server->world) == -1)
     return (-1);
-  vector_init(server->world.egg);
   welcome_server(server->world.port);
   return (0);
 }

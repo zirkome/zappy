@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Tue Jul  1 20:26:29 2014 guillaume fillon
+** Last update Wed Jul  2 00:17:51 2014 luc sinet
 */
 
 #include <err.h>
@@ -57,6 +57,11 @@ static void		update_fds_to_epoll(t_server *server)
 	  tmp2 = tmp->next;
 	  kick_user(&server->cl, (t_client*)tmp->value, &server->world);
 	  tmp = tmp2;
+	  continue ;
+	}
+      else if (((t_client*)tmp->value)->type == EGG)
+	{
+	  tmp = tmp->next;
 	  continue ;
 	}
       ev.events = EPOLLIN | EPOLLONESHOT;

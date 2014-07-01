@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 26 15:24:27 2014 guillaume fillon
-** Last update Tue Jul  1 17:26:20 2014 guillaume fillon
+** Last update Wed Jul  2 00:37:52 2014 luc sinet
 */
 
 #include "server.h"
@@ -29,14 +29,20 @@ static t_bool	get_command(char *line, char *command)
 void		clone_if_egg(t_list *list, t_client *cl, t_world *world)
 {
   t_node	*it;
+  t_client	*client;
 
   for (it = *list; it != NULL; it = it->next)
     {
-      if (((t_client*)it->value)->type == EGG)
+      client = (t_client *)it->value;
+      if (client->type == EGG)
 	{
-	  ((t_client*)it->value)->type = UNKNOWN;
-	  *(cl->player) = *(((t_client*)it->value)->player);
-	  kick_user(list, (t_client*)it->value, world);
+	  printf("found EGG\n");
+	  remove_from_world(world, PLAYER, cl->player->x,
+			    cl->player->y);
+	  *(cl->player) = *(client->player);
+	  add_to_world(world, PLAYER, cl->player->x,
+		       cl->player->y);
+	  kick_user(list, client, world);
 	  break ;
 	}
     }
