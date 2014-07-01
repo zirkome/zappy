@@ -5,11 +5,12 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Tue Jul  1 18:34:35 2014 guillaume fillon
+** Last update Tue Jul  1 20:26:29 2014 guillaume fillon
 */
 
 #include <err.h>
 
+#include "scheduler.h"
 #include "server.h"
 
 int		dispatch_fds(t_server *server, struct epoll_event *ev)
@@ -90,7 +91,8 @@ int			start_monitoring(t_server *server)
   for (;;)
     {
       update_fds_to_epoll(server);
-      nfds = epoll_monitor(events, MAX_EPOLL_EVENTS, 1000);
+      nfds = epoll_monitor(events, MAX_EPOLL_EVENTS, 100);
+      scheduler_update(&server->sched, server);
       if (nfds == -1)
 	return (iperror("epoll_wait", -1));
       for (n = 0; n < nfds; ++n)

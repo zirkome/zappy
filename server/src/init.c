@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 09:39:44 2014 luc sinet
-** Last update Tue Jul  1 18:41:21 2014 luc sinet
+** Last update Tue Jul  1 20:03:35 2014 guillaume fillon
 */
 
 #include <signal.h>
@@ -22,6 +22,7 @@ static void	init_teams_slots(t_server *server)
     w.teams[i].slots = w.slots;
 }
 
+//TODO: Norme
 int		init_server(t_server *server)
 {
   if (server->world.nb_teams < 2)
@@ -39,6 +40,7 @@ int		init_server(t_server *server)
   if (server->world.slots == 0)
     server->world.slots = 1;
   server->cl = NULL;
+  server->sched = NULL;
   srand(time(NULL));
   init_teams_slots(server);
   if ((server->world.egg = malloc(sizeof(t_egg))) == NULL ||

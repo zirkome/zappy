@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Tue Jul  1 18:43:53 2014 luc sinet
+## Last update Tue Jul  1 19:55:13 2014 guillaume fillon
 ##
 
 CC 		= gcc
@@ -55,7 +55,9 @@ SRC 		= main.c \
 		  gui_map.c \
 		  gui_player.c \
 		  gui_time.c \
-		  authentication.c
+		  authentication.c \
+		  scheduler.c \
+		  time.c
 
 COMMONSRC	= error.c
 
