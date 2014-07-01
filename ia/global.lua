@@ -35,5 +35,5 @@ ITEM = {
 	["thystame"] = 0
 }
 
-COMMANDS = {{["send"] = "", ["response"] = ""}
+COMMANDS = {{["send"] = "", ["response"] = ""}}
 BROADCAST = {}
