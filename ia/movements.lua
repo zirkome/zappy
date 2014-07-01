@@ -1,25 +1,7 @@
-function calc_new_position()
-	local tab = {1, 1, -1, -1}
-	if (ORIENTATION == 1 or ORIENTATION == 3) then
-		Y = Y + tab[ORIENTATION]
-	else
-		X = X + tab[ORIENTATION]
-	end
-	if (X == 0) then X = MAP_XMAX end
-	if (Y == 0) then Y = MAP_YMAX end
-	if (X == MAP_XMAX + 1) 	then x = 1 end
-	if (Y == MAP_YMAX + 1) 	then y = 1 end
-	return modulo(X, MAP_XMAX + 1), modulo(Y, MAP_YMAX + 1)
-end
-
-function calc_orientation(where)
-	local what_orientation = {
-		{["gauche"] = DIR["west"], ["droite"] = DIR["east"]},		-- NORTH
-		{["gauche"] = DIR["north"], ["droite"] = DIR["south"]},		-- EAST
-		{["gauche"] = DIR["east"], ["droite"] = DIR["west"]},		-- SOUTH
-		{["gauche"] = DIR["south"], ["droite"] = DIR["north"]}		-- WEST
-	}
-	return what_orientation[ORIENTATION][where]
+function random_moove(tcp)
+	local mooves = {"avance", "gauche", "droite"}
+	local rand = math.random(1, 3)
+	return execute_cmd(tcp, mooves[rand])
 end
 
 function determine_way_to(nb)
@@ -35,8 +17,54 @@ function determine_way_to(nb)
 	return nil
 end
 
-function random_moove(tcp)
-	local mooves = {"avance", "gauche", "droite"}
-	local rand = math.random(1, 3)
-	return execute_cmd(tcp, mooves[rand])
+function ga_av_dr(tcp)
+	ga(tcp)
+	av(tcp)
+	dr(tcp)
 end
+
+function dr_av_ga(tcp)
+	dr(tcp)
+	av(tcp)
+	ga(tcp)
+end
+
+function ga_av(tcp)
+	ga(tcp)
+	av(tcp)
+	return CURRENT_RES
+end
+
+function ga_ga(tcp)
+	ga(tcp)
+	ga(tcp)
+	return CURRENT_RES
+end
+
+function dr_av(tcp)
+	dr(tcp)
+	av(tcp)
+	return CURRENT_RES
+end
+
+function ga(tcp)
+	while (CURRENT_RES == KO) do
+		execute_cmd(tcp, "gauche")
+	end
+	return CURRENT_RES
+end
+
+function dr(tcp)
+	while (CURRENT_RES == KO) do
+		execute_cmd(tcp, "droite")
+	end
+	return CURRENT_RES
+end
+
+function av(tcp)
+	while (CURRENT_RES == KO) do
+		execute_cmd(tcp, "avance")
+	end
+	return CURRENT_RES
+end
+
