@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Tue Jul  1 16:34:25 2014 luc sinet
+** Last update Tue Jul  1 18:42:57 2014 luc sinet
 */
 
 #include "server.h"
@@ -32,40 +32,20 @@ static void	init_client(t_client *client, int fd)
   client->ghost = false;
   client->type = UNKNOWN;
   client->queue = queue_init();
-  client->next = NULL;
 }
 
-t_client	*create_user()
+t_client	*client_new(int fd)
 {
   t_client	*new;
 
   if ((new = malloc(sizeof(t_client))) == NULL)
-    return (ptperror("create_user: malloc", NULL));
+    return (ptperror("client_new: malloc", NULL));
   else if ((new->rb = create_ringbuffer(1024)) == NULL ||
 	   init_player(new) == -1)
-    return (NULL);
-  return (new);
-}
-
-t_client	*add_user(t_client **cl, t_world *world, int fd)
-{
-  t_client	*new;
-  t_client	*tmp;
-  int		ret;
-
-  tmp = *cl;
-  if ((new = create_user()) == NULL)
-    return (NULL);
-  init_client(new, fd);
-  if (*cl == NULL)
     {
-      *cl = new;
-      ret = add_to_world(world, PLAYER, new->player->x, new->player->y);
-      return (ret == -1 ? NULL : new);
+      free(new);
+      return (NULL);
     }
-  while (tmp->next)
-    tmp = tmp->next;
-  tmp->next = new;
-  ret = add_to_world(world, PLAYER, new->player->x, new->player->y);
-  return (ret == -1 ? NULL : new);
+  init_client(new, fd);
+  return (new);
 }

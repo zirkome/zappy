@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Tue Jul  1 09:36:23 2014 luc sinet
+** Last update Tue Jul  1 18:34:35 2014 guillaume fillon
 */
 
 #include <err.h>
@@ -14,21 +14,21 @@
 
 int		dispatch_fds(t_server *server, struct epoll_event *ev)
 {
-  t_client	*tmp;
+  t_node	*tmp;
 
   for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
     {
-      if (tmp->fd == ev->data.fd)
+      if (((t_client *)tmp->value)->fd == ev->data.fd)
 	break;
     }
-  if (tmp && tmp->fd != ev->data.fd)
+  if (tmp && ((t_client *)tmp->value)->fd != ev->data.fd)
     return (-1);
   if (ev->events & EPOLLIN)
     {
-      if (read_state(server, tmp) < 0)
+      if (read_state(server, (t_client *)tmp->value) < 0)
 	return (-1);
     }
-  if (write_state(server, tmp) < 0)
+  if (write_state(server, (t_client *)tmp->value) < 0)
     return (-1);
   return (0);
 }
@@ -36,31 +36,36 @@ int		dispatch_fds(t_server *server, struct epoll_event *ev)
 static void		update_fds_to_epoll(t_server *server)
 {
   struct epoll_event	ev;
-  t_client		*tmp;
+  t_node		*tmp;
+  t_node		*tmp2;
   t_client		*tofree;
 
-  for (tmp = server->cl, tofree = NULL; tmp != NULL; tmp = tmp->next)
+  for (tmp = server->cl, tofree = NULL; tmp != NULL;)
     {
       if (tofree != NULL)
+      	{
+      	  free(tofree);
+      	  tofree = NULL;
+      	}
+      if (((t_client*)tmp->value)->ghost == true &&
+	  queue_empty(((t_client*)tmp->value)->queue))
 	{
-	  free(tofree);
-	  tofree = NULL;
-	}
-      if (tmp->ghost == true && queue_empty(tmp->queue))
-	{
-	  if (epoll_event_del(tmp->fd, NULL) == -1)
+	  if (epoll_event_del(((t_client*)tmp->value)->fd, NULL) == -1)
 	    iperror("epoll_ctl: client", -1);
-	  kick_user(&server->cl, tmp, &server->world);
-	  tofree = tmp;
+	  tofree = (t_client*)tmp->value;
+	  tmp2 = tmp->next;
+	  kick_user(&server->cl, (t_client*)tmp->value, &server->world);
+	  tmp = tmp2;
 	  continue ;
 	}
       ev.events = EPOLLIN | EPOLLONESHOT;
-      if (!queue_empty(tmp->queue))
+      if (!queue_empty(((t_client*)tmp->value)->queue))
 	ev.events |= EPOLLOUT;
       ev.data.ptr = NULL;
-      ev.data.fd = tmp->fd;
-      if (epoll_event_mod(tmp->fd, &ev) == -1)
+      ev.data.fd = ((t_client*)tmp->value)->fd;
+      if (epoll_event_mod(((t_client*)tmp->value)->fd, &ev) == -1)
 	iperror("epoll_ctl: client", -1);
+      tmp = tmp->next;
     }
 }
 
