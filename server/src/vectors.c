@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Tue Jul  1 09:57:48 2014 luc sinet
-** Last update Tue Jul  1 11:26:14 2014 luc sinet
+** Last update Tue Jul  1 13:20:25 2014 luc sinet
 */
 
 #include "server.h"
@@ -56,12 +56,10 @@ int	vector_erase(t_vector *vector, void *ent)
 
 int	vector_erase_pos(t_vector *vector, int pos)
 {
-  int	i;
+  int	size;
 
-  if (vector->tab == NULL)
-    return (-1);
-  for (i = 0; vector->tab[i] != NULL; ++i);
-  if (pos >= i)
+  if ((size = vector_size(vector)) == 0 ||
+      pos >= size)
     return (-1);
   for (; vector->tab[pos] != NULL; ++pos)
     vector->tab[pos] = vector->tab[pos + 1];
