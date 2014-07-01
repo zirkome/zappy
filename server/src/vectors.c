@@ -5,16 +5,15 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Tue Jul  1 09:57:48 2014 luc sinet
-** Last update Tue Jul  1 13:20:25 2014 luc sinet
+** Last update Tue Jul  1 13:47:11 2014 luc sinet
 */
 
 #include "server.h"
 
-int	vector_init(t_vector *vector)
+void	vector_init(t_vector *vector)
 {
   vector->tab = NULL;
   vector->size = 0;
-  return (0);
 }
 
 int	vector_append(t_vector *vector, void *ent, int align_size)
