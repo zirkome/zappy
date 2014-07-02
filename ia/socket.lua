@@ -14,15 +14,15 @@ function is_valid_ipv4(ip)
 end
 
 function recept_command(tcp)
-	tcp:timeout(0)
+	tcp:settimeout(0)
 	local s, status, partial = tcp:receive()
 
-	if (status == "timeout") then
-		print_bkt("Timeout !", status)
-		return nil
+	while (status == "timeout") do
+		s, status, partial = tcp:receive()
+		CURRENT_RES = nil
 	end
 	print_bkt("Received : ", s)
-	return analyse_command(s)
+	analyse_command(s)
 end
 
 function send_command(tcp, command)
