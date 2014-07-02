@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 26 15:24:27 2014 guillaume fillon
-** Last update Wed Jul  2 00:37:52 2014 luc sinet
+** Last update Wed Jul  2 13:43:10 2014 luc sinet
 */
 
 #include "server.h"
@@ -26,7 +26,8 @@ static t_bool	get_command(char *line, char *command)
   return (true);
 }
 
-void		clone_if_egg(t_list *list, t_client *cl, t_world *world)
+void		clone_if_egg(t_list *list, t_client *cl,
+			     t_team *team)
 {
   t_node	*it;
   t_client	*client;
@@ -34,15 +35,10 @@ void		clone_if_egg(t_list *list, t_client *cl, t_world *world)
   for (it = *list; it != NULL; it = it->next)
     {
       client = (t_client *)it->value;
-      if (client->type == EGG)
+      if (client->type == EGG && client->player->teamptr == team)
 	{
-	  printf("found EGG\n");
-	  remove_from_world(world, PLAYER, cl->player->x,
-			    cl->player->y);
 	  *(cl->player) = *(client->player);
-	  add_to_world(world, PLAYER, cl->player->x,
-		       cl->player->y);
-	  kick_user(list, client, world);
+	  disconnect_user(NULL, client);
 	  break ;
 	}
     }
@@ -57,10 +53,11 @@ int    	check_remaining_slots(t_world *w, t_list *list,
   for (i = 0; i < w->nb_teams; ++i)
     if (strcmp(command, w->teams[i].name) == 0 && w->teams[i].slots > 0)
       {
-	clone_if_egg(list, cl, w);
+	clone_if_egg(list, cl, &w->teams[i]);
 	cl->player->teamptr = &w->teams[i];
 	cl->type = IA;
 	--w->teams[i].slots;
+	add_to_world(w, PLAYER, cl->player->x, cl->player->y);
 	msg = cnprintf(10, "%d\n", w->teams[i].slots);
 	queue_push(&cl->queue, msg);
 	free(msg);

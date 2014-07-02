@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Tue Jul  1 18:42:57 2014 luc sinet
+** Last update Wed Jul  2 10:29:48 2014 luc sinet
 */
 
 #include "server.h"
@@ -16,7 +16,7 @@ static int	init_player(t_client *new)
 {
   if ((new->player = malloc(sizeof(t_player))) == NULL)
     return (iperror("init_player: malloc", -1));
-  new->player->dir = NORTH;
+  new->player->dir = rand() % 4;
   new->player->x = 0;
   new->player->y = 0;
   new->player->level = 1;

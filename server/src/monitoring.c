@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Wed Jul  2 00:17:51 2014 luc sinet
+** Last update Wed Jul  2 11:05:00 2014 luc sinet
 */
 
 #include <err.h>
@@ -40,6 +40,7 @@ static void		update_fds_to_epoll(t_server *server)
   t_node		*tmp;
   t_node		*tmp2;
   t_client		*tofree;
+  t_client		*client;
 
   for (tmp = server->cl, tofree = NULL; tmp != NULL;)
     {
@@ -48,10 +49,11 @@ static void		update_fds_to_epoll(t_server *server)
       	  free(tofree);
       	  tofree = NULL;
       	}
-      if (((t_client*)tmp->value)->ghost == true &&
-	  queue_empty(((t_client*)tmp->value)->queue))
+      client = ((t_client*)tmp->value);
+      if (client->ghost == true &&
+	  queue_empty(client->queue))
 	{
-	  if (epoll_event_del(((t_client*)tmp->value)->fd, NULL) == -1)
+	  if (client->type != EGG && epoll_event_del(client->fd, NULL) == -1)
 	    iperror("epoll_ctl: client", -1);
 	  tofree = (t_client*)tmp->value;
 	  tmp2 = tmp->next;
@@ -59,17 +61,17 @@ static void		update_fds_to_epoll(t_server *server)
 	  tmp = tmp2;
 	  continue ;
 	}
-      else if (((t_client*)tmp->value)->type == EGG)
+      else if (client->type == EGG)
 	{
 	  tmp = tmp->next;
 	  continue ;
 	}
       ev.events = EPOLLIN | EPOLLONESHOT;
-      if (!queue_empty(((t_client*)tmp->value)->queue))
+      if (!queue_empty(client->queue))
 	ev.events |= EPOLLOUT;
       ev.data.ptr = NULL;
-      ev.data.fd = ((t_client*)tmp->value)->fd;
-      if (epoll_event_mod(((t_client*)tmp->value)->fd, &ev) == -1)
+      ev.data.fd = client->fd;
+      if (epoll_event_mod(client->fd, &ev) == -1)
 	iperror("epoll_ctl: client", -1);
       tmp = tmp->next;
     }

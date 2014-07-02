@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 14:03:33 2014 luc sinet
-** Last update Wed Jul  2 00:38:37 2014 luc sinet
+** Last update Wed Jul  2 10:29:19 2014 luc sinet
 */
 
 #include "server.h"
@@ -29,7 +29,6 @@ int		pl_fork(t_server *server, t_client *client,
   new->type = EGG;
   list_add_elem_at_back(&server->cl, new);
   add_to_world(&server->world, PLAYER, new->player->x, new->player->y);
-  printf("remianing %d\n", new->player->teamptr->slots);
   new->player->teamptr->slots += 1;
   return (queue_push(&client->queue, "ok\n"));
 }

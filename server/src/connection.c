@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Wed Jul  2 00:39:58 2014 luc sinet
+** Last update Wed Jul  2 13:39:15 2014 luc sinet
 */
 
 #include "server.h"
@@ -24,17 +24,14 @@ int			connect_new_user(t_server *server)
   if (cl == NULL)
     return (-1);
   list_add_elem_at_back(&server->cl, cl);
-  add_to_world(&server->world, PLAYER, cl->player->x, cl->player->y);
   queue_push(&cl->queue, "BIENVENUE\n");
   return (fd);
 }
 
 void		erase_client(t_world *world, t_client *cl)
 {
-  int		pos;
-
-  pos = MAP_POS(cl->player->x, cl->player->y, world->width);
-  string_erase(world->map[pos], PLAYER);
+  remove_from_world(world, PLAYER, cl->player->x,
+		    cl->player->y);
   if (cl->player->teamptr != NULL && cl->type != EGG)
     ++cl->player->teamptr->slots;
   queue_clear(&cl->queue);
