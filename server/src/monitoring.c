@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Wed Jul  2 11:05:00 2014 luc sinet
+** Last update Wed Jul  2 22:33:36 2014 guillaume fillon
 */
 
 #include <err.h>
@@ -99,7 +99,7 @@ int			start_monitoring(t_server *server)
     {
       update_fds_to_epoll(server);
       nfds = epoll_monitor(events, MAX_EPOLL_EVENTS, 100);
-      scheduler_update(&server->sched, server);
+      scheduler_update(&server->cl, server);
       if (nfds == -1)
 	return (iperror("epoll_wait", -1));
       for (n = 0; n < nfds; ++n)

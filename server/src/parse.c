@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Wed Jul  2 14:53:17 2014 luc sinet
+** Last update Wed Jul  2 22:29:00 2014 guillaume fillon
 */
 
 #include "scheduler.h"
@@ -107,10 +107,9 @@ int		process_input(t_server *server, t_client *cl, char *input)
   if ((idx = parse_input(input, arg)) == -1)
     return (-1);
   task.client = cl;
-  task.at = clock_getsecond() + (g_command[idx].delay / server->world.delay);
-  printf("now: %lu \tsched on: %lu\n", clock_getsecond(), task.at);
+  task.at = g_command[idx].delay / server->world.delay;
   task.callback = g_command[idx].func;
   if ((task.arg = strdup(arg)) == NULL)
     return (iperror("process_input: strdup", -1));
-  return (scheduler_add(&server->sched, &task));
+  return (scheduler_add(&cl->player->jobs, &task));
 }
