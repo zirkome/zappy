@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Wed Jul  2 00:09:58 2014 luc sinet
+## Last update Wed Jul  2 23:42:46 2014 luc sinet
 ##
 
 CC 		= gcc
@@ -45,6 +45,8 @@ SRC 		= main.c \
 		  player_broadcast.c \
 		  player_view.c \
 		  player_inventory.c \
+		  player_incantation.c \
+		  incantation_calcul.c \
 		  geometry.c \
 		  broadcast_calculs.c \
 		  strings.c \

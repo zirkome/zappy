@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Tue Jul  1 13:15:59 2014 luc sinet
-** Last update Tue Jul  1 13:25:27 2014 luc sinet
+** Last update Wed Jul  2 21:30:55 2014 luc sinet
 */
 
 #include "server.h"
@@ -22,11 +22,6 @@ unsigned int	vector_size(t_vector *vector)
 
 void		*vector_get(t_vector *vector, unsigned int pos)
 {
-  unsigned int	size;
-
-  if ((size = vector_size(vector)) == 0 ||
-      pos >= size)
-    return (NULL);
   return (vector->tab[pos]);
 }
 
