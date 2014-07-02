@@ -140,6 +140,7 @@ function moove_to_food(tcp)
 			return KO
 		end
 	end
+	return KO
 end
 
 function enought_stones(tcp)
@@ -224,4 +225,5 @@ function same_level(tcp)
 			return KO
 		end
 	end
+	return KO
 end
