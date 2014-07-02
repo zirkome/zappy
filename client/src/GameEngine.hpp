@@ -25,7 +25,7 @@ typedef struct	s_display
 class GameEngine : public gdl::Game
 {
 public:
-  GameEngine(GNetwork *);
+  GameEngine(GNetwork *_gNetwork, gdl::SdlContext *win);
   virtual ~GameEngine();
 
   virtual bool update();
@@ -33,7 +33,8 @@ public:
   virtual void draw();
 
 private:
-  gdl::SdlContext		_win;
+  GNetwork			*_socket;
+  gdl::SdlContext		*_win;
   Input				_input;
   gdl::Clock			_clock;
   gdl::BasicShader	        _shader;
@@ -41,7 +42,6 @@ private:
   // Square			_loading;
   std::vector<IObject *>	_resources;
   Camera			_cam;
-  GNetwork			*_socket;
   t_display			 _display;
 };
 

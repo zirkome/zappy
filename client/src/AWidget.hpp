@@ -6,7 +6,7 @@
 # include "GameEngine.hpp"
 # include "Square.hpp"
 
-class	Menu;
+class Menu;
 
 class	AWidget
 {

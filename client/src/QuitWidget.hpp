@@ -1,8 +1,7 @@
 #ifndef _QUITWIDGET_HPP_
 # define _QUITWIDGET_HPP_
 
-#include "AWidget.hpp"
-#include "Menu.hpp"
+# include "AWidget.hpp"
 
 class	QuitWidget : public AWidget
 {

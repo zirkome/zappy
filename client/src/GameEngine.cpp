@@ -1,22 +1,19 @@
 #include "GameEngine.hpp"
 #include "Input.hpp"
 
-GameEngine::GameEngine(GNetwork *socket): _win(), _input(),
-					  _ground("./assets/wall.tga"),
-					  _socket(socket)
+GameEngine::GameEngine(GNetwork *socket, gdl::SdlContext *win): 
+  _socket(socket), _win(win), _input(), _ground("./assets/wall.tga")
 {
   _display.loading = true;
 }
 
 GameEngine::~GameEngine()
 {
-  _win.stop();
+  _win->stop();
 }
 
 bool GameEngine::initialize()
 {
-  if (!_win.start(1600, 900, "-- Zappy --"))
-    return (false);
   if (!_ground.initialize())
     return (false);
   if (!_shader.load("./Shaders/basic.fp", GL_FRAGMENT_SHADER)
@@ -51,7 +48,7 @@ void GameEngine::draw()
     {
 
     }
-  _win.flush();
+  _win->flush();
 }
 
 bool GameEngine::update()
@@ -62,11 +59,14 @@ bool GameEngine::update()
   l_Keycit    beg;
   l_Keycit    end;
 
-  _win.updateClock(_clock);
+  _win->updateClock(_clock);
   _socket->update(_display);
   _input.getInput();
   if (_input.isPressed(SDLK_ESCAPE) || (_input[win] && win.event == WIN_QUIT))
-    return (false);
+    {
+      usleep(100000);
+      return (false);
+    }
   if ((time = _clock.getElapsed()) < fps)
     usleep((fps - time) * 1000);
   return (true);

@@ -8,16 +8,20 @@
 #include "Settings.hpp"
 #include "ImageWidget.hpp"
 #include "QuitWidget.hpp"
+#include "InputWidget.hpp"
+#include "ConnectWidget.hpp"
+#include "GameEngine.hpp"
 
-Menu::Menu(): _done(false), _gameEngine(NULL/* put a GNetwork*/)
+Menu::Menu()
 {
-  _set = new Settings();
-  _clock = new gdl::Clock();
+  _done = false;
+  _gameEngine = NULL;
 }
 
 Menu::~Menu()
 {
   freePanel(_mainPanel);
+  _gNetwork.close();
 }
 
 void	Menu::freePanel(std::vector<AWidget *> &panel)
@@ -32,7 +36,7 @@ void	Menu::freePanel(std::vector<AWidget *> &panel)
 
 bool  Menu::initialize()
 {
-  int x = _set->getVar(W_WIDTH), y = _set->getVar(W_HEIGHT);
+  int x = _set.getVar(W_WIDTH), y = _set.getVar(W_HEIGHT);
 
   if (!_win.start(x, y, "Zappy", SDL_INIT_EVERYTHING, SDL_WINDOW_OPENGL))
     throw(Exception("Cannot open window"));
@@ -43,31 +47,28 @@ bool  Menu::initialize()
       !_textShader.load("./Shaders/text.vp", GL_VERTEX_SHADER) ||
       !_textShader.build())
     return (false);
-  if (!_gameEngine.initialize())
-    return (false);
-  ImageWidget	*background = new ImageWidget(0, 0, y, x,
-					      "./assets/background.tga");
-  ImageWidget	*title = new ImageWidget(x / 8, y / 1.43f, y / 4.8f, x / 1.3f,
-					 "./assets/BomberCraft.tga");
+  ImageWidget	*background = new ImageWidget(0, 0, y, x, "./assets/background.tga");
+  ImageWidget	*title = new ImageWidget((1024 / 2) - ((340 * 1.25f) / 2), 400, 120 * 1.25f, 340 * 1.25f, "./assets/zappy.tga");
   _mainPanel.push_back(background);
   _mainPanel.push_back(title);
-  _mainPanel.push_back(new QuitWidget(x / 4, y / 18, y / 11.25f, x / 2, "./assets/button/quit.tga"));
-  // add 2 inputWidget
-
+  _mainPanel.push_back(new InputWidget(x / 4, 9.5f * y / 18, y / 11.25f, x / 2, "./assets/input.tga", "IP :"));
+  _mainPanel.push_back(new InputWidget(x / 4, 7.5f * y / 18, y / 11.25f, x / 2, "./assets/input.tga", "Port :"));
+  _mainPanel.push_back(new ConnectWidget(x / 4, 5.5f * y / 18, y / 11.25f, x / 2, "./assets/load_game.tga"));
+  _mainPanel.push_back(new QuitWidget(x / 4, y / 18, y / 11.25f, x / 2, "./assets/quit.tga"));
   return (true);
 }
 
 bool		Menu::update()
 {
   double	time;
-  double	fps = (1000 / _set->getVar(FPS));
-  int		y = _set->getVar(W_HEIGHT);
+  double	fps = (1000 / _set.getVar(FPS));
+  int		y = _set.getVar(W_HEIGHT);
   t_window	win;
   t_mouse	mouse;
 
-  _input->getInput();
-  (*_input)[mouse];
-  (*_input)[win];
+  _input.getInput();
+  _input[mouse];
+  _input[win];
   if (mouse.event == BUTTONUP)
     for (std::vector<AWidget *>::iterator it = _mainPanel.begin(),
 	   endit = _mainPanel.end(); it != endit ; ++it)
@@ -76,11 +77,11 @@ bool		Menu::update()
 	  (*it)->onClick((*this));
 	  break;
 	}
-  _win.updateClock(*_clock);
-  if (_input->isPressed(SDLK_ESCAPE) || win.event == WIN_QUIT)
+  _win.updateClock(_clock);
+  if (_input.isPressed(SDLK_ESCAPE) || win.event == WIN_QUIT || _done == true)
     return (false);
   _frames++;
-  if ((time = _clock->getElapsed()) < fps)
+  if ((time = _clock.getElapsed()) < fps)
     {
       _frames = 0;
       usleep((fps - time) * 1000);
@@ -90,7 +91,7 @@ bool		Menu::update()
 
 void	Menu::draw()
 {
-  float x = _set->getVar(W_WIDTH), y = _set->getVar(W_HEIGHT);
+  float x = _set.getVar(W_WIDTH), y = _set.getVar(W_HEIGHT);
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glViewport(0, 0, x, y);
@@ -103,12 +104,11 @@ void	Menu::draw()
   for (std::vector<AWidget *>::iterator it = _mainPanel.begin(),
 	 endit = _mainPanel.end(); it != endit ; ++it)
     {
-      //      (*it)->onDisplay(_filename, _filePos); // wat iz diz shit
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-      (*it)->draw(_textShader, *_clock);
+      (*it)->draw(_textShader, _clock);
     }
   glEnable(GL_DEPTH_TEST);
   _win.flush();
@@ -116,11 +116,11 @@ void	Menu::draw()
 
 void	Menu::handleClock(int &frame, double &time, double fps)
 {
-  time = _clock->getElapsed();
+  time = _clock.getElapsed();
   if (time < fps)
     usleep((fps - time) * 1000);
   frame = (frame >= 100) ? 100 : frame + 1;
-  _win.updateClock(*_clock);
+  _win.updateClock(_clock);
 }
 
 bool	Menu::textFillBuf(std::string &buf, unsigned int maxlen, Keycode key)
@@ -153,16 +153,16 @@ void	Menu::textInput(std::string &buf, unsigned int maxlen)
   int		frame = -1;
   Keycode	key = 0;
   Keycode	save = -1;
-  Input		*input = _input;
+  Input		*input = &_input;
 
   buf.clear();
   buf.push_back('|');
   while (key != 27)
     {
-      _input->getInput();
+      _input.getInput();
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      l_Keycit beg = _input->getPressedBeg();
-      l_Keycit end = _input->getPressedEnd();
+      l_Keycit beg = _input.getPressedBeg();
+      l_Keycit end = _input.getPressedEnd();
       if (beg != end && *beg == SDLK_LSHIFT)
 	++beg;
       if (beg != end)
@@ -196,12 +196,22 @@ void	Menu::textInput(std::string &buf, unsigned int maxlen)
     }
 }
 
-void	Menu::launchGame()
+bool	Menu::launchGame()
 {
-  bool	done = true;
+  std::string ip = "FREE", port = "6000";
 
-  while ((done = _gameEngine.update()))
-    _gameEngine.draw();
+  if (getInfo(ip, port) == true)
+    {
+      _gameEngine = new GameEngine(&_gNetwork, &_win);
+      if (!_gNetwork.open(ip.c_str(), port.c_str()))
+	throw Exception("cannot connect to the server"); // replace exception by error
+      _gameEngine->initialize();
+      while (_gameEngine->update())
+	_gameEngine->draw();
+      return (true);
+    }
+  else
+    return (false);
 }
 
 void	Menu::launch()
@@ -220,4 +230,14 @@ void	Menu::launch()
 void	Menu::setDone(bool done)
 {
   _done = done;
+}
+
+bool Menu::getInfo(std::string &ip, std::string &port)
+{
+  ip = dynamic_cast<InputWidget *>(_mainPanel[2])->getContent();
+  port = dynamic_cast<InputWidget *>(_mainPanel[3])->getContent();
+  if (ip == "FREE")
+    return (false);
+  else
+    return (true);
 }

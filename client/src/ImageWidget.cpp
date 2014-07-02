@@ -1,3 +1,4 @@
+#include "Menu.hpp"
 #include "ImageWidget.hpp"
 
 ImageWidget::ImageWidget(int x, int y, int height, int width, const std::string &texture)
