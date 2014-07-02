@@ -1,7 +1,8 @@
 function random_moove(tcp)
 	local mooves = {"avance", "gauche", "droite"}
 	local rand = math.random(1, 3)
-	return execute_cmd(tcp, mooves[rand])
+	execute_command(tcp, mooves[rand])
+	return OK
 end
 
 function determine_way_to(nb)
@@ -21,12 +22,14 @@ function ga_av_dr(tcp)
 	ga(tcp)
 	av(tcp)
 	dr(tcp)
+	return CURRENT_RES
 end
 
 function dr_av_ga(tcp)
 	dr(tcp)
 	av(tcp)
 	ga(tcp)
+	return CURRENT_RES
 end
 
 function ga_av(tcp)
@@ -48,22 +51,25 @@ function dr_av(tcp)
 end
 
 function ga(tcp)
+	CURRENT_RES = KO
 	while (CURRENT_RES == KO) do
-		execute_cmd(tcp, "gauche")
+		execute_command(tcp, "gauche")
 	end
 	return CURRENT_RES
 end
 
 function dr(tcp)
+	CURRENT_RES = KO
 	while (CURRENT_RES == KO) do
-		execute_cmd(tcp, "droite")
+		execute_command(tcp, "droite")
 	end
 	return CURRENT_RES
 end
 
 function av(tcp)
+	CURRENT_RES = KO
 	while (CURRENT_RES == KO) do
-		execute_cmd(tcp, "avance")
+		execute_command(tcp, "avance")
 	end
 	return CURRENT_RES
 end
