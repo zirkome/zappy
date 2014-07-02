@@ -5,25 +5,37 @@ dofile("execute_commands.lua")
 dofile("analyse_reception.lua")
 dofile("update.lua")
 dofile("level.lua")
+dofile("fork.lua")
 dofile("utils/utils_display.lua")
 dofile("utils/utils_spec.lua")
 dofile("utils/utils_parse.lua")
 dofile("utils/utils_getters.lua")
 dofile("utils/utils_bool.lua")
 
-function execute_ia(x, y, level, orientation, host, port, team)
-	local tcp = connect_server(host, port)
+function get_beginning(tcp, team)
 	recept_command(tcp)
 	send_command(tcp, team)
-	NUM_CLT = tonumber(recept_command(tcp))
-	local tab = parse_word(recept_command(tcp))
+	recept_command(tcp)
+	NUM_CLT = tonumber(CURRENT_RES)
+	recept_command(tcp)
+end
+
+function execute_ia(x, y, level, orientation, host, port, team)
+	local tcp = connect_server(host, port)
+	get_beginning(tcp, team)
+	local tab = parse_word(CURRENT_RES)
 	X, Y = tab[1], tab[2]
+
 	local current_state = 42
 	local value = OK
+	local walktrought_statement = get_tab_walk()
+	local function_statement = get_tab_func()
 
 	while (value ~= ERROR) do
-		current_state = WALTROUGHT_STATEMENT[current_state][value]
-		value = FUNCTION_STATEMENT[current_state](tcp)
+		current_state = walktrought_statement[current_state][value]
+		print(get_pid(), "STATEMENT FUNCTION : ", current_state)
+		value = function_statement[current_state](tcp)
+		CURRENT_RES = nil
 	end
 	close_server(tcp)
 	return 0

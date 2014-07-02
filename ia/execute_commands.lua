@@ -1,4 +1,4 @@
-function execute_cmd(tcp, str, arg)
+function execute_command(tcp, str, arg)
 	local tab = {
 		["avance"] = avance,
 		["droite"] = droite,
@@ -42,6 +42,7 @@ end
 function inventaire(tcp)
 	send_command(tcp, "inventaire")
 	recept_command(tcp)
+	UPDATE_INVENTORY = parse_case(CURRENT_RES)
 end
 
 function prend_objet(tcp, objet)

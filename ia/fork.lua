@@ -1,7 +1,11 @@
 local posix = require "posix"
 
 function fork_p()
-	return posix.fork()
+	if (IS_GROWING == false) then
+		posix.fork()
+	end
+	IS_GROWING = true
+	return OK
 end
 
 function get_pid()

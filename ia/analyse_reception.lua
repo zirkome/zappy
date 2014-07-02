@@ -1,50 +1,56 @@
-function special_case(str)
-	return str
-end
-
 function analyse_command(str)
-	local cut = parse_word(str)
-	local tab = {
-		["message"] = get_message,
-		["ok"] = all_right,
-		["ko"] = all_bad,
-		["elevation"] = growing,
-		["niveau"] = get_level,
-		["mort"] = exit_program,
-		["deplacement"] = get_expulse,
-	}
-	if (tab[cut[1]] == nil) then
-		return special_case(str)
+	if (str ~= nil) then
+		local cut = parse_word(str)
+		local tab = {
+			["message"] = get_message,
+			["ok"] = all_right,
+			["ko"] = all_bad,
+			["elevation"] = growing,
+			["niveau"] = get_level,
+			["mort"] = exit_program,
+			["deplacement"] = get_expulse,
+		}
+		if (tab[cut[1]] == nil) then
+			CURRENT_RES = str
+		else
+			CURRENT_RES = tab[cut[1]](cut)
+		end
 	else
-		return tab[cut[1]](cut)
+		CURRENT_RES = KO
 	end
 end
 
 function get_message(cut)
 	print("received broadcast from", cut[2], "msg: " .. cut[3])
+	CURRENT_K = cut[2]
+	BROADCAST:insert(cut[3])
+	CURRENT_RES = cut[4]
 end
 
 function all_right(cut)
-	return true
+	return OK
 end
 
 function all_bad(cut)
-	print("receive KO")
+	return KO
 end
 
 function growing(cut)
-	print("is growing !")
+	IS_GROWING = true
+	return KO
 end
 
 function get_level(cut)
-	print("my level is : ", cut[4])
+	IS_GROWING = false
+	return OK
 end
 
 function exit_program(cut)
-	print("i'm dead !")
+	print("i'm dead ! FUCK !")
 	os.exit(1)
 end
 
 function get_expulse(cut)
 	print("expulse at : ", cut[3])
+	return CURRENT_RES
 end
