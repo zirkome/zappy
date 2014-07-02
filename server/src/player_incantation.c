@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Wed Jul  2 18:22:49 2014 luc sinet
-** Last update Wed Jul  2 23:58:01 2014 luc sinet
+** Last update Thu Jul  3 00:14:03 2014 luc sinet
 */
 
 #include "server.h"
@@ -69,5 +69,6 @@ int		pl_incantation(t_server *server, t_client *client,
   vector_clear(&vec);
   snprintf(tab, sizeof(tab), "elevation en cours niveau actuel : %d\n",
 	   client->player->level);
+  client->player->level += 1;
   return (queue_push(&client->queue, tab));
 }
