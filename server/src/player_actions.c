@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 13:50:31 2014 luc sinet
-** Last update Wed Jul  2 14:44:48 2014 luc sinet
+** Last update Wed Jul  2 15:46:15 2014 luc sinet
 */
 
 #include "server.h"
@@ -20,6 +20,7 @@ int		pl_take(t_server *server, t_client *client,
   pl = client->player;
   pos = MAP_POS(pl->x, pl->y, server->world.width);
   if ((elem_id = get_element_id(arg)) == -1 ||
+      elem_id >= PLAYER ||
       string_erase(server->world.map[pos], elem_id) == -1 ||
       add_to_inventory(pl, elem_id, 1) == -1)
     {
