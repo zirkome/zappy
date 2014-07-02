@@ -240,7 +240,7 @@ end
 function same_level(tcp)
 	if (BROADCAST[1] ~= nil) then
 		local tab = parse_word(BROADCAST[1])
-		if (tab[1] ~= nil and tab[1] == "HELP" and tab[1] ~= nil and tab[1] == LEVEL) then
+		if (tab[1] ~= nil and tab[1] == "HELP" and tab[2] ~= nil and tab[2] == LEVEL) then
 			return OK
 		else
 			return KO
