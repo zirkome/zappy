@@ -18,59 +18,19 @@ function determine_way_to(nb)
 	return nil
 end
 
-function ga_av_dr(tcp)
-	ga(tcp)
-	av(tcp)
-	dr(tcp)
-	return CURRENT_RES
-end
+function execute_movements(tcp, str)
+	local tab = get_word(str)
 
-function dr_av_ga(tcp)
-	dr(tcp)
-	av(tcp)
-	ga(tcp)
-	return CURRENT_RES
-end
-
-function ga_av(tcp)
-	ga(tcp)
-	av(tcp)
-	return CURRENT_RES
-end
-
-function ga_ga(tcp)
-	ga(tcp)
-	ga(tcp)
-	return CURRENT_RES
-end
-
-function dr_av(tcp)
-	dr(tcp)
-	av(tcp)
-	return CURRENT_RES
-end
-
-function ga(tcp)
-	CURRENT_RES = KO
-	while (CURRENT_RES == KO) do
-		execute_command(tcp, "gauche")
+	for k, v in pairs(tab) do
+		moove_at(tcp, v)
 	end
 	return CURRENT_RES
 end
 
-function dr(tcp)
+function moove_at(tcp, where)
 	CURRENT_RES = KO
 	while (CURRENT_RES == KO) do
-		execute_command(tcp, "droite")
+		execute_command(tcp, where)
 	end
 	return CURRENT_RES
 end
-
-function av(tcp)
-	CURRENT_RES = KO
-	while (CURRENT_RES == KO) do
-		execute_command(tcp, "avance")
-	end
-	return CURRENT_RES
-end
-

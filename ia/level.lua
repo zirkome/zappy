@@ -1,12 +1,3 @@
-function is_required_at(case)
-	local tab = get_tab_level()
-
-	if (case ~= "X") then
-		return ITEM[case] < tab[LEVEL][case]
-	end
-	return false
-end
-
 function need_to_fork()
 	local tab = get_tab_level()
 
@@ -15,19 +6,6 @@ function need_to_fork()
 	else
 		return KO
 	end
-end
-
-function remain_players()
-	local tab = get_tab_level()
-
-	for k, v in pairs(tab[LEVEL]) do
-		if (k ~= "nourriture" and k ~= "joueur") then
-			if (tab[LEVEL][k] <= ITEM[k]) then
-				return false
-			end
-		end
-	end
-	return tab[LEVEL]["joueur"] < ITEM["joueur"]
 end
 
 function ready_to_levelup()
@@ -68,22 +46,22 @@ end
 function determine_way_broadcast(tcp)
 	if (CURRENT_K ~= nil) then
 		local tab = {
-			[1] = av,
-			[2] = ga_av,
-			[3] = ga_av,
-			[4] = ga_av,
-			[5] = ga_ga,
-			[6] = dr_av,
-			[7] = dr_av,
-			[8] = dr_av
+			[1] = "avance",
+			[2] = "gauche avance",
+			[3] = "gauche avance",
+			[4] = "gauche avance",
+			[5] = "gauche gauche",
+			[6] = "droite avance",
+			[7] = "droite avance",
+			[8] = "droite avance"
 		}
 		if (CURRENT_K ~= 0) then
-			local ret = tab[CURRENT_K](tcp)
+			execute_movements(tcp, tab[CURRENT_K])
 			CURRENT_K = nil
-			return ret
+			return CURRENT_RES
 		else
-			av(tcp)
-			return OK
+			execute_movements(tcp, "avance")
+			return CURRENT_RES
 		end
 	end
 	return KO
@@ -149,15 +127,15 @@ function moove_to_food(tcp)
 	execute_command(tcp, "voir")
 	local tab = parse_case(CURRENT_RES)
 	local moove = {
-		["gauche"] = ga_av_dr,
-		["avance"] = av,
-		["droite"] = dr_av_ga,
+		["gauche"] = "gauche avance droite",
+		["avance"] = "avance",
+		["droite"] = "droite avance gauche",
 	}
 	local case = get_case_on(tab, "nourriture")
 	if (case ~= false) then
 		local where = determine_way_to(case)
 		if (where ~= nil) then
-			return moove[where](tcp)
+			return execute_movements(tcp, moove[where])
 		else
 			return KO
 		end
@@ -216,15 +194,15 @@ function moove_to_stone(tcp)
 	execute_command(tcp, "voir")
 	local tab = parse_case(CURRENT_RES)
 	local moove = {
-		["gauche"] = ga_av_dr,
-		["avance"] = av,
-		["droite"] = dr_av_ga,
+		["gauche"] = "gauche avance droite",
+		["avance"] = "avance",
+		["droite"] = "droite avance gauche",
 	}
 	local case = get_case_on(tab, NEEDED_STONE)
 	if (case ~= false) then
 		local where = determine_way_to(case)
 		if (where ~= nil) then
-			return moove[where](tcp)
+			return execute_movements(tcp, moove[where])
 		else
 			return KO
 		end
