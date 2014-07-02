@@ -23,16 +23,13 @@ function get_beginning(tcp, team)
 end
 
 function execute_ia(host, port, team)
-	print(get_pid(), "OKKKK IM HERE")
 	local tcp = connect_server(host, port)
-	print(get_pid(), "loooooool")
 	local current_state = 42
 	local value = OK
 	local walktrought_statement = get_tab_walk()
 	local function_statement = get_tab_func()
 
 	get_beginning(tcp, team)
-	print(get_pid(), "HEERE", value)
 	while (value ~= ERROR) do
 		current_state = walktrought_statement[current_state][value]
 		print_bkt(get_pid(), "STATEMENT FUNCTION : ", current_state)
