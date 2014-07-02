@@ -197,7 +197,7 @@ function moove_to_stone(tcp)
 	local moove = {
 		["gauche"] = "gauche avance droite",
 		["avance"] = "avance",
-		["droite"] = "droite avance gauche",
+		["droite"] = "droite avance gauche"
 	}
 	local case = get_case_on(tab, NEEDED_STONE)
 	if (case ~= false) then

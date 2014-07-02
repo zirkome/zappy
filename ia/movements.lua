@@ -19,7 +19,7 @@ function determine_way_to(nb)
 end
 
 function execute_movements(tcp, str)
-	local tab = get_word(str)
+	local tab = parse_word(str)
 
 	for k, v in pairs(tab) do
 		moove_at(tcp, v)

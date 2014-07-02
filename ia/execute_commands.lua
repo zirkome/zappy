@@ -13,8 +13,8 @@ function execute_command(tcp, str, arg)
 		["connect_nbr"] = connect_nbr
 	}
 	if (tab[str] == nil) then
-		print("command is nil.")
-	else 
+		print("Command is unfoundable.")
+	else
 		return tab[str](tcp, arg)
 	end
 end
