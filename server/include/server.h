@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Wed Jul  2 00:06:52 2014 luc sinet
+** Last update Wed Jul  2 14:24:43 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -218,6 +218,7 @@ int		pl_expulse(t_server *server, t_client *client, char *arg);
 int		pl_broadcast(t_server *server, t_client *client, char *arg);
 int		pl_inventory(t_server *server, t_client *client, char *arg);
 int		pl_incantation(t_server *server, t_client *client, char *arg);
+int		pl_lay_egg(t_server *server, t_client *client, char *arg);
 int		pl_fork(t_server *server, t_client *client, char *arg);
 int		pl_connect_nbr(t_server *server, t_client *client, char *arg);
 

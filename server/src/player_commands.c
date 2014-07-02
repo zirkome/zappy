@@ -5,9 +5,10 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 14:03:33 2014 luc sinet
-** Last update Wed Jul  2 10:29:19 2014 luc sinet
+** Last update Wed Jul  2 14:27:24 2014 luc sinet
 */
 
+#include "scheduler.h"
 #include "server.h"
 
 int	pl_incantation(t_server *server UNUSED, t_client *client UNUSED,
@@ -16,8 +17,20 @@ int	pl_incantation(t_server *server UNUSED, t_client *client UNUSED,
   return (0);
 }
 
+int		pl_lay_egg(t_server *server, t_client *client,
+			   char *arg UNUSED)
+{
+  struct s_job	task;
+
+  task.client = client;
+  task.at = clock_getsecond() + (60.0f / server->world.delay);
+  task.callback = &pl_fork;
+  task.arg = NULL;
+  return (scheduler_add(&server->sched, &task));
+}
+
 int		pl_fork(t_server *server, t_client *client,
-			char *arg UNUSED)
+			   char *arg UNUSED)
 {
   t_client	*new;
 

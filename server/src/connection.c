@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Wed Jul  2 13:39:15 2014 luc sinet
+** Last update Wed Jul  2 14:34:15 2014 luc sinet
 */
 
 #include "server.h"
@@ -30,8 +30,10 @@ int			connect_new_user(t_server *server)
 
 void		erase_client(t_world *world, t_client *cl)
 {
-  remove_from_world(world, PLAYER, cl->player->x,
-		    cl->player->y);
+  if ((cl->type == (t_client_type)PLAYER || cl->type == (t_client_type)EGG)
+      && cl->player->teamptr != NULL)
+    remove_from_world(world, PLAYER, cl->player->x,
+		      cl->player->y);
   if (cl->player->teamptr != NULL && cl->type != EGG)
     ++cl->player->teamptr->slots;
   queue_clear(&cl->queue);

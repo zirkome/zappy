@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Tue Jul  1 20:22:56 2014 guillaume fillon
+** Last update Wed Jul  2 14:25:31 2014 luc sinet
 */
 
 #include "scheduler.h"
@@ -23,7 +23,7 @@ static	t_command	g_command[] =
   {"expulse", false, none, &pl_expulse, 7},
   {"broadcast", true, string, &pl_broadcast, 7},
   {"incantation", false, none, &pl_incantation, 300},
-  {"fork", false, none, &pl_fork, 42},
+  {"fork", false, none, &pl_lay_egg, 42},
   {"connect_nbr", false, none, &pl_connect_nbr, 0},
   {"msz", false, none, &gui_msz, 0},
   {"bct", true, string, &gui_bct, 0},
