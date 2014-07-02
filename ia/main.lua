@@ -5,70 +5,37 @@ dofile("execute_commands.lua")
 dofile("analyse_reception.lua")
 dofile("update.lua")
 dofile("level.lua")
+dofile("fork.lua")
 dofile("utils/utils_display.lua")
 dofile("utils/utils_spec.lua")
 dofile("utils/utils_parse.lua")
 dofile("utils/utils_getters.lua")
 dofile("utils/utils_bool.lua")
 
-function execute_ia(x, y, level, orientation, host, port, team)
-	local tcp = connect_server(host, port)
+function get_beginning(tcp, team)
 	recept_command(tcp)
 	send_command(tcp, team)
-	NUM_CLT = tonumber(recept_command(tcp))
-	local tab = parse_word(recept_command(tcp))
+	recept_command(tcp)
+	NUM_CLT = tonumber(CURRENT_RES)
+	recept_command(tcp)
+end
+
+function execute_ia(x, y, level, orientation, host, port, team)
+	local tcp = connect_server(host, port)
+	get_beginning(tcp, team)
+	local tab = parse_word(CURRENT_RES)
 	X, Y = tab[1], tab[2]
 
-	while (1) do
-		local inventaire = execute_cmd(tcp, "inventaire")
-		if (remain_players() == true) then
-			execute_cmd(tcp, "fork")
-		elseif (ready_to_levelup() == true) then
-			execute_cmd(tcp, "incantation")
-		elseif (inventaire ~= -42) then
-			update_ressource(parse_case(inventaire))
-			local view = execute_cmd(tcp, "voir")
-			if (view ~= -42) then
-				tab = parse_case(view)
-				local case, where = update_ressource_if(tab)
-				if (case ~= false) then
-					if (where == 1) then
-						execute_cmd(tcp, "prend", case)
-					else
-						if (determine_way_to(where) == "gauche") then
-							execute_cmd(tcp, "gauche")
-							execute_cmd(tcp, "avance")
-							execute_cmd(tcp, "droite")
-						elseif (determine_way_to(where) == "droite") then
-							execute_cmd(tcp, "droite")
-							execute_cmd(tcp, "avance")
-							execute_cmd(tcp, "gauche")
-						elseif (determine_way_to(where) == "avance") then
-							execute_cmd(tcp, "avance")
-						end
-					end
-				else
-					if (need_to_fork() == true) then
-						execute_cmd("fork")
-					else
-						local case = get_case_on(tab, "nourriture")
-						if (case ~= false) then
-							if (case == 1) then
-								execute_cmd(tcp, "prend", "nourriture")
-							else
-								random_moove(tcp)
-							end
-						else
-							random_moove(tcp)
-						end
-					end
-				end
-			else
-				random_moove(tcp)
-			end
-		else
-			random_moove(tcp)
-		end
+	local current_state = 42
+	local value = OK
+	local walktrought_statement = get_tab_walk()
+	local function_statement = get_tab_func()
+
+	while (value ~= ERROR) do
+		current_state = walktrought_statement[current_state][value]
+		print(get_pid(), "STATEMENT FUNCTION : ", current_state)
+		value = function_statement[current_state](tcp)
+		CURRENT_RES = nil
 	end
 	close_server(tcp)
 	return 0
