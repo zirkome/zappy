@@ -10,7 +10,11 @@ end
 function need_to_fork()
 	local tab = get_tab_level()
 
-	return tab[LEVEL]["joueur"] > ITEM["joueur"]
+	if (tab[LEVEL]["joueur"] > ITEM["joueur"]) then
+		return OK
+	else
+		return KO
+	end
 end
 
 function remain_players()
@@ -37,8 +41,16 @@ function ready_to_levelup()
 	return true
 end
 
-function enought_food()
-	if (ITEM["nourriture"] < 10) then
+function enought_food(tcp)
+	execute_command(tcp, "inventaire")
+	update_ressource(UPDATE_INVENTORY)
+	if (ITEM["nourriture"] < 15 and REGAIN_FOODS == false) then
+		REGAIN_FOODS = true
+		return KO
+	elseif (REGAIN_FOODS == true and ITEM["nourriture"] < 20) then
+		if (ITEM["nourriture"] == 20) then
+			REGAIN_FOODS = false
+		end
 		return KO
 	else
 		return OK
@@ -66,9 +78,12 @@ function determine_way_broadcast(tcp)
 			[8] = dr_av
 		}
 		if (CURRENT_K ~= 0) then
-			return tab[CURRENT_K](tcp)
+			local ret = tab[CURRENT_K](tcp)
+			CURRENT_K = nil
+			return ret
 		else
-			return KO
+			av(tcp)
+			return OK
 		end
 	end
 	return KO
@@ -94,7 +109,10 @@ function enought_trantorian()
 end
 
 function start_incantation(tcp)
-	execute_command(tcp, "incantation")
+	local res = false
+	while (res == false) do
+		execute_command(tcp, "incantation")
+	end
 	return CURRENT_RES
 end
 
@@ -128,25 +146,32 @@ function take_food(tcp)
 end
 
 function moove_to_food(tcp)
-	local case = get_case_on(tab, "nourriture")
+	execute_command(tcp, "voir")
+	local tab = parse_case(CURRENT_RES)
 	local moove = {
 		["gauche"] = ga_av_dr,
-		["avance"] = avance,
+		["avance"] = av,
 		["droite"] = dr_av_ga,
 	}
-	local where = determine_way_to(case)
-	if (case ~= false and where ~= nil) then
-		return moove[where]
-	else
-		return KO
+	local case = get_case_on(tab, "nourriture")
+	if (case ~= false) then
+		local where = determine_way_to(case)
+		if (where ~= nil) then
+			return moove[where](tcp)
+		else
+			return KO
+		end
 	end
 end
 
-function enought_stones()
+function enought_stones(tcp)
+	execute_command(tcp, "inventaire")
+	update_ressource(UPDATE_INVENTORY)
 	local tab = get_tab_level()
 
 	for k, v in pairs(tab[LEVEL]) do
-		if (k ~= "joueur" and ITEM[k] ~= v) then
+		print(LEVEL, ITEM[k], v, k)
+		if (k ~= "joueur" and ITEM[k] < v) then
 			return KO
 		end
 	end
@@ -159,9 +184,13 @@ function stone_needed_in_vision(tcp)
 	local tab = parse_case(CURRENT_RES)
 
 	for k, v in pairs(tab) do
-		if (v ~= "joueur" and level[LEVEL][v] > ITEM[v]) then
-			NEEDED_STONE = v
-			return OK
+		for l, w in pairs(v) do
+			if (w ~= "X") then
+				if (w ~= "joueur" and level[LEVEL][w] > ITEM[w]) then
+					NEEDED_STONE = w
+					return OK
+				end
+			end
 		end
 	end
 	return KO
@@ -185,29 +214,34 @@ function stone_on_my_case(tcp)
 end
 
 function moove_to_stone(tcp)
-	local case = get_case_on(tab, NEEDED_STONE)
+	execute_command(tcp, "voir")
+	local tab = parse_case(CURRENT_RES)
 	local moove = {
 		["gauche"] = ga_av_dr,
-		["avance"] = avance,
+		["avance"] = av,
 		["droite"] = dr_av_ga,
 	}
-	local where = determine_way_to(case)
-	if (case ~= false and where ~= nil) then
-		return moove[where]
-	else
-		return KO
+	local case = get_case_on(tab, NEEDED_STONE)
+	if (case ~= false) then
+		local where = determine_way_to(case)
+		if (where ~= nil) then
+			return moove[where](tcp)
+		else
+			return KO
+		end
 	end
 end
 
 function take_stone(tcp)
 	execute_command(tcp, "prend", NEEDED_STONE)
+	NEEDED_STONE = nil
 	return CURRENT_RES
 end
 
 function same_level(tcp)
 	if (BROADCAST[1] ~= nil) then
-		local tab = get_word(BROADCAST[1])
-		if (tab[3] ~= nil and tab[3] == "HELP" and tab[4] ~= nil and tab[4] == LEVEL) then
+		local tab = parse_word(BROADCAST[1])
+		if (tab[1] ~= nil and tab[1] == "HELP" and tab[1] ~= nil and tab[1] == LEVEL) then
 			return OK
 		else
 			return KO
