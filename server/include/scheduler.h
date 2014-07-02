@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Tue Jul  1 15:25:16 2014 guillaume fillon
-** Last update Tue Jul  1 20:14:46 2014 guillaume fillon
+** Last update Wed Jul  2 22:38:04 2014 guillaume fillon
 */
 
 #ifndef _SCHEDULER_H_
@@ -13,14 +13,17 @@
 
 # include "server.h"
 
-struct		s_job
+struct			s_job
 {
-  t_client	*client;
-  time_t	at;
-  t_callback	callback;
-  char		*arg;
+  t_client		*client;
+  union
+  {
+    struct timespec	_at;
+    time_t		at;
+  };
+  t_callback		callback;
+  char			*arg;
 };
-
 typedef t_list t_scheduler;
 
 /*

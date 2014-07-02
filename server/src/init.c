@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 09:39:44 2014 luc sinet
-** Last update Wed Jul  2 00:06:41 2014 luc sinet
+** Last update Wed Jul  2 22:39:42 2014 guillaume fillon
 */
 
 #include <signal.h>
@@ -39,7 +39,6 @@ int		init_server(t_server *server)
   if (server->world.slots == 0)
     server->world.slots = 1;
   server->cl = NULL;
-  server->sched = NULL;
   srand(time(NULL));
   init_teams_slots(server);
   if (generate_map(&server->world) == -1)

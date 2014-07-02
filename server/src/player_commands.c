@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 14:03:33 2014 luc sinet
-** Last update Wed Jul  2 14:27:24 2014 luc sinet
+** Last update Wed Jul  2 22:40:09 2014 guillaume fillon
 */
 
 #include "scheduler.h"
@@ -26,7 +26,7 @@ int		pl_lay_egg(t_server *server, t_client *client,
   task.at = clock_getsecond() + (60.0f / server->world.delay);
   task.callback = &pl_fork;
   task.arg = NULL;
-  return (scheduler_add(&server->sched, &task));
+  return (scheduler_add(&client->player->jobs, &task));
 }
 
 int		pl_fork(t_server *server, t_client *client,
