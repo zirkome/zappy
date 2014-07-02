@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Tue Jul  1 15:52:59 2014 guillaume fillon
-** Last update Tue Jul  1 20:29:13 2014 guillaume fillon
+** Last update Wed Jul  2 14:54:17 2014 luc sinet
 */
 
 #include "scheduler.h"
@@ -30,6 +30,7 @@ static int	check_job(struct s_job *job, time_t date, t_server *server)
       printf("now: %lu \tsched on: %lu\n", clock_getsecond(), job->at);
       job->callback(server, job->client, job->arg);
       list_del_node(&server->sched, job);
+      free(job->arg);
       free(job);
       return (0);
     }
