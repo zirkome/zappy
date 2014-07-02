@@ -42,6 +42,7 @@ end
 function inventaire(tcp)
 	send_command(tcp, "inventaire")
 	recept_command(tcp)
+	print(get_pid(), "CURRENT RES IS : ", CURRENT_RES)
 	UPDATE_INVENTORY = parse_case(CURRENT_RES)
 end
 

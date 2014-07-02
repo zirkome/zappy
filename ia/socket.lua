@@ -21,16 +21,16 @@ function recept_command(tcp)
 		s, status, partial = tcp:receive()
 		CURRENT_RES = nil
 	end
-	print_bkt("Received : ", s)
+	print_bkt(get_pid(), "Received : ", s)
 	analyse_command(s)
 end
 
 function send_command(tcp, command)
-	print_bkt("send : ", command)
+	print_bkt(get_pid(), "send : ", command)
 	local s = tcp:send(command .. "\n")
 
 	if (s ~= #command + 1) then
-		print_bkt("Error in send_command : ", s ," bytes send instead of " .. #command + 1)
+		print_bkt(get_pid(), "Error in send_command : ", s ," bytes send instead of " .. #command + 1)
 		return -1
 	end
 	return 0
@@ -42,7 +42,7 @@ function connect_server(host, port)
 	local success, err = tcp:connect(host, port)
 
 	if (success == nil) then
-		print("Error in connect_server : " .. err)
+		print_bkt(get_pid(), "Error in connect_server : " .. err)
 		return nil
 	end
 	return tcp

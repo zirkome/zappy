@@ -44,10 +44,10 @@ end
 function enought_food(tcp)
 	execute_command(tcp, "inventaire")
 	update_ressource(UPDATE_INVENTORY)
-	if (ITEM["nourriture"] < 15 and REGAIN_FOODS == false) then
+	if (ITEM["nourriture"] < 11 and REGAIN_FOODS == false) then
 		REGAIN_FOODS = true
 		return KO
-	elseif (REGAIN_FOODS == true and ITEM["nourriture"] < 20) then
+	elseif (REGAIN_FOODS == true and ITEM["nourriture"] < 15) then
 		if (ITEM["nourriture"] == 20) then
 			REGAIN_FOODS = false
 		end
@@ -170,7 +170,6 @@ function enought_stones(tcp)
 	local tab = get_tab_level()
 
 	for k, v in pairs(tab[LEVEL]) do
-		print(LEVEL, ITEM[k], v, k)
 		if (k ~= "joueur" and ITEM[k] < v) then
 			return KO
 		end

@@ -14,26 +14,28 @@ dofile("utils/utils_bool.lua")
 
 function get_beginning(tcp, team)
 	recept_command(tcp)
-	send_command(tcp, team)
-	recept_command(tcp)
-	NUM_CLT = tonumber(CURRENT_RES)
-	recept_command(tcp)
+	if (FORK == false) then
+		send_command(tcp, team)
+		recept_command(tcp)
+		NUM_CLT = tonumber(CURRENT_RES)
+		recept_command(tcp)
+	end
 end
 
-function execute_ia(x, y, level, orientation, host, port, team)
+function execute_ia(host, port, team)
+	print(get_pid(), "OKKKK IM HERE")
 	local tcp = connect_server(host, port)
-	get_beginning(tcp, team)
-	local tab = parse_word(CURRENT_RES)
-	X, Y = tab[1], tab[2]
-
+	print(get_pid(), "loooooool")
 	local current_state = 42
 	local value = OK
 	local walktrought_statement = get_tab_walk()
 	local function_statement = get_tab_func()
 
+	get_beginning(tcp, team)
+	print(get_pid(), "HEERE", value)
 	while (value ~= ERROR) do
 		current_state = walktrought_statement[current_state][value]
-		print(get_pid(), "STATEMENT FUNCTION : ", current_state)
+		print_bkt(get_pid(), "STATEMENT FUNCTION : ", current_state)
 		value = function_statement[current_state](tcp)
 		CURRENT_RES = nil
 	end
@@ -46,11 +48,12 @@ function main_prg()
 	local port = arg[2]
 	local team = arg[3]
 	if (host ~= nil and port ~= nil and is_valid_ipv4(host) == 0 and team ~= nil) then
-		return execute_ia(1, 1, 1, 1, host, port, team)
+		return execute_ia(host, port, team)
 	else
 		print("Usage: lua5.2 ia.out <host> <port> <team>")
 		return 1
 	end
 end
 
+init_global(false)
 return main_prg()

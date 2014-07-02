@@ -46,7 +46,7 @@ function get_level(cut)
 end
 
 function exit_program(cut)
-	print("i'm dead ! FUCK !")
+	print("i'm dead !")
 	os.exit(1)
 end
 

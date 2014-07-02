@@ -1,10 +1,11 @@
 local posix = require "posix"
 
 function fork_p()
-	if (IS_GROWING == false) then
-		posix.fork()
+	local pid = posix.fork()
+	if (pid == 0) then
+		init_global(true)
+		main_prg()
 	end
-	IS_GROWING = true
 	return OK
 end
 
