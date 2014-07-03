@@ -8,15 +8,7 @@ AWidget::AWidget(int x, int y, int height, int width)
   _height = height;
   _width = width;
   _square = NULL;
-  try
-    {
-      _text.initialize();
-    }
-  catch (const Exception &e)
-    {
-      std::cerr << e.what() << std::endl;
-      return ;
-    }
+  _text.initialize();
 }
 
 AWidget::~AWidget()
