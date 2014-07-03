@@ -22,7 +22,7 @@ end
 function enought_food(tcp)
 	execute_command(tcp, "inventaire")
 	update_ressource(UPDATE_INVENTORY)
-	if (ITEM["nourriture"] < 11 and REGAIN_FOODS == false) then
+	if (ITEM["nourriture"] < 10 and REGAIN_FOODS == false) then
 		REGAIN_FOODS = true
 		return KO
 	elseif (REGAIN_FOODS == true and ITEM["nourriture"] < 15) then
@@ -195,9 +195,9 @@ function moove_to_stone(tcp)
 	execute_command(tcp, "voir")
 	local tab = parse_case(CURRENT_RES)
 	local moove = {
-		["gauche"] = "gauche avance droite",
+		["gauche"] = "gauche avance",
 		["avance"] = "avance",
-		["droite"] = "droite avance gauche"
+		["droite"] = "droite avance"
 	}
 	local case = get_case_on(tab, NEEDED_STONE)
 	if (case ~= false) then

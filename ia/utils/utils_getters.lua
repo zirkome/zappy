@@ -20,7 +20,7 @@ function get_tab_walk()
 		[5] = {6, 14},
 		[6] = {1, 6},
 		[7] = {8, 9},
-		[8] = {10, 11},
+		[8] = {10, 27},
 		[9] = {7, 9},
 		[10] = {1, 10},
 		[11] = {7, 11},
@@ -37,6 +37,9 @@ function get_tab_walk()
 		[22] = {1, 22},
 		[23] = {24, 21},
 		[24] = {3, 21},
+		[25] = {26, 11},
+		[26] = {11, 26},
+		[27] = {25, 11},
 		[42] = {1}
 	}
 	return tab
@@ -67,7 +70,10 @@ function get_tab_func()
 		[21] = need_to_fork,
 		[22] = fork_p,
 		[23] = team_message,
-		[24] = same_level
+		[24] = same_level,
+		[25] = stone_on_my_case,
+		[26] = take_stone,
+		[27] = stone_needed_in_vision
 	}
 	return tab
 end
@@ -90,4 +96,17 @@ function get_case_on(case, item)
 		end
 	end
 	return false
+end
+
+function get_closer_of(nb, tab)
+	local closer = 0
+	local rank = 0
+
+	for k, v in pairs(tab) do
+		if (nb - v < closer) then
+			closer = nb - v
+			rank = k - 1
+		end
+	end
+	return rank
 end
