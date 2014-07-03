@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Wed Jul  2 22:29:00 2014 guillaume fillon
+** Last update Thu Jul  3 18:48:04 2014 luc sinet
 */
 
 #include "scheduler.h"
@@ -95,6 +95,13 @@ static int	parse_input(char *line, char *arg)
   return (i);
 }
 
+static int	prepare_cmd(t_server *server, t_client *client, int idx)
+{
+  if (idx != INCANTATION)
+    return (0);
+  return (prepare_incantation(server, client));
+}
+
 int		process_input(t_server *server, t_client *cl, char *input)
 {
   struct s_job	task;
@@ -104,7 +111,8 @@ int		process_input(t_server *server, t_client *cl, char *input)
   if (cl->type == UNKNOWN)
     return (authenticate_user(server, cl, input));
   printf("Got input: %s\n", input);
-  if ((idx = parse_input(input, arg)) == -1)
+  if ((idx = parse_input(input, arg)) == -1 ||
+      prepare_cmd(server, cl, idx + 1) == -1)
     return (-1);
   task.client = cl;
   task.at = g_command[idx].delay / server->world.delay;

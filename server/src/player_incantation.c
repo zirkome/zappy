@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Wed Jul  2 18:22:49 2014 luc sinet
-** Last update Thu Jul  3 15:49:24 2014 luc sinet
+** Last update Thu Jul  3 18:45:18 2014 luc sinet
 */
 
 #include "server.h"
@@ -58,8 +58,7 @@ t_vector	*check_incantation_conditions(t_server *server,
   return (vec);
 }
 
-int		prepare_incantation(t_server *server, t_client *client,
-				    char *arg UNUSED)
+int		prepare_incantation(t_server *server, t_client *client)
 {
   t_vector	*vec;
 
