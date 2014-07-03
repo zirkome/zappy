@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Wed Jul  2 18:22:49 2014 luc sinet
-** Last update Thu Jul  3 00:14:03 2014 luc sinet
+** Last update Thu Jul  3 11:23:23 2014 luc sinet
 */
 
 #include "server.h"
@@ -49,26 +49,52 @@ t_bool		enough_ressources(int lev, int x, int y, t_world *world)
   return (true);
 }
 
+int		elevate_players(t_vector *vec, int num, int lev)
+{
+  t_client	*client;
+  unsigned int	i;
+  unsigned int	size;
+  char		tab[64];
+
+  size = vector_size(vec);
+  for (i = 0; i < size && num > 0; ++i)
+    {
+      client = vector_get(vec, i);
+      if (client->player->level == lev)
+	{
+	  snprintf(tab, sizeof(tab), "elevation en cours niveau actuel : %d\n",
+		   client->player->level);
+	  queue_push(&client->queue, tab);
+	  client->player->level += 1;
+	  --num;
+	}
+    }
+  return (0);
+}
+
 int		pl_incantation(t_server *server, t_client *client,
 			       char *arg UNUSED)
 {
   t_player	*pl;
   t_vector	vec;
   char		tab[64];
+  int		num_player;
 
   pl = client->player;
   vector_init(&vec);
   if (!enough_ressources(pl->level, pl->x, pl->y, &server->world))
     return (-1);
   get_player_at_pos(&vec, server->cl, pl->x, pl->y);
-  if (!check_levels(pl->level, num_same_level(&vec, client->player->level)))
+  if ((num_player = needed_same_level(pl->level)) >
+      num_same_level(&vec, client->player->level))
     {
       vector_clear(&vec);
-      return (0);
+      return (-1);
     }
-  vector_clear(&vec);
   snprintf(tab, sizeof(tab), "elevation en cours niveau actuel : %d\n",
 	   client->player->level);
   client->player->level += 1;
+  elevate_players(&vec, num_player - 1, client->player->level);
+  vector_clear(&vec);
   return (queue_push(&client->queue, tab));
 }

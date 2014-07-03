@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Wed Jul  2 21:28:52 2014 luc sinet
-** Last update Thu Jul  3 00:18:44 2014 luc sinet
+** Last update Thu Jul  3 11:23:18 2014 luc sinet
 */
 
 #include "server.h"
@@ -24,13 +24,13 @@ void		get_player_at_pos(t_vector *vec, t_list list, int x, int y)
     }
 }
 
-t_bool	check_levels(int lev, int nb_same)
+int	needed_same_level(int lev)
 {
   if (lev == 1)
-    return (nb_same >= 1 ? true : false);
+    return (1);
   if (lev % 2 == 1)
     ++lev;
-  return ((nb_same >= (lev + 2)) ? true : false);
+  return (lev + 2);
 }
 
 int		num_same_level(t_vector *vec, int lev)
