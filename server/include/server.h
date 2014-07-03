@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Thu Jul  3 18:41:31 2014 luc sinet
+** Last update Fri Jul  4 00:34:10 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -38,6 +38,7 @@
 # define UNUSED __attribute__((unused))
 # define RSIZE 512
 # define DISCONNECTED 2
+# define FOODTIME 126
 
 # define CMDLEN 32
 # define ARGLEN 256
@@ -75,6 +76,8 @@ typedef struct	s_team
   int		slots;
 }		t_team;
 
+typedef struct	s_job	t_job;
+
 typedef struct	s_player
 {
   int		id;
@@ -83,6 +86,7 @@ typedef struct	s_player
   t_dir		dir;
   int		level;
   int		inventory[NB_ELEM];
+  t_job		*foodjob;
   t_list	jobs;
   t_team	*teamptr;
 }		t_player;
@@ -180,7 +184,7 @@ int		write_state(t_server *server, t_client *client);
 int		connect_new_user(t_server *server);
 int		kick_user(t_list *list, t_client *cl, t_world *world);
 int		disconnect_user(t_server *server, t_client *cl);
-
+int		handle_player_life(t_server *server, t_client *client);
 /*
 ** Client
 */

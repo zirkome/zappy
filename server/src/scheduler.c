@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Tue Jul  1 15:52:59 2014 guillaume fillon
-** Last update Wed Jul  2 22:36:23 2014 guillaume fillon
+** Last update Fri Jul  4 00:16:57 2014 luc sinet
 */
 
 #include "scheduler.h"

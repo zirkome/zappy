@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Wed Jul  2 22:33:36 2014 guillaume fillon
+** Last update Thu Jul  3 23:41:08 2014 luc sinet
 */
 
 #include <err.h>
@@ -22,7 +22,7 @@ int		dispatch_fds(t_server *server, struct epoll_event *ev)
       if (((t_client *)tmp->value)->fd == ev->data.fd)
 	break;
     }
-  if (tmp && ((t_client *)tmp->value)->fd != ev->data.fd)
+  if (tmp == NULL || ((t_client *)tmp->value)->fd != ev->data.fd)
     return (-1);
   if (ev->events & EPOLLIN)
     {

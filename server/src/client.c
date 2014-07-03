@@ -5,24 +5,27 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Thu Jul  3 21:56:09 2014 luc sinet
+** Last update Fri Jul  4 00:32:55 2014 luc sinet
 */
 
+#include "scheduler.h"
 #include "server.h"
 
 static int	g_increment = 1;
 
 static int	init_player(t_client *new)
 {
-  if ((new->player = malloc(sizeof(t_player))) == NULL)
+  if ((new->player = malloc(sizeof(t_player))) == NULL ||
+      (new->player->foodjob = malloc(sizeof(t_job))) == NULL)
     return (iperror("init_player: malloc", -1));
-  new->player->dir = 3;//rand() % 4;
+  new->player->dir = rand() % 4;
   new->player->x = 0;
   new->player->y = 0;
   new->player->level = 1;
   new->player->id = g_increment++;
   new->player->teamptr = NULL;
   new->player->jobs = NULL;
+  new->player->foodjob = NULL;
   memset(new->player->inventory, 0, sizeof(new->player->inventory));
   return (0);
 }

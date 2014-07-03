@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Thu Jul  3 18:48:04 2014 luc sinet
+** Last update Fri Jul  4 00:36:15 2014 luc sinet
 */
 
 #include "scheduler.h"
@@ -110,6 +110,8 @@ int		process_input(t_server *server, t_client *cl, char *input)
 
   if (cl->type == UNKNOWN)
     return (authenticate_user(server, cl, input));
+  if (cl->type == IA || cl->type == EGG)
+    handle_player_life(server, cl);
   printf("Got input: %s\n", input);
   if ((idx = parse_input(input, arg)) == -1 ||
       prepare_cmd(server, cl, idx + 1) == -1)
