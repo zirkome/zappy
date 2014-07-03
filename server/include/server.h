@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Thu Jul  3 11:24:26 2014 luc sinet
+** Last update Thu Jul  3 15:27:00 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -165,8 +165,16 @@ void		apply_map_looping(int *x, int *y, int wdx, int wdy);
 int		count_type_on_box(t_world *world, int type, int x, int y);
 int		count_player_in_team(t_list cl, t_team *team);
 void		get_player_at_pos(t_vector *vec, t_list list, int x, int y);
+
+t_vector	*check_incantation_conditions(t_server *server,
+					      t_client *client);
+int		prepare_incantation(t_server *server, t_client *client,
+				    char *arg);
 int		needed_same_level(int lev);
 int		num_same_level(t_vector *vec, int lev);
+int		*get_needed_ressources(int lev);
+t_bool		enough_ressources(int lev, int x, int y, t_world *world);
+void		reassign_ressources(int lev, int x, int y, t_world *world);
 
 int		read_state(t_server *server, t_client *client);
 int		write_state(t_server *server, t_client *client);
