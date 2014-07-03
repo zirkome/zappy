@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Jul  3 11:39:23 2014 luc sinet
-** Last update Thu Jul  3 13:57:54 2014 luc sinet
+** Last update Thu Jul  3 20:50:56 2014 luc sinet
 */
 
 #include "server.h"
@@ -50,9 +50,12 @@ t_bool	enough_ressources(int lev, int x, int y, t_world *world)
 
   if ((ressources = get_needed_ressources(lev)) == NULL)
     return (false);
-  for (i = 0; i < 7; ++i)
-    if (ressources[i] > get_ent_amount(x, y, i + LINEMATE, world))
-      return (false);
+  for (i = 0; i < 6; ++i)
+    {
+      printf("%d %d\n", ressources[i], get_ent_amount(x, y, i + LINEMATE, world));
+      if (ressources[i] != get_ent_amount(x, y, i + LINEMATE, world))
+	return (false);
+    }
   return (true);
 }
 
