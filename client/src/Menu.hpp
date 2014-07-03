@@ -10,6 +10,7 @@
 # include "GameEngine.hpp"
 # include "Settings.hpp"
 # include "Text.hpp"
+# include "GNetwork.hpp"
 # include "AWidget.hpp"
 
 # define MAPS_PATH "./Save/Maps/"
@@ -25,23 +26,26 @@ public:
   bool	update();
   void	draw();
   void	launch();
-  void	launchGame();
+  bool	launchGame();
   void	textInput(std::string &buf, unsigned int maxlen);
   void	setDone(bool done = true);
+  bool	getInfo(std::string &ip, std::string &port);
+
 private:
   bool	textFillBuf(std::string &buf, unsigned int maxlen, Keycode key);
   void	handleClock(int &frame, double &time, double fps);
   void	freePanel(std::vector<AWidget *> &panel);
 
   gdl::SdlContext	_win;
+  GNetwork		_gNetwork;
+  Settings		_set;
+  gdl::Clock		_clock;
+  Input			_input;
+  GameEngine		*_gameEngine;
   gdl::BasicShader	_textShader;
   int			_frames;
   bool			_done;
   Cube			_cube;
-  Input			*_input;
-  Settings		*_set;
-  GameEngine		_gameEngine;
-  gdl::Clock		*_clock;
   std::vector<AWidget *> _mainPanel;
 };
 

@@ -2,7 +2,6 @@
 # define _IMAGEWIDGET_HPP_
 
 # include "AWidget.hpp"
-# include "Menu.hpp"
 
 class	ImageWidget : public AWidget
 {

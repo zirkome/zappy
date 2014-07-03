@@ -1,3 +1,4 @@
+#include "Menu.hpp"
 #include "QuitWidget.hpp"
 
 QuitWidget::QuitWidget(int x, int y, int height, int width, const std::string &texture)
