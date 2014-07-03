@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 13:47:25 2014 luc sinet
-** Last update Wed Jul  2 00:40:44 2014 luc sinet
+** Last update Thu Jul  3 22:32:46 2014 luc sinet
 */
 
 #include "server.h"
@@ -25,20 +25,22 @@ int		pl_forward(t_server *server, t_client *client,
   return (0);
 }
 
-int	pl_right(t_server *server, t_client *client, char *arg)
+int	pl_right(t_server *server UNUSED, t_client *client,
+		 char *arg UNUSED)
 {
   if ((++client->player->dir) > WEST)
     client->player->dir = NORTH;
-  pl_forward(server, client, arg);
+  queue_push(&client->queue, "ok\n");
   return (0);
 }
 
-int	pl_left(t_server *server, t_client *client, char *arg)
+int	pl_left(t_server *server UNUSED, t_client *client,
+		char *arg UNUSED)
 {
   if (client->player->dir == NORTH)
     client->player->dir = WEST;
   else
     --client->player->dir;
-  pl_forward(server, client, arg);
+  queue_push(&client->queue, "ok\n");
   return (0);
 }
