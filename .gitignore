@@ -41,3 +41,6 @@ _ReSharper*/
 *.a
 client/client
 server/server
+visualiseur-fedora
+zappy-gfx-linux64
+zappy-server-linux
