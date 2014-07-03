@@ -1,3 +1,13 @@
+/*
+** parse_type.c for zappy in /home/kokaz/projects/tek2/unix/zappy/server
+**
+** Made by guillaume fillon
+** Login   <kokaz@epitech.net>
+**
+** Started on  Thu Jul  3 15:01:56 2014 guillaume fillon
+** Last update Thu Jul  3 15:01:57 2014 guillaume fillon
+*/
+
 #include "server.h"
 
 t_bool	is_number(char c)
