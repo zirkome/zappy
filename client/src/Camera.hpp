@@ -3,6 +3,8 @@
 
 # include <glm/glm.hpp>
 # include <glm/gtc/matrix_transform.hpp>
+# include <Clock.hh>
+# include "Input.hpp"
 
 class Camera
 {
@@ -12,8 +14,10 @@ public:
 
   void lookAt();
   void translate(glm::vec3 vec);
-  void	setPointView(glm::vec3 vec);
-  void	setPos(glm::vec3 pos);
+  void setPointView(glm::vec3 vec);
+  void setPos(glm::vec3 pos);
+  void tranlate(glm::vec3 vec);
+  void update(Input in, gdl::Clock clock);
 
   const glm::mat4 &getTransformation() const;
   const glm::mat4 &getProjection() const;

@@ -2,7 +2,9 @@
 #include "Input.hpp"
 
 GameEngine::GameEngine(GNetwork *socket): _win(), _input(),
-					  _ground("./assets/wall.tga"),
+					  _ground(GROUND_TEXTURE),
+					  _loading(LOADING_TEXTURE),
+					  _resources(64, NULL),
 					  _socket(socket)
 {
   _display.loading = true;
@@ -23,12 +25,38 @@ bool GameEngine::initialize()
       || !_shader.load("./Shaders/basic.vp", GL_VERTEX_SHADER)
       || !_shader.build())
     return (false);
+  if (!_textShader.load("./Shaders/text.fp", GL_FRAGMENT_SHADER)
+      || !_textShader.load("./Shaders/text.vp", GL_VERTEX_SHADER)
+      || !_textShader.build())
+    return (false);
   _cam.translate(glm::vec3(0.0, 5.0, 15.0));
   _cam.setPointView(glm::vec3(0.0, 0.0, 10.0));
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  // _resources.push_back(new Model());
+  if (!_loading.initialize())
+    return (false);
+  _ground.translate(glm::vec3(0.0, -0.5, 0.0));
+  _loading.setPos(0, 0);
+  _loading.setSize(1600, 900);
+  _loading.fillGeometry();
+  _resources[FOOD] = new Model();
+  _resources[LINEMATE] = new Model();
+  _resources[DERAUMERE] = new Model();
+  _resources[SIBUR] = new Model();
+  _resources[MENDIANE] = new Model();
+  _resources[PHIRAS] = new Model();
+  _resources[THYSTAME] = new Model();
+  if (!_resources[FOOD]->load(FOOD_MODEL)
+      || !_resources[LINEMATE]->load(LINEMATE_MODEL)
+      || !_resources[DERAUMERE]->load(DERAUMERE_MODEL)
+      || !_resources[SIBUR]->load(SIBUR_MODEL)
+      || !_resources[MENDIANE]->load(MENDIANE_MODEL)
+      || !_resources[PHIRAS]->load(PHIRAS_MODEL)
+      || !_resources[THYSTAME]->load(THYSTAME_MODEL)
+      || !_player.load(PLAYER_MODEL)
+      || !_egg.load(EGG_MODEL))
+    return (false);
   return (true);
 }
 
@@ -36,23 +64,57 @@ void GameEngine::draw()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   _cam.lookAt();
-  _shader.bind();
-  _shader.setUniform("projection", _cam.getProjection());
-  _shader.setUniform("view", _cam.getTransformation());
-  _shader.setUniform("nbLight", 0);
-  _shader.setUniform("isFog", 0);
-  _shader.setUniform("isLight", 0);
   if (!_display.loading)
     {
-      _ground.setScale(glm::vec3(_display.map.getX(), -0.5, _display.map.getY()));
+      _shader.bind();
+      _shader.setUniform("projection", _cam.getProjection());
+      _shader.setUniform("view", _cam.getTransformation());
+      _shader.setUniform("nbLight", 0);
+      _shader.setUniform("isFog", 0);
+      _shader.setUniform("isLight", 0);
+      _ground.setScale(glm::vec3(_display.map.getX(), 1.0, _display.map.getY()));
       _ground.draw(_shader, _clock);
+      for (int x = 0;x < _display.map.getX();++x)
+	for (int y = 0;y < _display.map.getY();++y)
+	  displayItem(_display.map[x * _display.map.getY() + y], x, y);
+      std::list<t_egg *>::const_iterator endEgg = _display.map.getEggEnd();
+      for (std::list<t_egg *>::const_iterator it = _display.map.getEggBegin();it != endEgg;++it)
+	{
+	  _egg.setPos(glm::vec3((*it)->x, 0.0, (*it)->y));
+	  _egg.draw(_shader, _clock);
+	}
+      std::list<t_player *>::const_iterator endPlayer = _display.map.getPlayerEnd();
+      for (std::list<t_player *>::const_iterator it = _display.map.getPlayerBegin();it != endPlayer;++it)
+	{
+	  _player.setPos(glm::vec3((*it)->x, 0.0, (*it)->y));
+	  _player.draw(_shader, _clock);
+	}
     }
   else
     {
-
+      glDisable(GL_DEPTH_TEST);
+      _textShader.bind();
+      _textShader.setUniform("projection", glm::ortho(0.0f, 1600.f,
+						      0.0f, 900.f, -1.0f, 1.0f));
+      _textShader.setUniform("view", glm::mat4(1));
+      _textShader.setUniform("winX", 1600.f);
+      _textShader.setUniform("winY", 900.f);
+      _loading.draw(_textShader, _clock);
+      glEnable(GL_DEPTH_TEST);
     }
   _win.flush();
 }
+
+void GameEngine::displayItem(const char flag, int x, int y)
+{
+  for (int i = 0;i < 64;i = i << 1)
+    if (flag & i)
+      {
+	_resources[i]->setPos(glm::vec3(x, 0, y));
+	_resources[i]->draw(_shader, _clock);
+      }
+}
+
 
 bool GameEngine::update()
 {
@@ -65,6 +127,7 @@ bool GameEngine::update()
   _win.updateClock(_clock);
   _socket->update(_display);
   _input.getInput();
+  _cam.update(_input, _clock);
   if (_input.isPressed(SDLK_ESCAPE) || (_input[win] && win.event == WIN_QUIT))
     return (false);
   if ((time = _clock.getElapsed()) < fps)

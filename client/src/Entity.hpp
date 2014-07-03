@@ -26,11 +26,19 @@ enum Action
     LOOT = 4,
   };
 
+enum State
+  {
+    NOT_HATCHING = 0,
+    HATCHING = 1,
+  };
+
 typedef struct	s_egg
 {
-  s_egg(int posX, int posY, int number): isAlive(true), x(posX), y(posY), nb(number) {};
+  s_egg(int posX, int posY, int number)
+    : isAlive(true), cuState(NOT_HATCHING), x(posX), y(posY), nb(number) {};
 
   bool		isAlive;
+  State		cuState;
   int		x;
   int		y;
   int		nb;
@@ -48,6 +56,7 @@ typedef struct	s_player
   int		y;
   int		lvl;
   int		orient;
+  int		inventory[7];
   Action	cuAction;
   std::string   team;
 }		t_player;

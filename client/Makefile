@@ -5,7 +5,7 @@
 ## Login   <fritsc_h@epitech.net>
 ##
 ## Started on  Sun May  4 15:17:27 2014 Harold Fritsch
-## Last update Fri Jun 27 00:06:56 2014 enzo de gregorio
+## Last update Tue Jul  1 22:42:33 2014 Adrien Della Maggiora
 ##
 
 CC 		=	g++
@@ -34,10 +34,11 @@ SRC 		=	main.cpp \
 			Menu.cpp \
 			Settings.cpp \
 			Text.cpp \
-			Square.cpp \
 			AWidget.cpp \
 			ImageWidget.cpp \
-			QuitWidget.cpp
+			QuitWidget.cpp \
+			Square.cpp \
+			Model.cpp
 
 OBJ		=	$(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 

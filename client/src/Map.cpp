@@ -40,6 +40,26 @@ int Map::getY() const
   return (_y);
 }
 
+std::list<t_egg *>::const_iterator Map::getEggBegin() const
+{
+  return (_egg.begin());
+}
+
+std::list<t_egg *>::const_iterator Map::getEggEnd() const
+{
+  return (_egg.end());
+}
+
+std::list<t_player *>::const_iterator Map::getPlayerBegin() const
+{
+  return (_player.begin());
+}
+
+std::list<t_player *>::const_iterator Map::getPlayerEnd() const
+{
+  return (_player.end());
+}
+
 void Map::addPlayer(t_player *player)
 {
   if (player->nb < 0 || (player->x < 0 || player->x > _x)
@@ -88,12 +108,53 @@ void Map::updatePlayerAction(int nb, Action act)
       }
 }
 
+void Map::updatePlayerInventory(int nb, int inventory[])
+{
+  for (std::list<t_player *>::iterator it = _player.begin();it != _player.end();++it)
+    if ((*it)->nb == nb)
+      {
+	for (int i = 0;i < 7;++i)
+	  (*it)->inventory[i] = inventory[i];
+	return ;
+      }
+}
+
+void Map::deletePlayer(int nb)
+{
+  for (std::list<t_player *>::iterator it = _player.begin(); it != _player.end();++it)
+    if ((*it)->nb == nb)
+      {
+	_player.erase(it);
+	return ;
+      }
+}
+
 void Map::addEgg(t_egg *egg)
 {
   if (egg->nb < 0 || (egg->x < 0 || egg->x > _x) || (egg->y < 0 || egg->y > _y))
     delete egg;
   else
     _egg.push_back(egg);
+}
+
+void Map::updateStateEgg(int nb, State state)
+{
+  for (std::list<t_egg *>::iterator it = _egg.begin(); it != _egg.end();++it)
+    if ((*it)->nb == nb)
+      {
+	(*it)->cuState = state;
+	return ;
+      }
+}
+
+void Map::deleteEgg(int nb)
+{
+  for (std::list<t_egg *>::iterator it = _egg.begin(); it != _egg.end();++it)
+    if ((*it)->nb == nb)
+      {
+	_egg.erase(it);
+	return ;
+      }
 }
 
 void Map::display() const

@@ -66,7 +66,6 @@ void GNetwork::send(const std::string &msg)
 {
   if (!msg.empty())
     {
-      std::cout << "TOTO" << std::endl;
       int tmp;
       for (unsigned int i = 0;i < msg.size() &&
 	     (tmp = write(_fd, &(msg.c_str())[i], msg.size() - i)) > 0;i += tmp);

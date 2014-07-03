@@ -51,6 +51,21 @@ std::string Protocol::parseCmd(const std::string &cmd, t_display &info)
   return (msg);
 }
 
+int Protocol::getNb(const std::string &cmd) const
+{
+  std::stringstream ss(cmd);
+  std::stringstream parse("");
+  std::string tmp;
+  int nb;
+
+  if (!(ss >> tmp >> tmp) || tmp.empty() || tmp[0] != '#')
+    return (-1);
+  parse.str(tmp.substr(1));
+  if (!(parse >> nb))
+    return (-1);
+  return (nb);
+}
+
 void Protocol::bienvenue(const std::string &, std::string &msg, t_display &)
 {
   msg = "GRAPHIC\n";
@@ -108,14 +123,11 @@ void Protocol::tna(const std::string &cmd, std::string &, t_display &info)
 void Protocol::pnw(const std::string &cmd, std::string &, t_display &info)
 {
   std::stringstream ss(cmd);
-  std::stringstream parse("");
   int nb, x, y, lvl, orient;
   std::string team;
 
-  if (!(ss >> team >> team) || team.empty() || team[0] != '#')
-    return ;
-  parse.str(team.substr(1));
-  if (!(parse >> nb) && !(ss >> x >> y >> orient >> lvl >> team))
+  if ((nb = getNb(cmd)) == -1
+      || !(ss >> team >> team >> x >> y >> orient >> lvl >> team))
     return ;
   info.map.addPlayer(new t_player(nb, x, y, lvl, orient, team));
 }
@@ -123,14 +135,11 @@ void Protocol::pnw(const std::string &cmd, std::string &, t_display &info)
 void Protocol::ppo(const std::string &cmd, std::string &, t_display &info)
 {
   std::stringstream ss(cmd);
-  std::stringstream parse("");
   int nb, x, y, orient;
   std::string team;
 
-  if (!(ss >> team >> team) || team.empty() || team[0] != '#')
-    return ;
-  parse.str(team.substr(1));
-  if (!(parse >> nb) || !(ss >> x >> y >> orient))
+  if ((nb = getNb(cmd)) == -1
+      || !(ss >> team >> team >> x >> y >> orient))
     return ;
   info.map.updatePlayerPos(nb, x, y, orient);
 }
@@ -138,21 +147,28 @@ void Protocol::ppo(const std::string &cmd, std::string &, t_display &info)
 void Protocol::plv(const std::string &cmd, std::string &, t_display &info)
 {
   std::stringstream ss(cmd);
-  std::stringstream parse("");
   int nb, lvl;
   std::string team;
 
-  if (!(ss >> team >> team) || team.empty() || team[0] != '#')
-    return ;
-  parse.str(team.substr(1));
-  if (!(parse >> nb) || !(ss >> lvl))
+  if ((nb = getNb(cmd)) == -1
+      || !(ss >> team >> team >> lvl))
     return ;
   info.map.updatePlayerLvl(nb, lvl);
 }
 
 void Protocol::pin(const std::string &cmd, std::string &, t_display &info)
 {
-  /* INVENTAIRE */
+  std::stringstream ss(cmd);
+  std::string tmp;
+  int nb, x, y;
+  int q[7];
+
+  if ((nb = getNb(cmd)) == -1 || !(ss >> tmp >> tmp >> x >> y))
+    return ;
+  for (int i = 0;i < 7;++i)
+    if (!(ss >> q[7]))
+      return ;
+  info.map.updatePlayerInventory(nb, q);
 }
 
 void Protocol::pex(const std::string &cmd, std::string &, t_display &info)
@@ -178,14 +194,11 @@ void Protocol::pie(const std::string &cmd, std::string &, t_display &info)
 void Protocol::pfk(const std::string &cmd, std::string &, t_display &info)
 {
   std::stringstream ss(cmd);
-  std::stringstream parse("");
   int nb, lvl;
   std::string team;
 
-  if (!(ss >> team >> team) || team.empty() || team[0] != '#')
-    return ;
-  parse.str(team.substr(1));
-  if (!(parse >> nb) || !(ss >> lvl))
+  if ((nb = getNb(cmd)) == -1
+      || !(ss >> team >> team >> lvl))
     return ;
   info.map.updatePlayerAction(nb, LAY);
 }
@@ -193,14 +206,11 @@ void Protocol::pfk(const std::string &cmd, std::string &, t_display &info)
 void Protocol::pdr(const std::string &cmd, std::string &, t_display &info)
 {
   std::stringstream ss(cmd);
-  std::stringstream parse("");
-  int nb, lvl;
+  int nb, type;
   std::string team;
 
-  if (!(ss >> team >> team) || team.empty() || team[0] != '#')
-    return ;
-  parse.str(team.substr(1));
-  if (!(parse >> nb) || !(ss >> lvl))
+  if ((nb = getNb(cmd)) == -1
+      || !(ss >> team >> team >> type))
     return ;
   info.map.updatePlayerAction(nb, DROP);
 }
@@ -208,41 +218,70 @@ void Protocol::pdr(const std::string &cmd, std::string &, t_display &info)
 void Protocol::pgt(const std::string &cmd, std::string &, t_display &info)
 {
   std::stringstream ss(cmd);
-  std::stringstream parse("");
-  int nb, lvl;
+  int nb, type;
   std::string team;
 
-  if (!(ss >> team >> team) || team.empty() || team[0] != '#')
-    return ;
-  parse.str(team.substr(1));
-  if (!(parse >> nb) || !(ss >> lvl))
+  if ((nb = getNb(cmd)) == -1
+      || !(ss >> team >> team >> type))
     return ;
   info.map.updatePlayerAction(nb, LOOT);
 }
 
 void Protocol::pdi(const std::string &cmd, std::string &, t_display &info)
 {
+  std::stringstream ss(cmd);
+  int nb, type;
+  std::string team;
 
+  if ((nb = getNb(cmd)) == -1
+      || !(ss >> team >> team >> type))
+    return ;
+  info.map.deletePlayer(nb);
 }
 
 void Protocol::enw(const std::string &cmd, std::string &, t_display &info)
 {
+  std::stringstream ss(cmd);
+  int nb, nb_player, x, y;
+  std::string tmp;
 
+  if ((nb = getNb(cmd)) == -1 || (nb_player = getNb(cmd.substr(cmd.find(" ")))) == -1
+      || (!(ss >> tmp >> tmp >> tmp >> x >> y)))
+    return ;
+  info.map.addEgg(new t_egg(x, y, nb));
 }
 
 void Protocol::eht(const std::string &cmd, std::string &, t_display &info)
 {
+  int nb;
 
+  if ((nb = getNb(cmd)) == -1)
+    return ;
+  info.map.updateStateEgg(nb, HATCHING);
 }
 
 void Protocol::ebo(const std::string &cmd, std::string &, t_display &info)
 {
+  std::stringstream ss(cmd);
+  int nb, type;
+  std::string team;
 
+  if ((nb = getNb(cmd)) == -1
+      || !(ss >> team >> team >> type))
+    return ;
+  info.map.deleteEgg(nb);
 }
 
 void Protocol::edi(const std::string &cmd, std::string &, t_display &info)
 {
-  // Disparaition immediate ?
+  std::stringstream ss(cmd);
+  int nb, type;
+  std::string team;
+
+  if ((nb = getNb(cmd)) == -1
+      || !(ss >> team >> team >> type))
+    return ;
+  info.map.deleteEgg(nb);
 }
 
 void Protocol::sgt(const std::string &cmd, std::string &, t_display &info)

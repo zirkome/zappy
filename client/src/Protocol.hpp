@@ -19,6 +19,8 @@ public:
   std::string parseCmd(const std::string &cmd, t_display &info);
 
 private:
+  int getNb(const std::string &) const;
+
   void bienvenue(const std::string &cmd, std::string &msg, t_display &info);
   void msz(const std::string &cmd, std::string &msg, t_display &info);
   void bct(const std::string &cmd, std::string &msg, t_display &info);
