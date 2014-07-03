@@ -1,0 +1,27 @@
+#version 120
+
+uniform float winX;
+uniform float winY;
+
+uniform sampler2D fTexture0;
+
+attribute vec2 vPosition;
+attribute vec4 vColor;
+attribute vec3 vNormal;
+attribute vec2 vTexCoord;
+
+varying vec4 fColor;
+varying vec2 fUv;
+
+void main(void)
+{
+  float x = winX / 2, y = winY / 2;
+
+  fColor = vColor;
+  fUv = vTexCoord;
+
+  vec2 pos = vPosition - vec2(x, y);
+  pos /= vec2(x, y);
+
+  gl_Position = vec4(pos, 0, 1);
+}

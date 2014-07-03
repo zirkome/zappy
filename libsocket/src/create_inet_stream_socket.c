@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun Apr 13 18:55:41 2014 guillaume fillon
-** Last update Sat May  3 13:44:47 2014 guillaume fillon
+** Last update Thu May 15 11:26:34 2014 Harold Fritsch
 */
 
 #include <stdio.h>
@@ -42,8 +42,8 @@ static int		check_result(struct addrinfo *result, int flags)
   return (sfd);
 }
 
-int			create_inet_stream_socket(const char* host,
-						  const char* service,
+int			create_inet_stream_socket(const char *host,
+						  const char *service,
 						  int flags)
 {
   int			sfd;

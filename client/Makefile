@@ -1,35 +1,63 @@
 ##
-## Makefile for MyFTP in /home/kokaz/projects/tek2/unix/PSU_2013_myftp
-## 
-## Made by guillaume fillon
-## Login   <kokaz@epitech.net>
-## 
-## Started on  Sat Mar 22 23:12:17 2014 guillaume fillon
-## Last update Thu May  1 20:27:01 2014 guillaume fillon
+## Makefile for  in /home/fritsc_h/zappy/client
+##
+## Made by Harold Fritsch
+## Login   <fritsc_h@epitech.net>
+##
+## Started on  Sun May  4 15:17:27 2014 Harold Fritsch
+## Last update Thu Jul  3 14:50:14 2014 Adrien Della Maggiora
 ##
 
-CC 		= gcc
+CC 		=	g++
 
-NAME 		= client
+NAME 		=	client
 
-SRCDIR		= src/
-OBJDIR		= obj/
+LIBGDL		=	./libGDL
 
-SRC 		= main.c
+LIBSOCKET	=	../libsocket
 
-OBJ		= $(addprefix $(OBJDIR), $(SRC:.c=.o))
+SRCDIR		=	src/
+OBJDIR		= 	obj/
+INCDIR		= 	-I./include/ -I../include/ -I$(LIBSOCKET)/include/ -I$(LIBGDL)/includes/
 
-LIBSOCKET	= ../libsocket
+SRC 		=	main.cpp \
+			GameEngine.cpp \
+			ATransformation.cpp \
+			Camera.cpp \
+			Cube.cpp \
+			Exception.cpp \
+			GNetwork.cpp \
+			Protocol.cpp \
+			Map.cpp \
+			Mutex.cpp \
+			Input.cpp \
+			Menu.cpp \
+			Settings.cpp \
+			Text.cpp \
+			AWidget.cpp \
+			ImageWidget.cpp \
+			QuitWidget.cpp \
+			Square.cpp \
+			Model.cpp \
+			TextWidget.cpp \
+			TextImgWidget.cpp \
+			LoadWidget.cpp \
+			InputWidget.cpp \
+			ConnectWidget.cpp
 
-CFLAGS 		+= -W -Wall -Wextra -I../include -I$(LIBSOCKET)/include
+OBJ		=	$(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 
-LDFLAGS 	+= -L$(LIBSOCKET) -lsocket
+CXXFLAGS 	+=	-W -Wall -Wextra -g
+
+LDFLAGS		+=	-L$(LIBGDL)/libs/ -lgdl_gl -lGLEW -lGL -lfbxsdk -lSDL2 -lpthread -lm -ldl -lrt
+LDFLAGS		+=	-Wl,-O2 -L$(LIBSOCKET)/ -lsocket
+
 
 dummy := $(shell test -d $(OBJDIR) || mkdir $(OBJDIR))
 
-$(OBJDIR)%.o: $(SRCDIR)%.c
-	@echo "- compilation of: $< (flag: "$(CFLAGS)")"
-	@$(CC) -o $@ -c $< $(CFLAGS)
+$(OBJDIR)%.o: $(SRCDIR)%.cpp
+	@echo "- compilation of: $< (flag: "$(CXXFLAGS)")"
+	@$(CC) -o $@ -c $< $(INCDIR) $(CXXFLAGS)
 
 $(NAME): $(OBJ)
 	@echo "- linking of: $@ (flag: "$(LDFLAGS)")"
