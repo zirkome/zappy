@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 11:11:11 2014 guillaume fillon
-** Last update Mon Jun 23 18:16:08 2014 guillaume fillon
+** Last update Thu Jun 26 15:46:12 2014 guillaume fillon
 */
 
 #include <stdlib.h>
@@ -40,10 +40,10 @@ int	parse_option(int opt, t_world *option, int argc, char *argv[])
 	    {
 	      ++option->nb_teams;
 	      option->teams =
-		realloc(option->teams, option->nb_teams * sizeof(char *));
+		realloc(option->teams, option->nb_teams * sizeof(t_team));
 	      if (option->teams == NULL)
 		return (iperror("getopt: malloc", -1));
-	      option->teams[option->nb_teams - 1] = argv[index];
+	      option->teams[option->nb_teams - 1].name = argv[index];
 	    }
 	  else
 	    break;

@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Tue Jun 24 13:53:46 2014 guillaume fillon
+## Last update Wed Jul  2 23:42:46 2014 luc sinet
 ##
 
 CC 		= gcc
@@ -24,11 +24,13 @@ OBJCOMMON	= $(COMMONDIR)/$(OBJDIR)
 LIBSOCKET	= ../libsocket
 
 SRC 		= main.c \
+		  generic_list.c \
 		  init.c \
 		  welcome.c \
 		  map.c \
 		  map_box.c \
-		  handle_user.c \
+		  map_player.c \
+		  client.c \
 		  events_handling.c \
 		  connection.c \
 		  getopt.c \
@@ -40,12 +42,23 @@ SRC 		= main.c \
 		  player_actions.c \
 		  player_commands.c \
 		  player_movement.c \
+		  player_broadcast.c \
+		  player_view.c \
+		  player_inventory.c \
+		  player_incantation.c \
+		  incantation_calcul.c \
+		  geometry.c \
+		  broadcast_calculs.c \
 		  strings.c \
+		  vectors.c \
+		  vectors_get.c \
+		  gui_misc.c \
 		  gui_map.c \
 		  gui_player.c \
 		  gui_time.c \
-		  player_broadcast.c
-
+		  authentication.c \
+		  scheduler.c \
+		  time.c
 
 COMMONSRC	= error.c
 
@@ -55,7 +68,7 @@ COBJ		= $(addprefix $(OBJCOMMON), $(COMMONSRC:.c=.o))
 CFLAGS 		+= -g -W -Wall -Wextra
 CFLAGS		+= -I../include -I./include -I$(COMMONDIR)/$(INCDIR) -I$(LIBSOCKET)/$(INCDIR)
 
-LDFLAGS 	= -Wl,-O2 -L$(LIBSOCKET) -lsocket
+LDFLAGS 	= -Wl,-O2 -L$(LIBSOCKET) -lsocket -lm
 
 dummy := $(shell test -d $(OBJDIR) || mkdir $(OBJDIR)) \
 	 $(shell test -d $(OBJCOMMON) || mkdir $(OBJCOMMON)) \

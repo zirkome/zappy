@@ -5,13 +5,14 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr 20 08:27:21 2014 luc sinet
-** Last update Fri Jun 20 18:13:56 2014 luc sinet
+** Last update Thu Jun 26 19:25:59 2014 guillaume fillon
 */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <errno.h>
+#include <err.h>
+
 #include "queue.h"
 
 int		queue_push(t_queue **queue, char *msg)
@@ -23,7 +24,7 @@ int		queue_push(t_queue **queue, char *msg)
   if ((new = malloc(sizeof(t_queue))) == NULL ||
       (new->msg = strdup(msg)) == NULL)
     {
-      perror("add_to_queue: malloc");
+      warn("add_to_queue: malloc");
       return (-1);
     }
   new->next = NULL;

@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Fri Jun 20 18:14:58 2014 luc sinet
+** Last update Wed Jul  2 15:42:17 2014 luc sinet
 */
 
 #include "server.h"
@@ -20,43 +20,40 @@ int			connect_new_user(t_server *server)
   size = sizeof(struct sockaddr_in);
   if ((fd = accept(server->fd, (struct sockaddr *)&client, &size)) == -1)
     return (iperror("accept", -1));
-  if (add_user(&server->cl, fd) == -1)
+  cl = client_new(fd);
+  if (cl == NULL)
     return (-1);
-  cl = server->cl;
-  while (cl->next)
-    cl = cl->next;
+  list_add_elem_at_back(&server->cl, cl);
   queue_push(&cl->queue, "BIENVENUE\n");
   return (fd);
 }
 
-void		erase_client(t_client *cl)
+void		erase_client(t_world *world, t_client *cl)
 {
-  printf("Client disconnected\n");
+  if ((cl->type == (t_client_type)IA || cl->type == (t_client_type)EGG)
+      && cl->player->teamptr != NULL)
+    remove_from_world(world, PLAYER, cl->player->x,
+		      cl->player->y);
+  if (cl->player->teamptr != NULL && cl->type != EGG)
+    ++cl->player->teamptr->slots;
   queue_clear(&cl->queue);
   free(cl->rb->buf);
   free(cl->rb);
   free(cl->player);
-  close(cl->fd);
+  if (cl->type != EGG)
+    close(cl->fd);
+  printf("Client disconnected\n");
 }
 
-int		disconnect_user(t_server *server, t_client *cl)
+int		kick_user(t_list *list, t_client *cl, t_world *world)
 {
-  t_client	*list;
+  erase_client(world, cl);
+  list_del_node(list, cl);
+  return (2);
+}
 
-  list = server->cl;
-  if (server->cl == cl)
-    {
-      server->cl = cl->next;
-      erase_client(cl);
-      return (2);
-    }
-  while (list->next && list->next != cl)
-    list = list->next;
-  if (list->next)
-    {
-      list->next = cl->next;
-      erase_client(cl);
-      return (2);
-    }
-  return (ierror("Can't disconnect client\n", -1));
+int	disconnect_user(UNUSED t_server *server, t_client *cl)
+{
+  cl->ghost = true;
+  return (0);
 }

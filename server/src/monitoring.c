@@ -5,30 +5,31 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Tue Jun 24 16:13:09 2014 guillaume fillon
+** Last update Wed Jul  2 22:33:36 2014 guillaume fillon
 */
 
 #include <err.h>
 
+#include "scheduler.h"
 #include "server.h"
 
 int		dispatch_fds(t_server *server, struct epoll_event *ev)
 {
-  t_client	*tmp;
+  t_node	*tmp;
 
   for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
     {
-      if (tmp->fd == ev->data.fd)
+      if (((t_client *)tmp->value)->fd == ev->data.fd)
 	break;
     }
-  if (tmp && tmp->fd != ev->data.fd)
+  if (tmp && ((t_client *)tmp->value)->fd != ev->data.fd)
     return (-1);
   if (ev->events & EPOLLIN)
     {
-      if (read_state(server, tmp) < 0)
+      if (read_state(server, (t_client *)tmp->value) < 0)
 	return (-1);
     }
-  if (write_state(server, tmp) < 0)
+  if (write_state(server, (t_client *)tmp->value) < 0)
     return (-1);
   return (0);
 }
@@ -36,17 +37,43 @@ int		dispatch_fds(t_server *server, struct epoll_event *ev)
 static void		update_fds_to_epoll(t_server *server)
 {
   struct epoll_event	ev;
-  t_client		*tmp;
+  t_node		*tmp;
+  t_node		*tmp2;
+  t_client		*tofree;
+  t_client		*client;
 
-  for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
+  for (tmp = server->cl, tofree = NULL; tmp != NULL;)
     {
+      if (tofree != NULL)
+      	{
+      	  free(tofree);
+      	  tofree = NULL;
+      	}
+      client = ((t_client*)tmp->value);
+      if (client->ghost == true &&
+	  queue_empty(client->queue))
+	{
+	  if (client->type != EGG && epoll_event_del(client->fd, NULL) == -1)
+	    iperror("epoll_ctl: client", -1);
+	  tofree = (t_client*)tmp->value;
+	  tmp2 = tmp->next;
+	  kick_user(&server->cl, (t_client*)tmp->value, &server->world);
+	  tmp = tmp2;
+	  continue ;
+	}
+      else if (client->type == EGG)
+	{
+	  tmp = tmp->next;
+	  continue ;
+	}
       ev.events = EPOLLIN | EPOLLONESHOT;
-      if (!queue_empty(tmp->queue))
+      if (!queue_empty(client->queue))
 	ev.events |= EPOLLOUT;
       ev.data.ptr = NULL;
-      ev.data.fd = tmp->fd;
-      if (epoll_event_mod(tmp->fd, &ev) == -1)
+      ev.data.fd = client->fd;
+      if (epoll_event_mod(client->fd, &ev) == -1)
 	iperror("epoll_ctl: client", -1);
+      tmp = tmp->next;
     }
 }
 
@@ -68,14 +95,13 @@ int			start_monitoring(t_server *server)
       warn("epoll_ctl: listen_sock");
       return (-1);
     }
-  int i = 0;
   for (;;)
     {
       update_fds_to_epoll(server);
-      nfds = epoll_monitor(events, MAX_EPOLL_EVENTS, 1000);
+      nfds = epoll_monitor(events, MAX_EPOLL_EVENTS, 100);
+      scheduler_update(&server->cl, server);
       if (nfds == -1)
 	return (iperror("epoll_wait", -1));
-      printf("%d %d\n", nfds, i++);
       for (n = 0; n < nfds; ++n)
 	{
 	  if ((events[n].events & EPOLLERR) ||

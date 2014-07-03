@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sat May  3 13:44:23 2014 luc sinet
-** Last update Fri Jun 20 18:14:32 2014 luc sinet
+** Last update Mon Jun 30 11:23:45 2014 luc sinet
 */
 
 #ifndef _QUEUE_H_
@@ -27,6 +27,7 @@ char	*queue_back(t_queue *queue);
 char	*queue_front(t_queue *queue);
 int	queue_empty(t_queue *queue);
 int	queue_size(t_queue *queue);
+int	queue_append_back(t_queue **queue, char *msg);
 t_queue	*queue_init();
 
 #endif /* _QUEUE_H_ */

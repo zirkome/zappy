@@ -5,11 +5,15 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Mon Jun 23 10:51:02 2014 luc sinet
-** Last update Tue Jun 24 09:06:15 2014 luc sinet
+** Last update Mon Jun 30 10:38:41 2014 luc sinet
 */
 
-#ifndef _STRING_H_
-# define _STRING_H_
+#ifndef _STRINGS_H_
+#define _STRINGS_H_
+
+# define ALIGN(x, size) ((x + size - 1) &~ (size - 1))
+# define ALLOC_SIZE 64
+# define AV_MAP 8
 
 typedef struct	s_string
 {
@@ -19,5 +23,6 @@ typedef struct	s_string
 
 void		string_init(t_string *string);
 char		*string_append(t_string *string, char *app, int align_size);
+int		string_erase(t_string *string, int type);
 
-#endif /* _STRING_H_ */
+#endif /* _STRINGS_H_ */
