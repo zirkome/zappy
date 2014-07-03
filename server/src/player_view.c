@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Jun 26 14:48:57 2014 luc sinet
-** Last update Sun Jun 29 13:55:44 2014 luc sinet
+** Last update Thu Jul  3 21:57:02 2014 luc sinet
 */
 
 #include "server.h"
@@ -36,24 +36,21 @@ void	apply_point_rotation(t_dir dir, int *x, int *y)
 {
   int	save;
 
-  if (dir == NORTH)
-    return ;
-  if (dir == EAST)
+  if (dir == SOUTH)
+    *x = -(*x);
+  else if (dir == EAST)
     {
       save = *x;
       *x = *y;
-      *y = -save;
+      *y = save;
     }
-  else if (dir == SOUTH)
-    {
-      *x = -(*x);
-      *y = -(*y);
-    }
+  else if (dir == NORTH)
+    *y = -(*y);
   else
     {
       save = *x;
       *x = -(*y);
-      *y = save;
+      *y = -save;
     }
 }
 
