@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 14:03:33 2014 luc sinet
-** Last update Thu Jul  3 11:57:30 2014 guillaume fillon
+** Last update Fri Jul  4 14:13:21 2014 luc sinet
 */
 
 #include "scheduler.h"
@@ -24,7 +24,7 @@ int		pl_lay_egg(t_server *server, t_client *client,
 }
 
 int		pl_fork(t_server *server, t_client *client,
-			   char *arg UNUSED)
+			char *arg UNUSED)
 {
   t_client	*new;
 

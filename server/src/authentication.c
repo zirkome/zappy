@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 26 15:24:27 2014 guillaume fillon
-** Last update Wed Jul  2 15:41:08 2014 luc sinet
+** Last update Fri Jul  4 14:12:56 2014 luc sinet
 */
 
 #include "server.h"
@@ -31,13 +31,16 @@ void		clone_if_egg(t_list *list, t_client *cl,
 {
   t_node	*it;
   t_client	*client;
+  t_job		*foodjob;
 
   for (it = *list; it != NULL; it = it->next)
     {
       client = (t_client *)it->value;
       if (client->type == EGG && client->player->teamptr == team)
 	{
+	  foodjob = cl->player->foodjob;
 	  *(cl->player) = *(client->player);
+	  cl->player->foodjob = foodjob;
 	  disconnect_user(NULL, client);
 	  break ;
 	}
