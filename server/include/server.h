@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Fri Jul  4 00:34:10 2014 luc sinet
+** Last update Fri Jul  4 11:25:28 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -39,6 +39,7 @@
 # define RSIZE 512
 # define DISCONNECTED 2
 # define FOODTIME 126
+# define INITFOOD 10
 
 # define CMDLEN 32
 # define ARGLEN 256
@@ -184,7 +185,8 @@ int		write_state(t_server *server, t_client *client);
 int		connect_new_user(t_server *server);
 int		kick_user(t_list *list, t_client *cl, t_world *world);
 int		disconnect_user(t_server *server, t_client *cl);
-int		handle_player_life(t_server *server, t_client *client);
+int		handle_player_life(t_server *server, t_client *client,
+				   time_t now);
 /*
 ** Client
 */

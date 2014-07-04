@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Fri Jul  4 00:32:55 2014 luc sinet
+** Last update Fri Jul  4 11:36:19 2014 luc sinet
 */
 
 #include "scheduler.h"
@@ -15,8 +15,7 @@ static int	g_increment = 1;
 
 static int	init_player(t_client *new)
 {
-  if ((new->player = malloc(sizeof(t_player))) == NULL ||
-      (new->player->foodjob = malloc(sizeof(t_job))) == NULL)
+  if ((new->player = malloc(sizeof(t_player))) == NULL)
     return (iperror("init_player: malloc", -1));
   new->player->dir = rand() % 4;
   new->player->x = 0;
@@ -27,6 +26,7 @@ static int	init_player(t_client *new)
   new->player->jobs = NULL;
   new->player->foodjob = NULL;
   memset(new->player->inventory, 0, sizeof(new->player->inventory));
+  new->player->inventory[FOOD - 1] = INITFOOD;
   return (0);
 }
 
