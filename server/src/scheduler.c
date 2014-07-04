@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Tue Jul  1 15:52:59 2014 guillaume fillon
-** Last update Fri Jul  4 11:17:45 2014 luc sinet
+** Last update Fri Jul  4 13:09:49 2014 luc sinet
 */
 
 #include "scheduler.h"
@@ -57,7 +57,7 @@ void		scheduler_update(t_list *clients, t_server *server)
       if (tmp->player != NULL)
 	{
 	  if (tmp->type == IA || tmp->type == EGG)
-	    handle_player_life(server, tmp, now);
+	    update_living_state(server, tmp, now, tmp->type);
 	  check_job(list_get_elem_at_front(tmp->player->jobs), now, server);
 	}
    }

@@ -5,27 +5,41 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jul  4 00:30:30 2014 luc sinet
-** Last update Fri Jul  4 11:33:23 2014 luc sinet
+** Last update Fri Jul  4 13:20:33 2014 luc sinet
 */
 
 #include "scheduler.h"
 #include "server.h"
 
-void		update_living_state(t_server *server, t_client *client,
-				    time_t now)
+void	init_client_foodjob(t_server *server, t_client *client, time_t now)
 {
-  t_job		*task;
+  t_job	*task;
+
+  if ((client->player->foodjob = malloc(sizeof(t_job))) == NULL)
+    return ;
+  task = client->player->foodjob;
+  task->client = client;
+  task->at = now + FOODTIME / server->world.delay;
+  task->callback = NULL;
+  task->arg = NULL;
+}
+
+void	rotten_egg(t_client *client)
+{
+  if (client->player->teamptr->slots > 0)
+    --client->player->teamptr->slots;
+  disconnect_user(NULL, client);
+}
+
+void	update_living_state(t_server *server, t_client *client,
+			    time_t now, t_client_type type)
+{
+  t_job	*task;
 
   task = client->player->foodjob;
   if (task == NULL)
     {
-      if ((client->player->foodjob = malloc(sizeof(t_job))) == NULL)
-	return ;
-      task = client->player->foodjob;
-      task->client = client;
-      task->at = now + FOODTIME / server->world.delay;
-      task->callback = NULL;
-      task->arg = NULL;
+      init_client_foodjob(server, client, now);
       return ;
     }
   if (now >= task->at)
@@ -33,16 +47,13 @@ void		update_living_state(t_server *server, t_client *client,
       task->at = now + FOODTIME / server->world.delay;
       if ((--(client->player->inventory[FOOD - 1])) < 0)
 	{
-	  queue_push(&client->queue, "mort\n");
-	  disconnect_user(NULL, client);
+	  if (type == IA)
+	    {
+	      queue_push(&client->queue, "mort\n");
+	      disconnect_user(NULL, client);
+	    }
+	  else
+	    rotten_egg(client);
 	}
     }
-}
-
-int	handle_player_life(t_server *server, t_client *client,
-			   time_t now)
-{
-  if (client->type == IA)
-    update_living_state(server, client, now);
-  return (0);
 }
