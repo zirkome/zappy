@@ -6,16 +6,16 @@ function random_moove(tcp)
 end
 
 function determine_way_to(nb)
-	local old = 1
+	local old = 0
 	local rank_y = 0
 	while (nb > old + 2 * (rank_y + 1)) do
 		old = 1 + 2 * (rank_y + 1)
 		rank_y = rank_y + 1
 	end
 	local rank_x = nb - old
-	if (rank_x == old) then
+	if (rank_x == 0) then
 		return "avance"
-	elseif (rank_x > old) then
+	elseif (rank_x > 0) then
 		return "droite"
 	else
 		return "gauche"

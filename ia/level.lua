@@ -1,10 +1,11 @@
 function need_to_fork()
 	local tab = get_tab_level()
 
-	if (ITEM["nourriture"] < 10) then
-		FOOD_FORK = true
-		return NEED_FOOD
-	elseif (tab[LEVEL]["joueur"] > ITEM["joueur"]) then
+	if (tab[LEVEL]["joueur"] > ITEM["joueur"]) then
+		if (ITEM["nourriture"] < 10) then
+			FOOD_FORK = true
+			return NEED_FOOD
+		end
 		return OK
 	else
 		return KO

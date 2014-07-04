@@ -39,13 +39,18 @@ end
 function connect_server(host, port)
 	local socket = require("socket")
 	local tcp = assert(socket.tcp())
-	local success, err = tcp:connect(host, port)
 
-	if (success == nil) then
-		print_bkt(get_pid(), "Error in connect_server : " .. err)
-		return nil
+	if (tcp ~= nil) then
+		local success, err = tcp:connect(host, port)
+
+		if (success == nil) then
+			print(get_pid(), "Error in connect_server : Can't connect to server")
+			return nil
+		end
+		return tcp
 	end
-	return tcp
+	print(get_pid(), "Error in connect_server : Can't connect to server")
+	return nil
 end
 
 function close_server(tcp)
