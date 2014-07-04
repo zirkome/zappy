@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Fri Jul  4 11:16:31 2014 luc sinet
+** Last update Fri Jul  4 15:40:28 2014 luc sinet
 */
 
 #include "scheduler.h"
@@ -42,7 +42,7 @@ static t_bool	get_command(char *line, char *command)
   int		i;
 
   i = 0;
-  while (line[i] && line[i] != ' ' && i < CMDLEN)
+  while (line[i] && (line[i] != ' ' && line[i] != '\t') && i < CMDLEN)
     {
       command[i] = line[i];
       ++i;
@@ -80,26 +80,20 @@ static int	parse_input(char *line, char *arg)
 
   i = 0;
   if (get_command(line, command) == false)
-    return (-1);
+    return (UNKNOWN_CMD);
   while (g_command[i].name && strcmp(g_command[i].name, command) != 0)
     ++i;
-  if (g_command[i].name == NULL ||
-      get_argument(&line[strlen(command)], arg, g_command[i].arg) == false ||
+  if (g_command[i].name == NULL)
+    return (UNKNOWN_CMD);
+  if (get_argument(&line[strlen(command)], arg, g_command[i].arg) == false ||
       check_argument_type(arg, &g_command[i]) == false)
-    return (-1);
+    return (BAD_PARAM);
   if (g_command[i].arg == true && i != BROADCAST)
     {
       if (check_argument_type(arg, &g_command[i]) == false)
-	return (-1);
+	return (BAD_PARAM);
     }
   return (i);
-}
-
-static int	prepare_cmd(t_server *server, t_client *client, int idx)
-{
-  if (idx != INCANTATION)
-    return (0);
-  return (prepare_incantation(server, client));
 }
 
 int		process_input(t_server *server, t_client *cl, char *input)
@@ -111,8 +105,8 @@ int		process_input(t_server *server, t_client *cl, char *input)
   if (cl->type == UNKNOWN)
     return (authenticate_user(server, cl, input));
   printf("Got input: %s\n", input);
-  if ((idx = parse_input(input, arg)) == -1 ||
-      prepare_cmd(server, cl, idx + 1) == -1)
+  if ((idx = parse_input(input, arg)) < 0 ||
+      (idx == INCANTATION && prepare_incantation(server, cl) == -1))
     return (-1);
   task.client = cl;
   task.at = g_command[idx].delay / server->world.delay;

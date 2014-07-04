@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Jun 26 14:59:43 2014 luc sinet
-** Last update Tue Jul  1 16:05:23 2014 guillaume fillon
+** Last update Fri Jul  4 15:31:07 2014 luc sinet
 */
 
 #ifndef _ENUMS_H_
@@ -40,6 +40,12 @@ enum	e_command
     PIN = 19,
     SGT = 20,
     SST = 21
+  };
+
+enum	e_error
+  {
+    UNKNOWN_CMD = -1,
+    BAD_PARAM = -2
   };
 
 enum
