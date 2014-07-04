@@ -1,7 +1,7 @@
 function random_moove(tcp)
-	local mooves = {"avance", "gauche", "droite"}
+	local mooves = {"avance", "gauche avance", "droite avance"}
 	local rand = math.random(1, 3)
-	execute_command(tcp, mooves[rand])
+	execute_movements(tcp, mooves[rand])
 	return OK
 end
 
@@ -13,9 +13,9 @@ function determine_way_to(nb)
 		rank_y = rank_y + 1
 	end
 	local rank_x = nb - old
-	if (rank_x == 0) then
+	if (rank_x == old) then
 		return "avance"
-	elseif(rank_x > 0) then
+	elseif (rank_x > old) then
 		return "droite"
 	else
 		return "gauche"

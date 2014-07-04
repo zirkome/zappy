@@ -1,7 +1,10 @@
 function need_to_fork()
 	local tab = get_tab_level()
 
-	if (tab[LEVEL]["joueur"] > ITEM["joueur"]) then
+	if (ITEM["nourriture"] < 10) then
+		FOOD_FORK = true
+		return NEED_FOOD
+	elseif (tab[LEVEL]["joueur"] > ITEM["joueur"]) then
 		return OK
 	else
 		return KO
@@ -22,15 +25,16 @@ end
 function enought_food(tcp)
 	execute_command(tcp, "inventaire")
 	update_ressource(UPDATE_INVENTORY)
-	if (ITEM["nourriture"] < 10 and REGAIN_FOODS == false) then
+	if ((ITEM["nourriture"] < 5 and REGAIN_FOODS == false) or FOOD_FORK == true) then
 		REGAIN_FOODS = true
 		return KO
 	elseif (REGAIN_FOODS == true and ITEM["nourriture"] < 15) then
-		if (ITEM["nourriture"] == 20) then
-			REGAIN_FOODS = false
-		end
 		return KO
 	else
+		if (ITEM["nourriture"] == 15) then
+			REGAIN_FOODS = false
+			FOOD_FORK = false
+		end
 		return OK
 	end
 end
@@ -195,9 +199,9 @@ function moove_to_stone(tcp)
 	execute_command(tcp, "voir")
 	local tab = parse_case(CURRENT_RES)
 	local moove = {
-		["gauche"] = "gauche avance",
+		["gauche"] = "gauche avance droite",
 		["avance"] = "avance",
-		["droite"] = "droite avance"
+		["droite"] = "droite avance gauche"
 	}
 	local case = get_case_on(tab, NEEDED_STONE)
 	if (case ~= false) then
@@ -208,6 +212,7 @@ function moove_to_stone(tcp)
 			return KO
 		end
 	end
+	return KO
 end
 
 function take_stone(tcp)
@@ -226,4 +231,28 @@ function same_level(tcp)
 		end
 	end
 	return KO
+end
+
+function ask_fork(tcp)
+	execute_command(tcp, "fork")
+	WAITING_FORK = true
+	return CURRENT_RES
+end
+
+function slot_opened(tcp)
+	execute_command(tcp, "connect_nbr")
+	if (tonumber(CURRENT_RES) > 0 and WAITING_FORK == true) then
+		WAITING_FORK = false
+		return OK
+	else
+		return KO
+	end
+end
+
+function waiting_fork(tcp)
+	if (WAITING_FORK == true) then
+		return OK
+	else
+		return KO
+	end
 end

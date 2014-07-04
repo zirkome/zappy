@@ -13,7 +13,7 @@ end
 
 function get_tab_walk()
 	local tab = {
-		[1] = {2, 7},
+		[1] = {28, 7},
 		[2] = {19, 12},
 		[3] = {4, 1},
 		[4] = {20, 2},
@@ -33,13 +33,16 @@ function get_tab_walk()
 		[18] = {12, 18},
 		[19] = {20, 12},
 		[20] = {3, 12},
-		[21] = {22, 5},
+		[21] = {22, 5, 1},
 		[22] = {1, 22},
 		[23] = {24, 21},
 		[24] = {3, 21},
 		[25] = {26, 11},
 		[26] = {11, 26},
 		[27] = {25, 11},
+		[28] = {29, 30},
+		[29] = {2, 29},
+		[30] = {1, 2},
 		[42] = {1}
 	}
 	return tab
@@ -68,12 +71,15 @@ function get_tab_func()
 		[19] = same_level,
 		[20] = enought_stones,
 		[21] = need_to_fork,
-		[22] = fork_p,
+		[22] = ask_fork,
 		[23] = team_message,
 		[24] = same_level,
 		[25] = stone_on_my_case,
 		[26] = take_stone,
-		[27] = stone_needed_in_vision
+		[27] = stone_needed_in_vision,
+		[28] = slot_opened,
+		[30] = waiting_fork,
+		[29] = fork_p
 	}
 	return tab
 end

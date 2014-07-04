@@ -1,5 +1,6 @@
 function init_global(fork)
 	FORK = fork
+	WAITING_FORK = false
 	TEAM = ""
 	LEVEL = 1
 	NUM_CLT = 0
@@ -20,8 +21,10 @@ function init_global(fork)
 	NEEDED_STONE = nil
 	REGAIN_FOODS = false
 	IS_GROWING = false
+	FOOD_FORK = false
 	ERROR = 0
 	OK = 1
 	KO = 2
-	LEVELUP = 3
+	NEED_FOOD = 3
+	LEVELUP = 4
 end

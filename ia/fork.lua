@@ -1,16 +1,13 @@
 local posix = require "posix"
 
 function fork_p(tcp)
-	execute_command(tcp, "fork")
-	if (CURRENT_RES == OK) then
-		local pid = posix.fork()
-		if (pid == 0) then
-			init_global(true)
-			main_prg()
-		end
-		return OK
+	local pid = posix.fork()
+	if (pid == 0) then
+		init_global(true)
+		main_prg()
 	end
-	return KO
+	ITEM["joueur"] = ITEM["joueur"] + 1
+	return OK
 end
 
 function get_pid()

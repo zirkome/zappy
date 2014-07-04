@@ -14,12 +14,10 @@ dofile("utils/utils_bool.lua")
 
 function get_beginning(tcp, team)
 	recept_command(tcp)
-	if (FORK == false) then
-		send_command(tcp, team)
-		recept_command(tcp)
-		NUM_CLT = tonumber(CURRENT_RES)
-		recept_command(tcp)
-	end
+	send_command(tcp, team)
+	recept_command(tcp)
+	NUM_CLT = tonumber(CURRENT_RES)
+	recept_command(tcp)
 end
 
 function execute_ia(host, port, team)
@@ -32,7 +30,7 @@ function execute_ia(host, port, team)
 	get_beginning(tcp, team)
 	while (value ~= ERROR) do
 		current_state = walktrought_statement[current_state][value]
-		print_bkt(get_pid(), "STATEMENT FUNCTION : ", current_state)
+		print(get_pid(), "STATEMENT FUNCTION : ", current_state)
 		value = function_statement[current_state](tcp)
 		CURRENT_RES = nil
 	end
