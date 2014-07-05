@@ -12,6 +12,7 @@
 # include "Text.hpp"
 # include "GNetwork.hpp"
 # include "AWidget.hpp"
+# include "Sound.hpp"
 
 # define MAPS_PATH "./Save/Maps/"
 # define GAMES_PATH "./Save/Games/"
@@ -47,6 +48,7 @@ private:
   bool			_done;
   Cube			_cube;
   std::vector<AWidget *> _mainPanel;
+  Sound			_sound;
 };
 
 #endif /* _MENU_HPP_ */

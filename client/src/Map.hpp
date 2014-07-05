@@ -2,6 +2,7 @@
 #define _MAP_HPP_
 
 # include <iostream>
+# include <cstring>
 # include <list>
 # include "Exception.hpp"
 # include "Entity.hpp"

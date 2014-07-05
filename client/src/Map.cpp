@@ -9,11 +9,32 @@ Map::~Map()
 {
   if (_map != NULL)
     delete _map;
+  while (!_egg.empty())
+    {
+      delete _egg.front();
+      _egg.pop_front();
+    }
+  while (!_player.empty())
+    {
+      delete _player.front();
+      _player.pop_front();
+    }
 }
 
 void Map::createMap(int x, int y)
 {
   _map = new unsigned char[x * y];
+  std::memset(_map, 0, x * y * sizeof(char));
+  while (!_egg.empty())
+    {
+      delete _egg.front();
+      _egg.pop_front();
+    }
+  while (!_player.empty())
+    {
+      delete _player.front();
+      _player.pop_front();
+    }
   _x = x;
   _y = y;
 }

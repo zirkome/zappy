@@ -54,6 +54,7 @@ bool  Menu::initialize()
   _mainPanel.push_back(new InputWidget(x / 4, 7.5f * y / 18, y / 11.25f, x / 2, "./assets/input.tga", "Port :"));
   _mainPanel.push_back(new ConnectWidget(x / 4, 5.5f * y / 18, y / 11.25f, x / 2, "./assets/button.tga"));
   _mainPanel.push_back(new QuitWidget(x / 4, y / 18, y / 11.25f, x / 2, "./assets/button.tga"));
+  _sound.play("menu", MUSIC);
   return (true);
 }
 
@@ -241,7 +242,7 @@ bool Menu::getInfo(std::string &ip, std::string &port)
 {
   ip = dynamic_cast<InputWidget *>(_mainPanel[1])->getContent();
   port = dynamic_cast<InputWidget *>(_mainPanel[2])->getContent();
-  if (port == "Port:")
+  if (port == "Port :")
     port = "6000";
   if (ip == "FREE")
     return (false);

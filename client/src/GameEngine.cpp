@@ -105,12 +105,14 @@ void GameEngine::draw()
 
 void GameEngine::displayItem(const char flag, int x, int y)
 {
-  for (int i = 0;i < 64;i = i << 1)
-    if (flag & i)
-      {
-	_resources[i]->setPos(glm::vec3(x, 0, y));
-	_resources[i]->draw(_shader, _clock);
-      }
+  for (int i = 1;i < 64;i = i << 1)
+    {
+      if (flag & i)
+	{
+	  _resources[i]->setPos(glm::vec3(x, 0, y));
+	  _resources[i]->draw(_shader, _clock);
+	}
+    }
 }
 
 
