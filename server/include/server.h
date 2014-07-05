@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Sat Jul  5 14:19:32 2014 luc sinet
+** Last update Sat Jul  5 15:28:48 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -88,6 +88,7 @@ typedef struct	s_player
   t_dir		dir;
   int		level;
   int		inventory[NB_ELEM];
+  int		save_pos[2];
   t_job		*foodjob;
   t_list	jobs;
   t_team	*teamptr;

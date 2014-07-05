@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Wed Jul  2 18:22:49 2014 luc sinet
-** Last update Thu Jul  3 18:45:18 2014 luc sinet
+** Last update Sat Jul  5 15:27:51 2014 luc sinet
 */
 
 #include "server.h"
@@ -73,6 +73,8 @@ int		prepare_incantation(t_server *server, t_client *client)
       queue_push(&client->queue, "ko\n");
       return (-1);
     }
+  client->player->save_pos[0] = client->player->x;
+  client->player->save_pos[1] = client->player->y;
   vector_clear(vec);
   free(vec);
   return (0);
@@ -87,7 +89,9 @@ int		pl_incantation(t_server *server, t_client *client,
   unsigned int	num_player;
 
   pl = client->player;
-  if ((vec = check_incantation_conditions(server, client)) == NULL)
+  if ((vec = check_incantation_conditions(server, client)) == NULL ||
+      (client->player->save_pos[0] != client->player->x) ||
+      (client->player->save_pos[1] != client->player->y))
     {
       queue_push(&client->queue, "ko\n");
       return (-1);

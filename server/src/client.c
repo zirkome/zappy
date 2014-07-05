@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Fri Jul  4 11:36:19 2014 luc sinet
+** Last update Sat Jul  5 15:29:20 2014 luc sinet
 */
 
 #include "scheduler.h"
@@ -26,6 +26,7 @@ static int	init_player(t_client *new)
   new->player->jobs = NULL;
   new->player->foodjob = NULL;
   memset(new->player->inventory, 0, sizeof(new->player->inventory));
+  memset(new->player->save_pos, 0, sizeof(new->player->save_pos));
   new->player->inventory[FOOD - 1] = INITFOOD;
   return (0);
 }
