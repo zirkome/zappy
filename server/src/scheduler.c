@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Tue Jul  1 15:52:59 2014 guillaume fillon
-** Last update Sat Jul  5 13:48:40 2014 luc sinet
+** Last update Sat Jul  5 14:31:29 2014 luc sinet
 */
 
 #include "scheduler.h"
@@ -56,12 +56,15 @@ void		update_food(t_world *world, t_node *clients)
   for (i = 0, size = world->width * world->height; i < size; ++i)
     food += count_type_on_box(world, FOOD, i % world->width, i / world->width);
   if (FOODLIMIT(size, food))
-    for (size = size - 1; food > 0 && size > 0; --size)
-      if (food >= rand() % size)
-	{
-	  add_to_world(world, FOOD, size % world->width, size / world->width);
-	  --food;
-	}
+    {
+      food = (size - size / 4) - food;
+      for (size = size - 1; food > 0 && size > 0; --size)
+	if (food >= rand() % size)
+	  {
+	    add_to_world(world, FOOD, size % world->width, size / world->width);
+	    --food;
+	  }
+    }
 }
 
 void		scheduler_update(t_list *clients, t_server *server)
