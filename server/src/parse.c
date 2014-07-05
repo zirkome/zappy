@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Fri Jul  4 15:40:28 2014 luc sinet
+** Last update Sat Jul  5 15:57:23 2014 luc sinet
 */
 
 #include "scheduler.h"
@@ -104,7 +104,7 @@ int		process_input(t_server *server, t_client *cl, char *input)
 
   if (cl->type == UNKNOWN)
     return (authenticate_user(server, cl, input));
-  printf("Got input: %s\n", input);
+  printf("Got input: %s %d\n", input, parse_input(input, arg));
   if ((idx = parse_input(input, arg)) < 0 ||
       (idx == INCANTATION && prepare_incantation(server, cl) == -1))
     return (-1);

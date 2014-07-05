@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Jun 26 14:59:43 2014 luc sinet
-** Last update Fri Jul  4 15:31:07 2014 luc sinet
+** Last update Sat Jul  5 16:00:00 2014 luc sinet
 */
 
 #ifndef _ENUMS_H_
@@ -19,27 +19,27 @@ typedef enum	bool
 
 enum	e_command
   {
-    FORWARD = 1,
-    RIGHT = 2,
-    LEFT = 3,
-    SEE = 4,
-    INVENTORY = 5,
-    TAKE = 6,
-    PUT = 7,
-    EXPULSE = 8,
-    BROADCAST = 9,
-    INCANTATION = 10,
-    FORK = 11,
-    CONNECT_NBR = 12,
-    MSZ = 13,
-    BCT = 14,
-    MCT = 15,
-    TNA = 16,
-    PPO = 17,
-    PLV = 18,
-    PIN = 19,
-    SGT = 20,
-    SST = 21
+    FORWARD = 0,
+    RIGHT = 1,
+    LEFT = 2,
+    SEE = 3,
+    INVENTORY = 4,
+    TAKE = 5,
+    PUT = 6,
+    EXPULSE = 7,
+    BROADCAST = 8,
+    INCANTATION = 9,
+    FORK = 10,
+    CONNECT_NBR = 11,
+    MSZ = 12,
+    BCT = 13,
+    MCT = 14,
+    TNA = 15,
+    PPO = 16,
+    PLV = 17,
+    PIN = 18,
+    SGT = 19,
+    SST = 20
   };
 
 enum	e_error
