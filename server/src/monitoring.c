@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Thu Jul  3 23:41:08 2014 luc sinet
+** Last update Sat Jul  5 15:51:29 2014 luc sinet
 */
 
 #include <err.h>
@@ -38,27 +38,19 @@ static void		update_fds_to_epoll(t_server *server)
 {
   struct epoll_event	ev;
   t_node		*tmp;
-  t_node		*tmp2;
-  t_client		*tofree;
   t_client		*client;
 
-  for (tmp = server->cl, tofree = NULL; tmp != NULL;)
+  for (tmp = server->cl; tmp != NULL;)
     {
-      if (tofree != NULL)
-      	{
-      	  free(tofree);
-      	  tofree = NULL;
-      	}
       client = ((t_client*)tmp->value);
       if (client->ghost == true &&
 	  queue_empty(client->queue))
 	{
 	  if (client->type != EGG && epoll_event_del(client->fd, NULL) == -1)
 	    iperror("epoll_ctl: client", -1);
-	  tofree = (t_client*)tmp->value;
-	  tmp2 = tmp->next;
-	  kick_user(&server->cl, (t_client*)tmp->value, &server->world);
-	  tmp = tmp2;
+	  tmp = tmp->next;
+	  kick_user(&server->cl, client, &server->world);
+	  free(client);
 	  continue ;
 	}
       else if (client->type == EGG)
