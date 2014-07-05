@@ -16,6 +16,7 @@ Menu::Menu()
 {
   _done = false;
   _gameEngine = NULL;
+  _set.loadFile("default.cfg");
 }
 
 Menu::~Menu()
@@ -48,13 +49,11 @@ bool  Menu::initialize()
       !_textShader.build())
     return (false);
   ImageWidget	*background = new ImageWidget(0, 0, y, x, "./assets/background.tga");
-  ImageWidget	*title = new ImageWidget((1024 / 2) - ((340 * 1.25f) / 2), 400, 120 * 1.25f, 340 * 1.25f, "./assets/zappy.tga");
   _mainPanel.push_back(background);
-  _mainPanel.push_back(title);
   _mainPanel.push_back(new InputWidget(x / 4, 9.5f * y / 18, y / 11.25f, x / 2, "./assets/input.tga", "IP :"));
   _mainPanel.push_back(new InputWidget(x / 4, 7.5f * y / 18, y / 11.25f, x / 2, "./assets/input.tga", "Port :"));
   _mainPanel.push_back(new ConnectWidget(x / 4, 5.5f * y / 18, y / 11.25f, x / 2, "./assets/button.tga"));
-  _mainPanel.push_back(new QuitWidget(x / 4, y / 18, y / 11.25f, x / 2, "./assets/quit.tga"));
+  _mainPanel.push_back(new QuitWidget(x / 4, y / 18, y / 11.25f, x / 2, "./assets/button.tga"));
   return (true);
 }
 
@@ -70,13 +69,19 @@ bool		Menu::update()
   _input[mouse];
   _input[win];
   if (mouse.event == BUTTONUP)
+    {
+      for (std::vector<AWidget *>::iterator it = _mainPanel.begin(),
+	     endit = _mainPanel.end(); it != endit ; ++it)
+	if ((*it)->isClicked(mouse.x, y - mouse.y))
+	  {
+	    (*it)->onClick((*this));
+	    break;
+	  }
+    }
+  else
     for (std::vector<AWidget *>::iterator it = _mainPanel.begin(),
 	   endit = _mainPanel.end(); it != endit ; ++it)
-      if ((*it)->isClicked(mouse.x, y - mouse.y))
-	{
-	  (*it)->onClick((*this));
-	  break;
-	}
+      (*it)->update(mouse.x, y - mouse.y);
   _win.updateClock(_clock);
   if (_input.isPressed(SDLK_ESCAPE) || win.event == WIN_QUIT || _done == true)
     return (false);
@@ -202,9 +207,9 @@ bool	Menu::launchGame()
 
   if (getInfo(ip, port) == true)
     {
-      _gameEngine = new GameEngine(&_gNetwork, &_win);
       if (!_gNetwork.open(ip.c_str(), port.c_str()))
 	throw Exception("cannot connect to the server"); // replace exception by error
+      _gameEngine = new GameEngine(_gNetwork, _win, _set);
       _gameEngine->initialize();
       while (_gameEngine->update())
 	_gameEngine->draw();
@@ -234,8 +239,10 @@ void	Menu::setDone(bool done)
 
 bool Menu::getInfo(std::string &ip, std::string &port)
 {
-  ip = dynamic_cast<InputWidget *>(_mainPanel[2])->getContent();
-  port = dynamic_cast<InputWidget *>(_mainPanel[3])->getContent();
+  ip = dynamic_cast<InputWidget *>(_mainPanel[1])->getContent();
+  port = dynamic_cast<InputWidget *>(_mainPanel[2])->getContent();
+  if (port == "Port:")
+    port = "6000";
   if (ip == "FREE")
     return (false);
   else

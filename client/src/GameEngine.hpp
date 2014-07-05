@@ -2,6 +2,7 @@
 # define _GAMEENGINE_HPP_
 
 # include <unistd.h>
+# include <vector>
 # include <OpenGL.hh>
 # include <Game.hh>
 # include <SdlContext.hh>
@@ -14,6 +15,8 @@
 # include "Input.hpp"
 # include "Square.hpp"
 # include "Model.hpp"
+# include "Settings.hpp"
+# include "Light.hpp"
 
 # define ASSETS_DIR "./assets/"
 
@@ -28,7 +31,7 @@
 # define PHIRAS_MODEL ASSETS_DIR""
 # define THYSTAME_MODEL ASSETS_DIR""
 
-# define PLAYER_MODEL ASSETS_DIR""
+# define PLAYER_MODEL ASSETS_DIR"CJ.fbx"
 # define EGG_MODEL ASSETS_DIR""
 
 
@@ -44,7 +47,7 @@ typedef struct	s_display
 class GameEngine : public gdl::Game
 {
 public:
-  GameEngine(GNetwork *_gNetwork, gdl::SdlContext *win);
+  GameEngine(GNetwork &_gNetwork, gdl::SdlContext &win, Settings &set);
   virtual ~GameEngine();
 
   virtual bool update();
@@ -54,8 +57,9 @@ public:
 private:
   void displayItem(const char flag, int x, int y);
 
-  GNetwork			*_socket;
-  gdl::SdlContext		*_win;
+  GNetwork			&_socket;
+  gdl::SdlContext		&_win;
+  Settings			&_set;
   Input				_input;
   gdl::Clock			_clock;
   gdl::BasicShader	        _shader;
@@ -66,7 +70,8 @@ private:
   Model		       		_player;
   Model			       	_egg;
   Camera			_cam;
-  t_display			 _display;
+  t_display			_display;
+  std::vector<Light *>		_lights;
 };
 
 #endif /* _GAMEENGINE_HPP_ */

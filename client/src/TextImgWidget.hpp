@@ -1,6 +1,7 @@
 #ifndef _TEXTIMGWIDGET_H_
 # define _TEXTIMGWIDGET_H_
 
+# include <OpenGL.hh>
 # include "TextWidget.hpp"
 # include "Menu.hpp"
 

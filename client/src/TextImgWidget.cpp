@@ -20,6 +20,8 @@ void	TextImgWidget::draw(gdl::AShader &shader, const gdl::Clock &clock)
 {
   _square->fillGeometry();
   _square->draw(shader, clock);
+  if (_hover)
+    glColor3f(0.0, 0.0, 255.0);
   _text.setText(_sentence,_x +_width / 2 - (_sentence.length() / 4.0) * 45, _y + (_height - 45) / 2, 45);
   glDisable(GL_DEPTH_TEST);
   _text.draw(shader, clock);

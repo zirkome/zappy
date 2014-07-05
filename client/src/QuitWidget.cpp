@@ -2,7 +2,7 @@
 #include "QuitWidget.hpp"
 
 QuitWidget::QuitWidget(int x, int y, int height, int width, const std::string &texture)
-  : AWidget(x, y, height, width)
+  : TextImgWidget(x, y, height, width, texture, "Quit")
 {
   _square = new Square(texture);
   _square->initialize();
@@ -14,13 +14,15 @@ QuitWidget::~QuitWidget()
 {
 }
 
+bool    QuitWidget::isClicked(int x, int y)
+{
+  if (x >= _x && x <= (_x + _width) && y >= _y && y <= (_y + _height))
+    return (true);
+  else
+    return (false);
+}
+
 void	QuitWidget::onClick(Menu &menu)
 {
   menu.setDone(true);
-}
-
-void	QuitWidget::draw(gdl::AShader &shader, const gdl::Clock &clock)
-{
-  _square->fillGeometry();
-  _square->draw(shader, clock);
 }

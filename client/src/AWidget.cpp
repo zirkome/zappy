@@ -3,6 +3,7 @@
 AWidget::AWidget(int x, int y, int height, int width)
   : _text()
 {
+  _hover = false;
   _x = x;
   _y = y;
   _height = height;
@@ -68,4 +69,12 @@ int	AWidget::getWidth() const
 const Text	&AWidget::getText() const
 {
   return (_text);
+}
+
+void	AWidget::update(int x, int y)
+{
+  if (isClicked(x, y))
+    _hover = true;
+  else
+    _hover = false;
 }

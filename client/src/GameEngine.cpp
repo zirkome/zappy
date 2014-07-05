@@ -1,16 +1,16 @@
 #include "GameEngine.hpp"
 #include "Input.hpp"
 
-GameEngine::GameEngine(GNetwork *socket, gdl::SdlContext *win)
-  : _socket(socket), _win(win), _input(), _ground(GROUND_TEXTURE),
-    _loading(LOADING_TEXTURE), _resources(64, NULL)
+GameEngine::GameEngine(GNetwork &socket, gdl::SdlContext &win, Settings &set)
+  : _socket(socket), _win(win), _set(set), _input(), _ground(GROUND_TEXTURE),
+    _loading(LOADING_TEXTURE), _resources(64, NULL), _cam(_set)
 {
   _display.loading = true;
 }
 
 GameEngine::~GameEngine()
 {
-  _win->stop();
+
 }
 
 bool GameEngine::initialize()
@@ -65,9 +65,9 @@ void GameEngine::draw()
       _shader.bind();
       _shader.setUniform("projection", _cam.getProjection());
       _shader.setUniform("view", _cam.getTransformation());
-      _shader.setUniform("nbLight", 0);
-      _shader.setUniform("isFog", 0);
-      _shader.setUniform("isLight", 0);
+      _shader.setUniform("nbLight", static_cast<int>(_lights.size()));
+      _shader.setUniform("isFog", _set.getVar(R_DRAWFOG));
+      _shader.setUniform("isLight", _set.getVar(R_SKYBOX));
       _ground.setScale(glm::vec3(_display.map.getX(), 1.0, _display.map.getY()));
       _ground.draw(_shader, _clock);
       for (int x = 0;x < _display.map.getX();++x)
@@ -88,17 +88,19 @@ void GameEngine::draw()
     }
   else
     {
+      float x = _set.getVar(W_WIDTH), y = _set.getVar(W_HEIGHT);
+
       glDisable(GL_DEPTH_TEST);
       _textShader.bind();
-      _textShader.setUniform("projection", glm::ortho(0.0f, 1600.f,
-						      0.0f, 900.f, -1.0f, 1.0f));
+      _textShader.setUniform("projection", glm::ortho(0.0f, x,
+						      0.0f, y, -1.0f, 1.0f));
       _textShader.setUniform("view", glm::mat4(1));
-      _textShader.setUniform("winX", 1600.f);
-      _textShader.setUniform("winY", 900.f);
+      _textShader.setUniform("winX", x);
+      _textShader.setUniform("winY", y);
       _loading.draw(_textShader, _clock);
       glEnable(GL_DEPTH_TEST);
     }
-  _win->flush();
+  _win.flush();
 }
 
 void GameEngine::displayItem(const char flag, int x, int y)
@@ -120,8 +122,8 @@ bool GameEngine::update()
   l_Keycit    beg;
   l_Keycit    end;
 
-  _win->updateClock(_clock);
-  _socket->update(_display);
+  _win.updateClock(_clock);
+  _socket.update(_display);
   _input.getInput();
   _cam.update(_input, _clock);
   if (_input.isPressed(SDLK_ESCAPE) || (_input[win] && win.event == WIN_QUIT))

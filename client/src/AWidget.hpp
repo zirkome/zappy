@@ -5,6 +5,7 @@
 # include "Text.hpp"
 # include "GameEngine.hpp"
 # include "Square.hpp"
+# include "Input.hpp"
 
 class Menu;
 
@@ -17,6 +18,7 @@ protected:
   int		_width;
   Text		_text;
   Square	*_square;
+  bool		_hover;
 
 public:
   AWidget(int x, int y, int height, int width);
@@ -28,6 +30,8 @@ public:
   virtual void	onDisplay(const std::list<std::string> &text, int filePos);
   virtual void	onClick(Menu &menu) = 0;
   virtual void	draw(gdl::AShader &shader, const gdl::Clock &clock) = 0;
+
+  void		update(int x, int y);
 
   void		setSquare(Square *);
   Square	*getSquare() const;
