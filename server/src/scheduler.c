@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Tue Jul  1 15:52:59 2014 guillaume fillon
-** Last update Fri Jul  4 13:09:49 2014 luc sinet
+** Last update Sat Jul  5 13:48:40 2014 luc sinet
 */
 
 #include "scheduler.h"
@@ -44,6 +44,26 @@ static int	check_job(struct s_job *job, time_t date, t_server *server)
   return (-1);
 }
 
+void		update_food(t_world *world, t_node *clients)
+{
+  unsigned int	food;
+  unsigned int	i;
+  unsigned int	size;
+
+  for (food = 0; clients != NULL; clients = clients->next)
+    if (((t_client *)clients->value)->player != NULL)
+      food += ((t_client *)clients->value)->player->inventory[FOOD - 1];
+  for (i = 0, size = world->width * world->height; i < size; ++i)
+    food += count_type_on_box(world, FOOD, i % world->width, i / world->width);
+  if (FOODLIMIT(size, food))
+    for (size = size - 1; food > 0 && size > 0; --size)
+      if (food >= rand() % size)
+	{
+	  add_to_world(world, FOOD, size % world->width, size / world->width);
+	  --food;
+	}
+}
+
 void		scheduler_update(t_list *clients, t_server *server)
 {
   time_t	now;
@@ -51,6 +71,11 @@ void		scheduler_update(t_list *clients, t_server *server)
   t_client	*tmp;
 
   now = clock_getsecond();
+  if (now >= server->world.food_check)
+    {
+      update_food(&server->world, *clients);
+      server->world.food_check = now + 5;
+    }
   for (cl = *clients; cl != NULL; cl = cl->next)
     {
       tmp = (t_client*)cl->value;

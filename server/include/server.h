@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Fri Jul  4 13:10:19 2014 luc sinet
+** Last update Sat Jul  5 13:34:42 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -40,6 +40,7 @@
 # define DISCONNECTED 2
 # define FOODTIME 126
 # define INITFOOD 10
+# define FOODLIMIT(size, amount) ((amount < size / 6) ? 1 : 0)
 
 # define CMDLEN 32
 # define ARGLEN 256
@@ -120,6 +121,7 @@ typedef struct	s_world
   t_string	**map;
   int		slots;
   time_t	delay;
+  time_t	food_check;
   int		nb_teams;
   t_team	*teams;
   int		hflg;

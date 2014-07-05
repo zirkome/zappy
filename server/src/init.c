@@ -5,11 +5,12 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 09:39:44 2014 luc sinet
-** Last update Wed Jul  2 22:39:42 2014 guillaume fillon
+** Last update Sat Jul  5 13:49:15 2014 luc sinet
 */
 
 #include <signal.h>
 #include "server.h"
+#include "scheduler.h"
 
 static void	init_teams_slots(t_server *server)
 {
@@ -40,6 +41,7 @@ int		init_server(t_server *server)
     server->world.slots = 1;
   server->cl = NULL;
   srand(time(NULL));
+  server->world.food_check = clock_getsecond() + 5;
   init_teams_slots(server);
   if (generate_map(&server->world) == -1)
     return (-1);
