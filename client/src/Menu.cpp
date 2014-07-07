@@ -22,7 +22,6 @@ Menu::Menu()
 Menu::~Menu()
 {
   freePanel(_mainPanel);
-  _gNetwork.close();
 }
 
 void	Menu::freePanel(std::vector<AWidget *> &panel)
@@ -55,6 +54,9 @@ bool  Menu::initialize()
   _mainPanel.push_back(new ConnectWidget(x / 4, 5.5f * y / 18, y / 11.25f, x / 2, "./assets/button.tga"));
   _mainPanel.push_back(new QuitWidget(x / 4, y / 18, y / 11.25f, x / 2, "./assets/button.tga"));
   _sound.play("menu", MUSIC);
+  _gameEngine = new GameEngine(&_gNetwork, &_win, &_set, &_input);
+  if (!_gameEngine->initialize())
+    return (false);
   return (true);
 }
 
@@ -100,7 +102,6 @@ void	Menu::draw()
   float x = _set.getVar(W_WIDTH), y = _set.getVar(W_HEIGHT);
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glViewport(0, 0, x, y);
   glDisable(GL_DEPTH_TEST);
   _textShader.bind();
   _textShader.setUniform("projection", glm::ortho(0.0f, x, 0.0f, y, -1.0f, 1.0f));
@@ -159,7 +160,6 @@ void	Menu::textInput(std::string &buf, unsigned int maxlen)
   int		frame = -1;
   Keycode	key = 0;
   Keycode	save = -1;
-  Input		*input = &_input;
 
   buf.clear();
   buf.push_back('|');
@@ -204,20 +204,26 @@ void	Menu::textInput(std::string &buf, unsigned int maxlen)
 
 bool	Menu::launchGame()
 {
+  // std::string ip = "10.10.253.239", port = "6000";
   std::string ip = "FREE", port = "6000";
 
   if (getInfo(ip, port) == true)
     {
       if (!_gNetwork.open(ip.c_str(), port.c_str()))
-	throw Exception("cannot connect to the server"); // replace exception by error
-      _gameEngine = new GameEngine(_gNetwork, _win, _set);
-      _gameEngine->initialize();
+	{
+	  std::cout << "Cannot connect to the server" << std::endl;
+	  return (false);
+	}
       while (_gameEngine->update())
 	_gameEngine->draw();
+      _gNetwork.close();
       return (true);
     }
   else
-    return (false);
+    {
+      std::cout << "You must enter an ip address" << std::endl;
+      return (false);
+    }
 }
 
 void	Menu::launch()

@@ -18,21 +18,23 @@
 # include "Settings.hpp"
 # include "Light.hpp"
 
+# define CHANGETIME 1
+
 # define ASSETS_DIR "./assets/"
 
 # define LOADING_TEXTURE ASSETS_DIR"loading.tga"
 # define GROUND_TEXTURE ASSETS_DIR"ground.tga"
 
-# define FOOD_MODEL ASSETS_DIR""
-# define LINEMATE_MODEL ASSETS_DIR""
-# define DERAUMERE_MODEL ASSETS_DIR""
-# define SIBUR_MODEL ASSETS_DIR""
-# define MENDIANE_MODEL ASSETS_DIR""
-# define PHIRAS_MODEL ASSETS_DIR""
-# define THYSTAME_MODEL ASSETS_DIR""
+# define FOOD_MODEL ASSETS_DIR"hamburger.fbx"
+# define LINEMATE_MODEL ASSETS_DIR"knife.fbx"
+# define DERAUMERE_MODEL ASSETS_DIR"pistol.fbx"
+# define SIBUR_MODEL ASSETS_DIR"mp5.fbx"
+# define MENDIANE_MODEL ASSETS_DIR"ak47.fbx"
+# define PHIRAS_MODEL ASSETS_DIR"svd.fbx"
+# define THYSTAME_MODEL ASSETS_DIR"rpg.fbx"
 
 # define PLAYER_MODEL ASSETS_DIR"CJ.fbx"
-# define EGG_MODEL ASSETS_DIR""
+# define EGG_MODEL ASSETS_DIR"CJ.fbx"
 
 
 typedef struct	s_display
@@ -47,7 +49,7 @@ typedef struct	s_display
 class GameEngine : public gdl::Game
 {
 public:
-  GameEngine(GNetwork &_gNetwork, gdl::SdlContext &win, Settings &set);
+  GameEngine(GNetwork *_gNetwork, gdl::SdlContext *win, Settings *set, Input *input);
   virtual ~GameEngine();
 
   virtual bool update();
@@ -57,10 +59,10 @@ public:
 private:
   void displayItem(const char flag, int x, int y);
 
-  GNetwork			&_socket;
-  gdl::SdlContext		&_win;
-  Settings			&_set;
-  Input				_input;
+  GNetwork			*_socket;
+  gdl::SdlContext		*_win;
+  Settings			*_set;
+  Input				*_input;
   gdl::Clock			_clock;
   gdl::BasicShader	        _shader;
   gdl::BasicShader	        _textShader;

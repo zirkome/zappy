@@ -2,6 +2,7 @@
 # define _GNETWORK_HPP_
 
 # include <iostream>
+# include <queue>
 # include <sys/time.h>
 # include <libsocket.h>
 # include "Exception.hpp"
@@ -20,12 +21,15 @@ public:
   bool close();
   void send(const std::string &msg);
 
+  void changeTime(int t);
+
   void update(t_display &map);
 
 private:
-  int		_fd;
-  t_ringb	*_buffer;
-  Protocol	_proto;
+  int			  _fd;
+  t_ringb		  *_buffer;
+  std::queue<std::string> _msg;
+  Protocol		  _proto;
 };
 
 #endif /* _GNETWORK_HPP_ */

@@ -23,6 +23,8 @@ Map::~Map()
 
 void Map::createMap(int x, int y)
 {
+  if (_map != NULL)
+    delete _map;
   _map = new unsigned char[x * y];
   std::memset(_map, 0, x * y * sizeof(char));
   while (!_egg.empty())

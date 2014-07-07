@@ -5,7 +5,7 @@
 ## Login   <fritsc_h@epitech.net>
 ##
 ## Started on  Sun May  4 15:17:27 2014 Harold Fritsch
-## Last update Sat Jul  5 13:34:04 2014 Adrien Della Maggiora
+## Last update Mon Jul  7 22:07:06 2014 Adrien Della Maggiora
 ##
 
 CC 		=	g++
@@ -41,7 +41,6 @@ SRC 		=	main.cpp \
 			Model.cpp \
 			TextWidget.cpp \
 			TextImgWidget.cpp \
-			LoadWidget.cpp \
 			InputWidget.cpp \
 			ConnectWidget.cpp \
 			Light.cpp \

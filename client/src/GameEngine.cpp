@@ -1,9 +1,10 @@
 #include "GameEngine.hpp"
 #include "Input.hpp"
 
-GameEngine::GameEngine(GNetwork &socket, gdl::SdlContext &win, Settings &set)
-  : _socket(socket), _win(win), _set(set), _input(), _ground(GROUND_TEXTURE),
-    _loading(LOADING_TEXTURE), _resources(64, NULL), _cam(_set)
+GameEngine::GameEngine(GNetwork *socket, gdl::SdlContext *win,
+		       Settings *set, Input *input)
+  : _socket(socket), _win(win), _set(set), _input(input), _ground(GROUND_TEXTURE),
+    _loading(LOADING_TEXTURE), _resources(64, NULL), _cam(*_set)
 {
   _display.loading = true;
 }
@@ -34,7 +35,7 @@ bool GameEngine::initialize()
     return (false);
   _ground.translate(glm::vec3(0.0, -0.5, 0.0));
   _loading.setPos(0, 0);
-  _loading.setSize(1600, 900);
+  _loading.setSize(_set->getVar(W_WIDTH), W_HEIGHT);
   _loading.fillGeometry();
   _resources[FOOD] = new Model();
   _resources[LINEMATE] = new Model();
@@ -62,12 +63,16 @@ void GameEngine::draw()
   _cam.lookAt();
   if (!_display.loading)
     {
+      glEnable(GL_CULL_FACE);
+      glCullFace(GL_BACK);
       _shader.bind();
       _shader.setUniform("projection", _cam.getProjection());
       _shader.setUniform("view", _cam.getTransformation());
       _shader.setUniform("nbLight", static_cast<int>(_lights.size()));
-      _shader.setUniform("isFog", _set.getVar(R_DRAWFOG));
-      _shader.setUniform("isLight", _set.getVar(R_SKYBOX));
+      _shader.setUniform("isFog", _set->getVar(R_DRAWFOG));
+      _shader.setUniform("isLight", _set->getVar(R_DRAWLIGHT));
+      _ground.setPos(glm::vec3(_display.map.getX() / 2, -0.5,
+				  _display.map.getY() / 2));
       _ground.setScale(glm::vec3(_display.map.getX(), 1.0, _display.map.getY()));
       _ground.draw(_shader, _clock);
       for (int x = 0;x < _display.map.getX();++x)
@@ -85,10 +90,11 @@ void GameEngine::draw()
 	  _player.setPos(glm::vec3((*it)->x, 0.0, (*it)->y));
 	  _player.draw(_shader, _clock);
 	}
+      glDisable(GL_CULL_FACE);
     }
   else
     {
-      float x = _set.getVar(W_WIDTH), y = _set.getVar(W_HEIGHT);
+      float x = _set->getVar(W_WIDTH), y = _set->getVar(W_HEIGHT);
 
       glDisable(GL_DEPTH_TEST);
       _textShader.bind();
@@ -100,19 +106,17 @@ void GameEngine::draw()
       _loading.draw(_textShader, _clock);
       glEnable(GL_DEPTH_TEST);
     }
-  _win.flush();
+  _win->flush();
 }
 
 void GameEngine::displayItem(const char flag, int x, int y)
 {
-  for (int i = 1;i < 64;i = i << 1)
-    {
-      if (flag & i)
-	{
-	  _resources[i]->setPos(glm::vec3(x, 0, y));
-	  _resources[i]->draw(_shader, _clock);
-	}
-    }
+  for (int i = 1;i <= 64;i = i << 1)
+    if (flag & i)
+      {
+  	_resources[i]->setPos(glm::vec3(x + 0.5, 0.5, y + 0.5));
+  	_resources[i]->draw(_shader, _clock);
+      }
 }
 
 
@@ -124,14 +128,21 @@ bool GameEngine::update()
   l_Keycit    beg;
   l_Keycit    end;
 
-  _win.updateClock(_clock);
-  _socket.update(_display);
-  _input.getInput();
-  _cam.update(_input, _clock);
-  if (_input.isPressed(SDLK_ESCAPE) || (_input[win] && win.event == WIN_QUIT))
+  _win->updateClock(_clock);
+  _socket->update(_display);
+  _input->getInput();
+  _cam.update(*_input, _clock);
+  if (_input->isPressed(SDLK_ESCAPE) || ((*_input)[win] && win.event == WIN_QUIT))
+    return (false);
+  if (_input->isPressed(SDLK_EQUALS))
     {
-      usleep(100000);
-      return (false);
+      _socket->changeTime(_display.time + CHANGETIME);
+      _display.time += CHANGETIME;
+    }
+  if (_input->isPressed(SDLK_MINUS))
+    {
+      _socket->changeTime(_display.time - CHANGETIME);
+      _display.time -= CHANGETIME;
     }
   if ((time = _clock.getElapsed()) < fps)
     usleep((fps - time) * 1000);

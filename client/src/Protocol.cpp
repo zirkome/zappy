@@ -51,6 +51,14 @@ std::string Protocol::parseCmd(const std::string &cmd, t_display &info)
   return (msg);
 }
 
+std::string Protocol::changeTime(int t) const
+{
+  std::stringstream ss("");
+
+  ss << "sst " << t << "\n";
+  return (ss.str());
+}
+
 int Protocol::getNb(const std::string &cmd) const
 {
   std::stringstream ss(cmd);
@@ -101,7 +109,6 @@ void Protocol::bct(const std::string &cmd, std::string &, t_display &info)
       for (int i = 1, j = 0;i <= 64;i = i << 1, j++)
 	if (q[j] > 0)
 	  info.map[x * info.map.getY() + y] |= i;
-      info.map.display();
     }
   catch (Exception &e)
     {

@@ -1,11 +1,10 @@
 #ifndef _INPUTWIDGET_H_
 # define _INPUTWIDGET_H_
 
-# include "LoadWidget.hpp"
 # include "TextImgWidget.hpp"
 # include "Menu.hpp"
 
-class InputWidget : public LoadWidget
+class InputWidget : public TextImgWidget
 {
 public:
   InputWidget(int x, int y, int height, int width,
