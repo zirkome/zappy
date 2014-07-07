@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Tue Jul  1 15:25:16 2014 guillaume fillon
-** Last update Wed Jul  2 22:38:04 2014 guillaume fillon
+** Last update Mon Jul  7 10:15:25 2014 guillaume fillon
 */
 
 #ifndef _SCHEDULER_H_
@@ -37,5 +37,6 @@ long	clock_getnanosecond();
 */
 int	scheduler_add(t_scheduler *sched, struct s_job *task);
 void	scheduler_update(t_scheduler *sched, t_server *server);
+void	free_job(void *value);
 
 #endif /* _SCHEDULER_H_ */

@@ -5,10 +5,21 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Tue Jul  1 15:52:59 2014 guillaume fillon
-** Last update Sat Jul  5 14:31:29 2014 luc sinet
+** Last update Mon Jul  7 10:16:49 2014 guillaume fillon
 */
 
 #include "scheduler.h"
+
+void		free_job(void *value)
+{
+  struct s_job	*job;
+
+  if (value == NULL)
+    return ;
+  job = (struct s_job *) value;
+  free(job->arg);
+  free(job);
+}
 
 int		scheduler_add(t_scheduler *sched, struct s_job *task)
 {

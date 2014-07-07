@@ -5,10 +5,11 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Fri Jul  4 14:19:59 2014 luc sinet
+** Last update Mon Jul  7 10:16:36 2014 guillaume fillon
 */
 
 #include "server.h"
+#include "scheduler.h"
 
 int			connect_new_user(t_server *server)
 {
@@ -37,7 +38,11 @@ void		erase_client(t_world *world, t_client *cl)
   if (cl->player->teamptr != NULL && cl->type != EGG)
     ++cl->player->teamptr->slots;
   queue_clear(&cl->queue);
-  free(cl->player->foodjob);
+  if (cl->player != NULL)
+    {
+      free(cl->player->foodjob);
+      list_clear(&cl->player->jobs, &free_job);
+    }
   free(cl->rb->buf);
   free(cl->rb);
   free(cl->player);
