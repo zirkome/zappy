@@ -5,10 +5,11 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 26 21:14:01 2014 guillaume fillon
-** Last update Tue Jul  1 17:21:41 2014 guillaume fillon
+** Last update Mon Jul  7 10:35:02 2014 guillaume fillon
 */
 
 #include "server.h"
+#include "gui.h"
 
 int		gui_welcome(t_server *server, t_client *client)
 {
@@ -26,7 +27,7 @@ int		gui_welcome(t_server *server, t_client *client)
       if (((t_client*)tmp->value)->type == IA)
 	{
 	  pl = ((t_client*)tmp->value)->player;
-	  msg = cnprintf(BUFSIZ, "pnw #%d %d %d %d %d %s\n",
+	  msg = cnprintf(BUFSIZ, "pnw %d %d %d %d %d %s\n",
 			 pl->id, pl->x, pl->y,
 			 pl->dir, pl->level, pl->teamptr->name);
 	  queue_push(&client->queue, msg);

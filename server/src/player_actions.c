@@ -5,14 +5,16 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 13:50:31 2014 luc sinet
-** Last update Thu Jul  3 18:12:51 2014 luc sinet
+** Last update Mon Jul  7 14:57:13 2014 guillaume fillon
 */
 
 #include "server.h"
+#include "gui.h"
 
 int		pl_take(t_server *server, t_client *client,
 			char *arg)
 {
+  t_gui_arg	garg;
   t_player	*pl;
   int		elem_id;
   int		pos;
@@ -28,12 +30,15 @@ int		pl_take(t_server *server, t_client *client,
       return (-1);
     }
   queue_push(&client->queue, "ok\n");
+  garg.id = elem_id - 1;
+  gui_events_handling(server, client, &garg, &gui_take);
   return (0);
 }
 
 int		pl_put(t_server *server, t_client *client,
 		       char *arg)
 {
+  t_gui_arg	garg;
   t_player	*pl;
   int		elem_id;
 
@@ -46,6 +51,8 @@ int		pl_put(t_server *server, t_client *client,
       return (-1);
     }
   queue_push(&client->queue, "ok\n");
+  garg.id = elem_id - 1;
+  gui_events_handling(server, client, &garg, &gui_put);
   return (0);
 }
 
@@ -95,6 +102,7 @@ int		pl_expulse(t_server *server, t_client *client,
 	      --to_expulse;
 	    }
 	}
+      gui_events_handling(server, client, NULL, &gui_expulse);
       return (queue_push(&client->queue, "ok\n"));
     }
   else

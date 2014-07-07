@@ -5,10 +5,11 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 26 15:24:27 2014 guillaume fillon
-** Last update Fri Jul  4 14:12:56 2014 luc sinet
+** Last update Sun Jul  6 20:33:33 2014 guillaume fillon
 */
 
 #include "server.h"
+#include "gui.h"
 
 static t_bool	get_command(char *line, char *command)
 {

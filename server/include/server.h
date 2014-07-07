@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Sat Jul  5 15:28:48 2014 luc sinet
+** Last update Mon Jul  7 11:15:21 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
@@ -155,6 +155,8 @@ long		stoi(char *str);
 __attribute__((format (printf, 2, 3)))
 char		*cnprintf(size_t size, const char *format, ...);
 char		*vcnprintf(size_t size, const char *format, va_list ap);
+__attribute__((format (printf, 2, 3)))
+void		queue_push_message(t_queue **queue, const char *format, ...);
 
 int		parse_option(int opt, t_world *option, int argc, char *argv[]);
 
@@ -241,19 +243,5 @@ int		pl_incantation(t_server *server, t_client *client, char *arg);
 int		pl_lay_egg(t_server *server, t_client *client, char *arg);
 int		pl_fork(t_server *server, t_client *client, char *arg);
 int		pl_connect_nbr(t_server *server, t_client *client, char *arg);
-
-/*
-** GUI commands
-*/
-int		gui_welcome(t_server *server, t_client *client);
-int		gui_msz(t_server *server, t_client *client, char *arg);
-int		gui_bct(t_server *server, t_client *client, char *arg);
-int		gui_mct(t_server *server, t_client *client, char *arg);
-int		gui_tna(t_server *server, t_client *client, char *arg);
-int		gui_ppo(t_server *server, t_client *client, char *arg);
-int		gui_plv(t_server *server, t_client *client, char *arg);
-int		gui_pin(t_server *server, t_client *client, char *arg);
-int		gui_sgt(t_server *server, t_client *client, char *arg);
-int		gui_sst(t_server *server, t_client *client, char *arg);
 
 #endif /* _SERVER_H_ */
