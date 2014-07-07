@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Mon Jun 23 10:40:26 2014 luc sinet
-** Last update Mon Jul  7 15:10:19 2014 guillaume fillon
+** Last update Mon Jul  7 15:31:52 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -69,7 +69,7 @@ int		pl_broadcast(t_server *server, t_client *client,
 
   pl = client->player;
   for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
-    if ((t_client*)tmp->value != client)
+    if (((t_client*)tmp->value)->type == IA && (t_client*)tmp->value != client)
       find_player_dir(pl, (t_client*)tmp->value, &server->world, arg);
   garg.msg = arg;
   gui_events_handling(server, client, &garg, &gui_broadcast);
