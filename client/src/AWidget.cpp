@@ -9,11 +9,16 @@ AWidget::AWidget(int x, int y, int height, int width)
   _height = height;
   _width = width;
   _square = NULL;
+  _squareHover = NULL;
   _text.initialize();
 }
 
 AWidget::~AWidget()
 {
+  if (_square != NULL)
+    delete _square;
+  if (_squareHover != NULL)
+    delete _squareHover;
 }
 
 bool	AWidget::isClicked(int x, int y)

@@ -111,12 +111,21 @@ void GameEngine::draw()
 
 void GameEngine::displayItem(const char flag, int x, int y)
 {
+  float j = 0;
+  float posx = x, posy = y;
+
+  posx += 0.25;
+  posy += 0.10;
   for (int i = 1;i <= 64;i = i << 1)
-    if (flag & i)
-      {
-  	_resources[i]->setPos(glm::vec3(x + 0.5, 0.5, y + 0.5));
-  	_resources[i]->draw(_shader, _clock);
-      }
+    {
+      if (flag & i)
+	{
+	  _resources[i]->setPos(glm::vec3((j >= 4) ? posx + 0.5 : posx , 0.5,
+					  posy + ((j > 4) ? (j - 4.0) * 0.80 / 7.0 : j * 0.80 / 7.0)));
+	  _resources[i]->draw(_shader, _clock);
+	}
+      ++j;
+    }
 }
 
 

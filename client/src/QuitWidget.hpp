@@ -6,7 +6,8 @@
 class	QuitWidget : public TextImgWidget
 {
 public:
-  QuitWidget(int x, int y, int height, int width, const std::string &texture);
+  QuitWidget(int x, int y, int height, int width, const std::string &texture,
+	     const std::string &textureHover = "");
   ~QuitWidget();
 
   virtual bool  isClicked(int x, int y);

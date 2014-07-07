@@ -51,8 +51,8 @@ bool  Menu::initialize()
   _mainPanel.push_back(background);
   _mainPanel.push_back(new InputWidget(x / 4, 9.5f * y / 18, y / 11.25f, x / 2, "./assets/input.tga", "IP :"));
   _mainPanel.push_back(new InputWidget(x / 4, 7.5f * y / 18, y / 11.25f, x / 2, "./assets/input.tga", "Port :"));
-  _mainPanel.push_back(new ConnectWidget(x / 4, 5.5f * y / 18, y / 11.25f, x / 2, "./assets/button.tga"));
-  _mainPanel.push_back(new QuitWidget(x / 4, y / 18, y / 11.25f, x / 2, "./assets/button.tga"));
+  _mainPanel.push_back(new ConnectWidget(x / 4, 5.5f * y / 18, y / 11.25f, x / 2, "./assets/button.tga", "./assets/button_hover.tga"));
+  _mainPanel.push_back(new QuitWidget(x / 4, y / 18, y / 11.25f, x / 2, "./assets/button.tga", "./assets/button_hover.tga"));
   _sound.play("menu", MUSIC);
   _gameEngine = new GameEngine(&_gNetwork, &_win, &_set, &_input);
   if (!_gameEngine->initialize())
@@ -204,11 +204,11 @@ void	Menu::textInput(std::string &buf, unsigned int maxlen)
 
 bool	Menu::launchGame()
 {
-  // std::string ip = "10.10.253.239", port = "6000";
-  std::string ip = "FREE", port = "6000";
+  std::string ip = "10.10.253.239", port = "6000";
+  // std::string ip = "FREE", port = "6000";
 
-  if (getInfo(ip, port) == true)
-    {
+  // if (getInfo(ip, port) == true)
+  //   {
       if (!_gNetwork.open(ip.c_str(), port.c_str()))
 	{
 	  std::cout << "Cannot connect to the server" << std::endl;
@@ -218,12 +218,12 @@ bool	Menu::launchGame()
 	_gameEngine->draw();
       _gNetwork.close();
       return (true);
-    }
-  else
-    {
-      std::cout << "You must enter an ip address" << std::endl;
-      return (false);
-    }
+  //   }
+  // else
+  //   {
+  //     std::cout << "You must enter an ip address" << std::endl;
+  //     return (false);
+  //   }
 }
 
 void	Menu::launch()

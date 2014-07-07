@@ -1,13 +1,10 @@
 #include "Menu.hpp"
 #include "QuitWidget.hpp"
 
-QuitWidget::QuitWidget(int x, int y, int height, int width, const std::string &texture)
-  : TextImgWidget(x, y, height, width, texture, "Quit")
+QuitWidget::QuitWidget(int x, int y, int height, int width, const std::string &texture,
+		       const std::string &textureHover)
+  : TextImgWidget(x, y, height, width, texture, textureHover, "Quit")
 {
-  _square = new Square(texture);
-  _square->initialize();
-  _square->setPos(x, y);
-  _square->setSize(width, height);
 }
 
 QuitWidget::~QuitWidget()

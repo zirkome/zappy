@@ -18,6 +18,7 @@ protected:
   int		_width;
   Text		_text;
   Square	*_square;
+  Square	*_squareHover;
   bool		_hover;
 
 public:

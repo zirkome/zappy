@@ -9,7 +9,8 @@ class	TextImgWidget : public TextWidget
 {
 public:
   TextImgWidget(int x, int y, int height, int width,
-		const std::string &texture, const std::string &text);
+		const std::string &texture,
+		const std::string &texture_hover, const std::string &text);
   ~TextImgWidget();
 
   const std::string	&getContent() const;

@@ -2,8 +2,9 @@
 #include "InputWidget.hpp"
 
 InputWidget::InputWidget(int x, int y, int height, int width,
-			 const std::string &texture, const std::string &text) :
-  TextImgWidget(x, y, height, width, texture, text)
+			 const std::string &texture, const std::string &text,
+			 const std::string &textureHover) :
+  TextImgWidget(x, y, height, width, texture, textureHover, text)
 {
 }
 
