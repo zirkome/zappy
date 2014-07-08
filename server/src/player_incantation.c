@@ -5,10 +5,11 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Wed Jul  2 18:22:49 2014 luc sinet
-** Last update Sat Jul  5 15:27:51 2014 luc sinet
+** Last update Tue Jul  8 12:21:34 2014 guillaume fillon
 */
 
 #include "server.h"
+#include "gui.h"
 
 int		elevate_players(t_vector *vec, int num, int lev)
 {
@@ -23,7 +24,7 @@ int		elevate_players(t_vector *vec, int num, int lev)
       client = vector_get(vec, i);
       if (client->player->level == lev)
 	{
-	  snprintf(tab, sizeof(tab), "elevation en cours niveau actuel : %d\n",
+	  snprintf(tab, sizeof(tab), "niveau actuel : %d\n",
 		   client->player->level);
 	  queue_push(&client->queue, tab);
 	  client->player->level += 1;
@@ -73,6 +74,7 @@ int		prepare_incantation(t_server *server, t_client *client)
       queue_push(&client->queue, "ko\n");
       return (-1);
     }
+  gui_events_handling(server, client, NULL, &gui_incantation_start);
   client->player->save_pos[0] = client->player->x;
   client->player->save_pos[1] = client->player->y;
   vector_clear(vec);
@@ -87,6 +89,7 @@ int		pl_incantation(t_server *server, t_client *client,
   t_player	*pl;
   t_vector	*vec;
   unsigned int	num_player;
+  t_gui_arg	garg;
 
   pl = client->player;
   if ((vec = check_incantation_conditions(server, client)) == NULL ||
@@ -94,6 +97,8 @@ int		pl_incantation(t_server *server, t_client *client,
       (client->player->save_pos[1] != client->player->y))
     {
       queue_push(&client->queue, "ko\n");
+      garg.id = 0;
+      gui_events_handling(server, client, &garg, &gui_incantation_end);
       return (-1);
     }
   num_player = needed_same_level(pl->level);
@@ -104,5 +109,7 @@ int		pl_incantation(t_server *server, t_client *client,
   vector_clear(vec);
   free(vec);
   reassign_ressources(pl->level - 1, pl->x, pl->y, &server->world);
+  garg.id = 1;
+  gui_events_handling(server, client, &garg, &gui_incantation_end);
   return (queue_push(&client->queue, tab));
 }
