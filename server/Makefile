@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Tue Jul  8 13:10:36 2014 guillaume fillon
+## Last update Tue Jul  8 16:24:27 2014 guillaume fillon
 ##
 
 CC 		= gcc
@@ -65,8 +65,7 @@ SRC 		= main.c \
 		  gui_broadcast.c \
 		  gui_incantation.c \
 		  gui_fork.c \
-		  gui_egg_born.c \
-		  gui_egg_dead.c \
+		  gui_egg.c \
 		  gui_player_dead.c \
 		  gui_team_win.c \
 		  authentication.c \

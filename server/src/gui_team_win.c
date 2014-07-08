@@ -5,10 +5,15 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Fri Jul  4 16:00:28 2014 guillaume fillon
-** Last update Fri Jul  4 16:03:36 2014 guillaume fillon
+** Last update Tue Jul  8 16:26:54 2014 guillaume fillon
 */
 
 #include "server.h"
 #include "gui.h"
 
-int	gui_team_win(t_server *, t_client *, t_client *, t_gui_arg *);
+int	gui_team_win(UNUSED t_server *server, t_client *graphic,
+		     UNUSED t_client *client, UNUSED t_gui_arg *arg)
+{
+  queue_push_message(&graphic->queue, "seg %s\n", arg->msg);
+  return (0);
+}
