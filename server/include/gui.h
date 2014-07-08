@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Fri Jul  4 14:50:48 2014 guillaume fillon
-** Last update Mon Jul  7 11:36:56 2014 guillaume fillon
+** Last update Tue Jul  8 16:44:01 2014 luc sinet
 */
 
 #ifndef _GUI_H_
@@ -38,7 +38,7 @@ typedef union	u_gui_arg
 
 typedef int (*t_gui_callback)(t_server *, t_client *, t_client *, t_gui_arg *);
 
-void	gui_events_handling(t_server *server, t_client *client,
+int	gui_events_handling(t_server *server, t_client *client,
 			    t_gui_arg *arg, t_gui_callback f);
 int	gui_movements(t_server *, t_client *, t_client *, t_gui_arg *);
 int	gui_take(t_server *, t_client *, t_client *, t_gui_arg *);

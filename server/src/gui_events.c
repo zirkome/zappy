@@ -5,13 +5,13 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jul  3 14:26:40 2014 guillaume fillon
-** Last update Mon Jul  7 11:01:19 2014 guillaume fillon
+** Last update Tue Jul  8 16:42:54 2014 luc sinet
 */
 
 #include "server.h"
 #include "gui.h"
 
-void		gui_events_handling(t_server *server,
+int		gui_events_handling(t_server *server,
 				    t_client *client,
 				    t_gui_arg *arg,
 				    t_gui_callback f)
@@ -23,4 +23,5 @@ void		gui_events_handling(t_server *server,
       if (((t_client*)tmp->value)->type == GRAPHIC)
 	f(server, (t_client*)tmp->value, client, arg);
     }
+  return (0);
 }

@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Mon Jul  7 10:20:13 2014 guillaume fillon
+** Last update Tue Jul  8 16:45:59 2014 luc sinet
 */
 
 #include "server.h"
@@ -107,7 +107,9 @@ int		process_input(t_server *server, t_client *cl, char *input)
     return (authenticate_user(server, cl, input));
   printf("Got input: %s %d\n", input, parse_input(input, arg));
   if ((idx = parse_input(input, arg)) < 0 ||
-      (idx == INCANTATION && prepare_incantation(server, cl) == -1))
+      (idx == INCANTATION && prepare_incantation(server, cl) == -1) ||
+      (idx == FORK && gui_events_handling(server, cl, NULL,
+					  &gui_fork_start) == -1))
     return (-1);
   task.client = cl;
   task.at = g_command[idx].delay / server->world.delay;
