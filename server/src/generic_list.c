@@ -5,7 +5,7 @@
 ** Login   <fillon_g@epitech.net>
 **
 ** Started on  Thu Jan  9 14:22:00 2014 guillaume fillon
-** Last update Tue Jul  1 18:29:59 2014 guillaume fillon
+** Last update Mon Jul  7 10:16:24 2014 guillaume fillon
 */
 
 #include <stdlib.h>
@@ -249,13 +249,15 @@ t_node *list_get_first_node_with_value(t_list list, void *value, t_value_compara
   return tmp;
 }
 
-void list_clear(t_list *front_ptr)
+void list_clear(t_list *front_ptr, void (*release)(void *))
 {
   t_node *tmp;
 
   tmp = *front_ptr;
-  if (tmp->next != NULL)
-    list_clear(&(tmp->next));
+  if (tmp != NULL && tmp->next != NULL)
+    list_clear(&(tmp->next), release);
+  if (*front_ptr != NULL)
+    release((*front_ptr)->value);
   free(*front_ptr);
   *front_ptr = NULL;
 }

@@ -5,11 +5,12 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Sat Jul  5 15:57:23 2014 luc sinet
+** Last update Mon Jul  7 10:20:13 2014 guillaume fillon
 */
 
-#include "scheduler.h"
 #include "server.h"
+#include "scheduler.h"
+#include "gui.h"
 
 static	t_command	g_command[] =
 {

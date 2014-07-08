@@ -47,7 +47,7 @@ t_bool	list_del_elem_at_back(t_list *front_ptr);
 t_bool	list_del_elem_at_position(t_list *front_ptr, unsigned int position);
 t_bool	list_choose_del(t_list *front_ptr, unsigned int position);
 t_bool	list_del_node(t_list *front_ptr, void *node_ptr);
-void	list_clear(t_list *front_ptr);
+void	list_clear(t_list *front_ptr, void (*release)(void *));
 
 /*
 ** Value Access
