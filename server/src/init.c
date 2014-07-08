@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 09:39:44 2014 luc sinet
-** Last update Sat Jul  5 13:49:15 2014 luc sinet
+** Last update Tue Jul  8 16:26:40 2014 luc sinet
 */
 
 #include <signal.h>
@@ -31,6 +31,7 @@ int		init_server(t_server *server)
 	    "(e.g: -n team1 team2)\n", stderr);
       return (-1);
     }
+  server->jobs = NULL;
   if (server->world.port == NULL)
     server->world.port = DEFAULT_PORT;
   if ((server->fd = create_inet_server_socket(NULL, server->world.port)) < 0)

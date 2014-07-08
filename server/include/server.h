@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Mon Jul  7 11:15:21 2014 guillaume fillon
+** Last update Tue Jul  8 16:14:45 2014 luc sinet
 */
 
 #ifndef _SERVER_H_
@@ -135,6 +135,7 @@ typedef struct		s_server
   struct epoll_event	events[MAX_EPOLL_EVENTS];
   t_world		world;
   t_list		cl;
+  t_list		jobs;
 }			t_server;
 
 typedef int (*t_callback)(t_server *, t_client *, char *);

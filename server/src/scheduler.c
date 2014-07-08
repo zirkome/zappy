@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Tue Jul  1 15:52:59 2014 guillaume fillon
-** Last update Tue Jul  8 10:40:12 2014 luc sinet
+** Last update Tue Jul  8 16:31:59 2014 luc sinet
 */
 
 #include "scheduler.h"
@@ -41,13 +41,17 @@ int		scheduler_add(t_scheduler *sched, struct s_job *task)
   return (0);
 }
 
-static int	check_job(struct s_job *job, time_t date, t_server *server)
+static int	check_job(struct s_job *job, time_t date,
+			  t_server *server, t_bool glob)
 {
   if (job != NULL && date >= job->at)
     {
       printf("[SCHEDULER][EXEC] now: %lu \tsched on: %lu\n", clock_getsecond(), job->at);
       job->callback(server, job->client, job->arg);
-      list_del_node(&job->client->player->jobs, job);
+      if (!glob)
+	list_del_node(&job->client->player->jobs, job);
+      else
+	list_del_node(&server->jobs, job);
       free(job->arg);
       free(job);
       return (0);
@@ -90,6 +94,7 @@ void		scheduler_update(t_list *clients, t_server *server)
       update_food(&server->world, *clients);
       server->world.food_check = now + 5;
     }
+  check_job(list_get_elem_at_front(server->jobs), now, server, 1);
   for (cl = *clients; cl != NULL; cl = cl->next)
     {
       tmp = (t_client*)cl->value;
@@ -97,7 +102,7 @@ void		scheduler_update(t_list *clients, t_server *server)
 	{
 	  if (tmp->type == IA || tmp->type == EGG)
 	    update_living_state(server, tmp, now, tmp->type);
-	  check_job(list_get_elem_at_front(tmp->player->jobs), now, server);
+	  check_job(list_get_elem_at_front(tmp->player->jobs), now, server, 0);
 	}
    }
 }
