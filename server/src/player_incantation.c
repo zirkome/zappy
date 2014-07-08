@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Wed Jul  2 18:22:49 2014 luc sinet
-** Last update Tue Jul  8 12:21:34 2014 guillaume fillon
+** Last update Tue Jul  8 15:55:52 2014 luc sinet
 */
 
 #include "server.h"
@@ -48,8 +48,8 @@ t_vector	*check_incantation_conditions(t_server *server,
     return (NULL);
   vector_init(vec);
   get_player_at_pos(vec, server->cl, pl->x, pl->y);
-  if ((num_player = needed_same_level(pl->level)) !=
-      num_same_level(vec, pl->level)
+  if ((num_player = needed_same_level(pl->level) + 1) !=
+      (num_same_level(vec, pl->level))
       || (int)vector_size(vec) != num_player)
     {
       vector_clear(vec);
