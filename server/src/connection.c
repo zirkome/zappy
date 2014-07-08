@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Mon Jul  7 10:16:36 2014 guillaume fillon
+** Last update Tue Jul  8 10:41:03 2014 luc sinet
 */
 
 #include "server.h"
@@ -43,8 +43,7 @@ void		erase_client(t_world *world, t_client *cl)
       free(cl->player->foodjob);
       list_clear(&cl->player->jobs, &free_job);
     }
-  free(cl->rb->buf);
-  free(cl->rb);
+  free_ringbuffer(cl->rb);
   free(cl->player);
   if (cl->type != EGG)
     close(cl->fd);

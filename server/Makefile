@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Tue Jul  8 12:42:50 2014 guillaume fillon
+## Last update Tue Jul  8 13:10:36 2014 guillaume fillon
 ##
 
 CC 		= gcc
@@ -51,7 +51,6 @@ SRC 		= main.c \
 		  incantation_ressources.c \
 		  geometry.c \
 		  broadcast_calculs.c \
-		  strings.c \
 		  vectors.c \
 		  vectors_get.c \
 		  gui_events.c \
