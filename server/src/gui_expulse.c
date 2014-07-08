@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Fri Jul  4 14:47:11 2014 guillaume fillon
-** Last update Mon Jul  7 14:57:43 2014 guillaume fillon
+** Last update Mon Jul  7 16:57:41 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -22,8 +22,9 @@ int		gui_expulse(t_server *server, t_client *graphic,
   for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
     {
       pl = ((t_client*)tmp->value)->player;
-      queue_push_message(&graphic->queue, "ppo %d %d %d %d\n",
-			 pl->id, pl->x, pl->y, pl->dir);
+      if (((t_client*)tmp->value)->type == IA)
+	queue_push_message(&graphic->queue, "ppo %d %d %d %d\n",
+			   pl->id, pl->x, pl->y, pl->dir);
     }
   return (0);
 }
