@@ -46,7 +46,6 @@ private:
   gdl::BasicShader	_textShader;
   int			_frames;
   bool			_done;
-  Cube			_cube;
   std::vector<AWidget *> _mainPanel;
   Sound			_sound;
 };

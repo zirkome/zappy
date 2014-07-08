@@ -11,7 +11,13 @@ GameEngine::GameEngine(GNetwork *socket, gdl::SdlContext *win,
 
 GameEngine::~GameEngine()
 {
-
+  delete _resources[FOOD];
+  delete _resources[LINEMATE];
+  delete _resources[DERAUMERE];
+  delete _resources[SIBUR];
+  delete _resources[MENDIANE];
+  delete _resources[PHIRAS];
+  delete _resources[THYSTAME];
 }
 
 bool GameEngine::initialize()
@@ -35,7 +41,7 @@ bool GameEngine::initialize()
     return (false);
   _ground.translate(glm::vec3(0.0, -0.5, 0.0));
   _loading.setPos(0, 0);
-  _loading.setSize(_set->getVar(W_WIDTH), W_HEIGHT);
+  _loading.setSize(_set->getVar(W_WIDTH), _set->getVar(W_HEIGHT));
   _loading.fillGeometry();
   _resources[FOOD] = new Model();
   _resources[LINEMATE] = new Model();
@@ -71,8 +77,8 @@ void GameEngine::draw()
       _shader.setUniform("nbLight", static_cast<int>(_lights.size()));
       _shader.setUniform("isFog", _set->getVar(R_DRAWFOG));
       _shader.setUniform("isLight", _set->getVar(R_DRAWLIGHT));
-      _ground.setPos(glm::vec3(_display.map.getX() / 2, -0.5,
-				  _display.map.getY() / 2));
+      _ground.setPos(glm::vec3(_display.map.getX() / 2.0, -0.5,
+				  _display.map.getY() / 2.0));
       _ground.setScale(glm::vec3(_display.map.getX(), 1.0, _display.map.getY()));
       _ground.draw(_shader, _clock);
       for (int x = 0;x < _display.map.getX();++x)
@@ -113,18 +119,28 @@ void GameEngine::displayItem(const char flag, int x, int y)
 {
   float j = 0;
   float posx = x, posy = y;
+  float inter = 0.0;
 
+  if (flag & 1)
+    {
+      _resources[FOOD]->setPos(glm::vec3(posx + 0.5, 0.10, posy + 0.5));
+      _resources[FOOD]->draw(_shader, _clock);
+    }
   posx += 0.25;
   posy += 0.10;
-  for (int i = 1;i <= 64;i = i << 1)
+  j = 0;
+  for (int i = 2;i <= 64;i = i << 1)
     {
       if (flag & i)
 	{
-	  _resources[i]->setPos(glm::vec3((j >= 4) ? posx + 0.5 : posx , 0.5,
-					  posy + ((j > 4) ? (j - 4.0) * 0.80 / 7.0 : j * 0.80 / 7.0)));
+	  _resources[i]->setPos(glm::vec3(posx + inter, 0.10,
+					  posy + ((j > 2) ? (j - 3.0) * 1.0 / 3.0
+						  : j * 1.0 / 3.0)));
 	  _resources[i]->draw(_shader, _clock);
 	}
       ++j;
+      if (j > 2 && inter == 0)
+	inter += 0.5;
     }
 }
 

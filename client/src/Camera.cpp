@@ -67,4 +67,8 @@ void	Camera::update(Input in, gdl::Clock clock)
     translate(glm::vec3(1.0, 0.0, 0.0) * static_cast<float>(5 * clock.getElapsed()));
   if (in.isPressed(SDLK_a))
     translate(glm::vec3(-1.0, 0.0, 0.0) * static_cast<float>(5 * clock.getElapsed()));
+  if (in.isPressed(SDLK_SPACE))
+    translate(glm::vec3(0.0, 1.0, 0.0) * static_cast<float>(5 * clock.getElapsed()));
+  if (in.isPressed(SDLK_c))
+    translate(glm::vec3(0.0, -1.0, 0.0) * static_cast<float>(5 * clock.getElapsed()));
 }

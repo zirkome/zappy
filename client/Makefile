@@ -5,7 +5,7 @@
 ## Login   <fritsc_h@epitech.net>
 ##
 ## Started on  Sun May  4 15:17:27 2014 Harold Fritsch
-## Last update Mon Jul  7 22:07:06 2014 Adrien Della Maggiora
+## Last update Tue Jul  8 14:23:59 2014 Adrien Della Maggiora
 ##
 
 CC 		=	g++
@@ -44,7 +44,8 @@ SRC 		=	main.cpp \
 			InputWidget.cpp \
 			ConnectWidget.cpp \
 			Light.cpp \
-			Sound.cpp
+			Sound.cpp \
+			Line.cpp
 
 OBJ		=	$(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 

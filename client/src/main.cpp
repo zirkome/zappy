@@ -1,4 +1,5 @@
 #include <iostream>
+#include <signal.h>
 #include <libsocket.h>
 #include "Menu.hpp"
 
@@ -13,6 +14,7 @@ int	main()
     {
       Menu		menu;
 
+      signal(SIGPIPE, SIG_IGN);
       menu.initialize();
       while (menu.update() != false)
 	menu.draw();

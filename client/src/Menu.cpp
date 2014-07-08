@@ -21,6 +21,8 @@ Menu::Menu()
 
 Menu::~Menu()
 {
+  if (_gameEngine != NULL)
+    delete _gameEngine;
   freePanel(_mainPanel);
 }
 
