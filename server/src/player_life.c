@@ -5,11 +5,12 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jul  4 00:30:30 2014 luc sinet
-** Last update Fri Jul  4 14:12:52 2014 luc sinet
+** Last update Tue Jul  8 13:17:16 2014 guillaume fillon
 */
 
 #include "scheduler.h"
 #include "server.h"
+#include "gui.h"
 
 void	init_client_foodjob(t_server *server, t_client *client, time_t now)
 {
@@ -49,6 +50,7 @@ void	update_living_state(t_server *server, t_client *client,
 	{
 	  if (type == IA)
 	    {
+	      gui_events_handling(server, client, NULL, &gui_player_dead);
 	      queue_push(&client->queue, "mort\n");
 	      disconnect_user(NULL, client);
 	    }

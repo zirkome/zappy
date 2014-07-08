@@ -5,10 +5,18 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Fri Jul  4 16:00:59 2014 guillaume fillon
-** Last update Fri Jul  4 16:02:49 2014 guillaume fillon
+** Last update Tue Jul  8 13:17:27 2014 guillaume fillon
 */
 
 #include "server.h"
 #include "gui.h"
 
-int	gui_player_dead(t_server *, t_client *, t_client *, t_gui_arg *);
+int	gui_player_dead(UNUSED t_server *server, t_client *graphic,
+			t_client *client, UNUSED t_gui_arg *arg)
+{
+  t_player	*pl;
+
+  pl = client->player;
+  queue_push_message(&graphic->queue, "pdi %d\n", pl->id);
+  return (0);
+}
