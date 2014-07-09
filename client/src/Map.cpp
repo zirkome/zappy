@@ -21,7 +21,7 @@ Map::~Map()
     }
 }
 
-void Map::createMap(int x, int y)
+void Map::createMap(const int x, const int y)
 {
   if (_map != NULL)
     delete _map;
@@ -41,7 +41,7 @@ void Map::createMap(int x, int y)
   _y = y;
 }
 
-unsigned char &Map::operator[](int coord) const
+unsigned char &Map::operator[](const int coord) const
 {
   if (_map != NULL && coord >= 0 && coord <= _x * _y)
     return (_map[coord]);
@@ -93,7 +93,7 @@ void Map::addPlayer(t_player *player)
     _player.push_back(player);
 }
 
-void Map::updatePlayerPos(int nb, int x, int y, int orient)
+void Map::updatePlayerPos(const int nb, const int x, const int y, const int orient)
 {
   if ((x < 0 || x > _x) || (y < 0 || y > _y)
       || (orient < NORTH || orient > WEST))
@@ -109,7 +109,7 @@ void Map::updatePlayerPos(int nb, int x, int y, int orient)
 }
 
 
-void Map::updatePlayerLvl(int nb, int lvl)
+void Map::updatePlayerLvl(const int nb, const int lvl)
 {
   if (lvl < 0 || lvl > 8)
     return ;
@@ -121,7 +121,7 @@ void Map::updatePlayerLvl(int nb, int lvl)
       }
 }
 
-void Map::updatePlayerAction(int nb, Action act)
+void Map::updatePlayerAction(const int nb, const Action act)
 {
   for (std::list<t_player *>::iterator it = _player.begin();it != _player.end();++it)
     if ((*it)->nb == nb)
@@ -131,7 +131,7 @@ void Map::updatePlayerAction(int nb, Action act)
       }
 }
 
-void Map::updatePlayerInventory(int nb, int inventory[])
+void Map::updatePlayerInventory(const int nb, const int inventory[])
 {
   for (std::list<t_player *>::iterator it = _player.begin();it != _player.end();++it)
     if ((*it)->nb == nb)
@@ -142,7 +142,7 @@ void Map::updatePlayerInventory(int nb, int inventory[])
       }
 }
 
-void Map::deletePlayer(int nb)
+void Map::deletePlayer(const int nb)
 {
   for (std::list<t_player *>::iterator it = _player.begin(); it != _player.end();++it)
     if ((*it)->nb == nb)
@@ -170,7 +170,7 @@ void Map::updateStateEgg(int nb, State state)
       }
 }
 
-void Map::deleteEgg(int nb)
+void Map::deleteEgg(const int nb)
 {
   for (std::list<t_egg *>::iterator it = _egg.begin(); it != _egg.end();++it)
     if ((*it)->nb == nb)
@@ -192,4 +192,48 @@ void Map::display() const
 	}
       std::cout << std::endl;
     }
+}
+
+void Map::addBroadcast(const int nb)
+{
+  glm::vec2 pos;
+  std::list<t_player *>::const_iterator it;
+
+  for (it = _player.begin();it != _player.end() && (*it)->nb != nb;it++);
+  if (it == _player.end())
+    return ;
+  pos.x = (*it)->x;
+  pos.y = (*it)->y;
+  for (it = _player.begin();it != _player.end();it++)
+    {
+      if ((*it)->x != pos.x && (*it)->y != pos.y)
+	_broadcast.push_back(new t_broadcast(pos.x, pos.y, (*it)->x, (*it)->y));
+    }
+}
+
+void Map::updateBroadcast()
+{
+  std::list<t_broadcast *>::iterator end = _broadcast.end();
+
+  for (std::list<t_broadcast *>::iterator it = _broadcast.begin();it != end;)
+    {
+      --((*it)->timeout);
+      if ((*it)->timeout == 0)
+	{
+	  it = _broadcast.erase(it);
+	  end = _broadcast.end();
+	}
+      else
+	++it;
+    }
+}
+
+std::list<t_broadcast *>::const_iterator Map::getBroadcastBegin() const
+{
+  return (_broadcast.begin());
+}
+
+std::list<t_broadcast *>::const_iterator Map::getBroadcastEnd() const
+{
+  return (_broadcast.end());
 }

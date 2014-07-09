@@ -216,8 +216,15 @@ bool	Menu::launchGame()
 	  std::cout << "Cannot connect to the server" << std::endl;
 	  return (false);
 	}
-      while (_gameEngine->update())
-	_gameEngine->draw();
+      try
+	{
+	  while (_gameEngine->update())
+	    _gameEngine->draw();
+	}
+      catch(Exception &e)
+	{
+	  std::cout << e.what() << std::endl;
+	}
       _gNetwork.close();
       return (true);
   //   }

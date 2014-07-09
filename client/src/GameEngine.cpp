@@ -87,15 +87,18 @@ void GameEngine::draw()
       std::list<t_egg *>::const_iterator endEgg = _display.map.getEggEnd();
       for (std::list<t_egg *>::const_iterator it = _display.map.getEggBegin();it != endEgg;++it)
 	{
-	  _egg.setPos(glm::vec3((*it)->x, 0.0, (*it)->y));
+	  _egg.setPos(glm::vec3((*it)->x + 0.5, 0.0, (*it)->y + 0.5));
 	  _egg.draw(_shader, _clock);
 	}
       std::list<t_player *>::const_iterator endPlayer = _display.map.getPlayerEnd();
       for (std::list<t_player *>::const_iterator it = _display.map.getPlayerBegin();it != endPlayer;++it)
 	{
-	  _player.setPos(glm::vec3((*it)->x, 0.0, (*it)->y));
+	  _player.setPos(glm::vec3((*it)->x + 0.5, 0.0, (*it)->y + 0.5));
+	  _player.setRotation(glm::vec3(0.0, 90 - 90 * (*it)->orient, 0.0));
 	  _player.draw(_shader, _clock);
 	}
+      for (std::list<t_broadcast *>::const_iterator it = _display.map.getBroadcastBegin();it != _display.map.getBroadcastEnd();it++)
+	(*it)->line.draw(_shader, _clock);
       glDisable(GL_CULL_FACE);
     }
   else
@@ -157,6 +160,7 @@ bool GameEngine::update()
   _socket->update(_display);
   _input->getInput();
   _cam.update(*_input, _clock);
+  _display.map.updateBroadcast();
   if (_input->isPressed(SDLK_ESCAPE) || ((*_input)[win] && win.event == WIN_QUIT))
     return (false);
   if (_input->isPressed(SDLK_EQUALS))

@@ -1,3 +1,4 @@
+#include <OpenGL.hh>
 #include "Line.hpp"
 
 Line::Line(float x1, float y1, float x2, float y2)
@@ -23,8 +24,8 @@ bool Line::initialize()
   _geometry->pushVertex(glm::vec3(_pos1.x, 1.0, _pos1.y));
   _geometry->pushVertex(glm::vec3(_pos2.x, 1.0, _pos2.y));
 
-  _geometry->setColor(glm::vec4(1.0, 1.0, 1.0, 1.0));
-  _geometry->setColor(glm::vec4(1.0, 1.0, 1.0, 1.0));
+  _geometry->setColor(glm::vec4(0.0, 0.0, 1.0, 1.0));
+  _geometry->setColor(glm::vec4(0.0, 0.0, 1.0, 1.0));
 
   _geometry->build();
   return (true);
@@ -36,8 +37,16 @@ void Line::draw(gdl::AShader &shader, gdl::Clock const &) const
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  if (_geometry)
-    _geometry->draw(shader, getTransformation(), GL_TRIANGLES);
+
+  std::cout << "DRAW" << std::endl;
+  glLineWidth(10);
+  glBegin(GL_LINES);
+  glVertex3f(_pos1.x, _pos1.y, 1.0);
+  glVertex3f(_pos2.x, _pos2.y, 1.0);
+  glEnd();
+
+  // if (_geometry)
+  //   _geometry->draw(shader, glm::mat4(1), GL_LINES);
 }
 
 IObject *Line::clone() const

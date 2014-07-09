@@ -182,7 +182,13 @@ void Protocol::pex(const std::string &cmd, std::string &, t_display &info)
 
 void Protocol::pbc(const std::string &cmd, std::string &, t_display &info)
 {
-  /* BROADCAST */
+  std::stringstream ss(cmd);
+  std::string tmp;
+  int nb;
+
+  if (!(ss >> tmp >> nb))
+    return ;
+  info.map.addBroadcast(nb);
 }
 
 void Protocol::pic(const std::string &cmd, std::string &, t_display &info)
@@ -231,10 +237,10 @@ void Protocol::pgt(const std::string &cmd, std::string &, t_display &info)
 void Protocol::pdi(const std::string &cmd, std::string &, t_display &info)
 {
   std::stringstream ss(cmd);
-  int nb, type;
+  int nb;
   std::string team;
 
-  if (!(ss >> team >> nb >> type))
+  if (!(ss >> team >> nb))
     return ;
   info.map.deletePlayer(nb);
 }
@@ -262,10 +268,10 @@ void Protocol::eht(const std::string &cmd, std::string &, t_display &info)
 void Protocol::ebo(const std::string &cmd, std::string &, t_display &info)
 {
   std::stringstream ss(cmd);
-  int nb, type;
+  int nb;
   std::string team;
 
-  if (!(ss >> team >> nb >> type))
+  if (!(ss >> team >> nb))
     return ;
   info.map.deleteEgg(nb);
 }
@@ -273,11 +279,10 @@ void Protocol::ebo(const std::string &cmd, std::string &, t_display &info)
 void Protocol::edi(const std::string &cmd, std::string &, t_display &info)
 {
   std::stringstream ss(cmd);
-  int nb, type;
+  int nb;
   std::string team;
 
-  if ((nb = getNb(cmd)) == -1
-      || !(ss >> team >> team >> type))
+  if (!(ss >> team >> nb))
     return ;
   info.map.deleteEgg(nb);
 }

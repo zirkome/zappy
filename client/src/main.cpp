@@ -1,6 +1,7 @@
 #include <iostream>
 #include <signal.h>
 #include <libsocket.h>
+#include "Exception.hpp"
 #include "Menu.hpp"
 
 void	usage(const char *name)
