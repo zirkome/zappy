@@ -10,7 +10,7 @@ Sound::Sound()
 	throw (Exception("Mix_OpenAudio()"));
       Mix_AllocateChannels(128);
       // _musicBox["intro"] = Mix_LoadMUS("./assets/sounds/intro.ogg");
-      _musicBox["menu"] = Mix_LoadMUS("./assets/sounds/menu.ogg");
+      //      _musicBox["menu"] = Mix_LoadMUS("./assets/sounds/menu.ogg");
       // _musicBox["game"] = Mix_LoadMUS("./assets/sounds/game.ogg");
       // _soundBox["box"] = Mix_LoadWAV("./assets/sounds/chest.wav");
       // _soundBox["creeper"] = Mix_LoadWAV("./assets/sounds/creeper.wav");

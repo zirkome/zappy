@@ -17,6 +17,7 @@
 # include "Model.hpp"
 # include "Settings.hpp"
 # include "Light.hpp"
+# include "Console.hpp"
 
 # define CHANGETIME 1
 
@@ -65,6 +66,7 @@ private:
   Input				*_input;
   gdl::Clock			_clock;
   gdl::BasicShader	        _shader;
+  Console			_console;
   gdl::BasicShader	        _textShader;
   Cube				_ground;
   Square			_loading;

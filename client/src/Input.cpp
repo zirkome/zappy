@@ -29,6 +29,11 @@ Input::~Input()
 ** What we care off is just the key pressed
 */
 
+/*
+** Seems im obliged to stock the transformation bacause of the links
+**
+*/
+
 Keycode		Input::toAscii(Keycode key) const
 {
   if (key >= SDLK_KP_1 && key <= SDLK_KP_0)
@@ -56,28 +61,40 @@ void	Input::pressKey(const SDL_Event &event)
 	    _key = it->second;
 	}
     }
+  if (_key == SDLK_KP_PERIOD)
+    _key = '.';
   if ((it = std::find(_keyPressed.begin(), _keyPressed.end(), _key)) == _keyPressed.end())
     _keyPressed.push_back(_key);
 }
 
+/*
+** Here i need to cehck twice because of the transformations
+*/
+
 void	Input::unpressKey()
 {
   Scopelock	<Mutex>sc(_mutex);
+  bool		size = true;
   l_Keyit	it;
   Keycode      	key;
 
   key = _key;
+  if (key == SDLK_KP_PERIOD)
+    key = '.';
   if ((it = std::find(_keyPressed.begin(), _keyPressed.end(), key)) != _keyPressed.end())
     _keyPressed.erase(it);
-  else if (key < 128 && isalpha(key))
+  if (key < 128 && isalpha(key))
+    key -= (size * 32);
+  else
     {
-      if (key >= 'A' && key <= 'Z')
-	key += 32;
-      else if (key >= 'a' && key <= 'z')
-	key -= 32;
-      if ((it = std::find(_keyPressed.begin(), _keyPressed.end(), key)) != _keyPressed.end())
-	_keyPressed.erase(it);
+      m_Linkcit it;
+
+      if ((it = _links.find(key)) != _links.end())
+	key = it->second;
+      key = key;
     }
+  if ((it = std::find(_keyPressed.begin(), _keyPressed.end(), key)) != _keyPressed.end())
+    _keyPressed.erase(it);
 }
 
 void	Input::keyboardInput(const SDL_Event &event)
