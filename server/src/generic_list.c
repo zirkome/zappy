@@ -5,12 +5,11 @@
 ** Login   <fillon_g@epitech.net>
 **
 ** Started on  Thu Jan  9 14:22:00 2014 guillaume fillon
-** Last update Wed Jul  9 15:36:02 2014 guillaume fillon
+** Last update Wed Jul  9 16:16:12 2014 luc sinet
 */
 
 #include <stdlib.h>
 #include <stdio.h>
-
 #include "generic_list.h"
 
 unsigned int	list_get_size(t_list list)
