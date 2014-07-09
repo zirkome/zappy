@@ -58,7 +58,7 @@ public:
   virtual void draw();
 
 private:
-  void displayItem(const char flag, int x, int y);
+  void displayItem(const unsigned int *flag, int x, int y);
 
   GNetwork			*_socket;
   gdl::SdlContext		*_win;

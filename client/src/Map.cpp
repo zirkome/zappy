@@ -8,7 +8,11 @@ Map::Map(): _map(NULL), _x(0), _y(0)
 Map::~Map()
 {
   if (_map != NULL)
-    delete _map;
+    {
+      for (int i = 0;i < _x * _y;++i)
+	delete _map[i];
+      delete _map;
+    }
   while (!_egg.empty())
     {
       delete _egg.front();
@@ -24,9 +28,17 @@ Map::~Map()
 void Map::createMap(const int x, const int y)
 {
   if (_map != NULL)
-    delete _map;
-  _map = new unsigned char[x * y];
-  std::memset(_map, 0, x * y * sizeof(char));
+    {
+      for (int i = 0;i < x * y;++i)
+	delete _map[i];
+      delete _map;
+    }
+  _map = new unsigned int* [x * y];
+  for (int i = 0;i < x * y;++i)
+    {
+      _map[i] = new unsigned int [LASTRESSOURCES];
+      std::memset(_map[i], 0, LASTRESSOURCES * sizeof(unsigned int));
+    }
   while (!_egg.empty())
     {
       delete _egg.front();
@@ -41,7 +53,7 @@ void Map::createMap(const int x, const int y)
   _y = y;
 }
 
-unsigned char &Map::operator[](const int coord) const
+unsigned int *Map::operator[](const int coord) const
 {
   if (_map != NULL && coord >= 0 && coord <= _x * _y)
     return (_map[coord]);
@@ -136,7 +148,7 @@ void Map::updatePlayerInventory(const int nb, const int inventory[])
   for (std::list<t_player *>::iterator it = _player.begin();it != _player.end();++it)
     if ((*it)->nb == nb)
       {
-	for (int i = 0;i < 7;++i)
+	for (int i = 0;i < LASTRESSOURCES;++i)
 	  (*it)->inventory[i] = inventory[i];
 	return ;
       }
@@ -178,20 +190,6 @@ void Map::deleteEgg(const int nb)
 	_egg.erase(it);
 	return ;
       }
-}
-
-void Map::display() const
-{
-  if (!_map)
-    return ;
-  for (int x = 0;x < _x;++x)
-    {
-      for (int y = 0;y < _y;++y)
-	{
-	  std::cout << static_cast<int>(_map[x * _y + y]) << "\t";
-	}
-      std::cout << std::endl;
-    }
 }
 
 void Map::addBroadcast(const int nb)

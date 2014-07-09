@@ -24,7 +24,7 @@ public:
   virtual ~Map();
 
   void createMap(const int, const int);
-  unsigned char &operator[](const int) const;
+  unsigned int *operator[](const int) const;
   void addPlayer(t_player *player);
   void updatePlayerPos(const int nb, const int x, const int y, const int orient);
   void updatePlayerLvl(const int nb, const int lvl);
@@ -36,7 +36,6 @@ public:
   void deleteEgg(const int nb);
   void addBroadcast(const int nb);
   void updateBroadcast();
-  void display() const;
 
   int getSize() const;
   int getX() const;
@@ -52,7 +51,7 @@ public:
   std::list<t_broadcast *>::const_iterator getBroadcastEnd() const;
 
 private:
-  unsigned char *_map;
+  unsigned int **_map;
   std::list<t_player *> _player;
   std::list<t_egg *> _egg;
   std::list<t_broadcast *>  _broadcast;

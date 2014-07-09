@@ -96,19 +96,17 @@ void Protocol::bct(const std::string &cmd, std::string &, t_display &info)
   std::stringstream ss(cmd);
   std::string tmp;
   int x, y;
-  int q[7];
+  int q[LASTRESSOURCES];
 
   try
     {
       if (!(ss >> tmp >> x >> y))
 	return ;
-      for (int i = 0;i < 7;++i)
+      for (int i = FOOD;i < LASTRESSOURCES;++i)
 	if (!(ss >> q[i]))
 	  return ;
-      info.map[x * info.map.getY() + y] = 0;
-      for (int i = 1, j = 0;i <= 64;i = i << 1, j++)
-	if (q[j] > 0)
-	  info.map[x * info.map.getY() + y] |= i;
+      for (int i = FOOD;i < LASTRESSOURCES;++i)
+	(info.map[x * info.map.getY() + y])[i] = q[i];
     }
   catch (Exception &e)
     {
@@ -165,12 +163,12 @@ void Protocol::pin(const std::string &cmd, std::string &, t_display &info)
   std::stringstream ss(cmd);
   std::string tmp;
   int nb, x, y;
-  int q[7];
+  int q[LASTRESSOURCES];
 
   if (!(ss >> tmp >> nb >> x >> y))
     return ;
-  for (int i = 0;i < 7;++i)
-    if (!(ss >> q[7]))
+  for (int i = FOOD;i < LASTRESSOURCES;++i)
+    if (!(ss >> q[LASTRESSOURCES]))
       return ;
   info.map.updatePlayerInventory(nb, q);
 }
