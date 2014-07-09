@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Wed Jul  9 14:16:57 2014 guillaume fillon
+** Last update Wed Jul  9 18:56:41 2014 guillaume fillon
 */
 
 #include <err.h>
@@ -52,7 +52,7 @@ static void		update_fds_to_epoll(t_server *server)
 	  free(client);
 	  continue ;
 	}
-      else if (client->type == EGG)
+      else if (client->type == EGG || client->type == EGG_HATCHING)
 	{
 	  tmp = tmp->next;
 	  continue ;

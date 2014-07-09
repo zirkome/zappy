@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Wed Jul  9 15:13:07 2014 guillaume fillon
+** Last update Wed Jul  9 18:17:03 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
@@ -61,6 +61,7 @@ typedef enum	e_client_type
     GRAPHIC,
     IA,
     EGG,
+    EGG_HATCHING,
     UNKNOWN
   }		t_client_type;
 
@@ -233,6 +234,7 @@ int		authenticate_user(t_server *server, t_client *cl, char *input);
 /*
 ** Player commands
 */
+int		pl_fork_start(t_server *server, t_client *client, char *arg);
 int		pl_forward(t_server *server, t_client *client, char *arg);
 int		pl_right(t_server *server, t_client *client, char *arg);
 int		pl_left(t_server *server, t_client *client, char *arg);

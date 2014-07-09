@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Tue Jul  8 16:45:59 2014 luc sinet
+** Last update Wed Jul  9 19:02:08 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -24,7 +24,7 @@ static	t_command	g_command[] =
   {"expulse", false, none, &pl_expulse, 7},
   {"broadcast", true, string, &pl_broadcast, 7},
   {"incantation", false, none, &pl_incantation, 300},
-  {"fork", false, none, &pl_lay_egg, 42},
+  {"fork", false, none, &pl_fork_start, 0},
   {"connect_nbr", false, none, &pl_connect_nbr, 0},
   {"msz", false, none, &gui_msz, 0},
   {"bct", true, string, &gui_bct, 0},
@@ -107,9 +107,7 @@ int		process_input(t_server *server, t_client *cl, char *input)
     return (authenticate_user(server, cl, input));
   printf("Got input: %s %d\n", input, parse_input(input, arg));
   if ((idx = parse_input(input, arg)) < 0 ||
-      (idx == INCANTATION && prepare_incantation(server, cl) == -1) ||
-      (idx == FORK && gui_events_handling(server, cl, NULL,
-					  &gui_fork_start) == -1))
+      (idx == INCANTATION && prepare_incantation(server, cl) == -1))
     return (-1);
   task.client = cl;
   task.at = g_command[idx].delay / server->world.delay;
