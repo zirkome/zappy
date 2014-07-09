@@ -4,7 +4,7 @@
 GameEngine::GameEngine(GNetwork *socket, gdl::SdlContext *win,
 		       Settings *set, Input *input)
   : _socket(socket), _win(win), _set(set), _input(input), _ground(GROUND_TEXTURE),
-    _loading(LOADING_TEXTURE), _resources(64, NULL), _cam(*_set)
+    _loading(LOADING_TEXTURE), _resources(65, NULL), _cam(*_set)
 {
   _display.loading = true;
 }
@@ -80,7 +80,7 @@ void GameEngine::draw()
       _ground.setPos(glm::vec3(_display.map.getX() / 2.0, -0.5,
 				  _display.map.getY() / 2.0));
       _ground.setScale(glm::vec3(_display.map.getX(), 1.0, _display.map.getY()));
-      _ground.draw(_shader, _clock);
+      // _ground.draw(_shader, _clock);
       for (int x = 0;x < _display.map.getX();++x)
 	for (int y = 0;y < _display.map.getY();++y)
 	  displayItem(_display.map[x * _display.map.getY() + y], x, y);

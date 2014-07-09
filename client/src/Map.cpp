@@ -205,10 +205,17 @@ void Map::addBroadcast(const int nb)
   pos.x = (*it)->x;
   pos.y = (*it)->y;
   for (it = _player.begin();it != _player.end();it++)
-    {
-      if ((*it)->x != pos.x && (*it)->y != pos.y)
-	_broadcast.push_back(new t_broadcast(pos.x, pos.y, (*it)->x, (*it)->y));
-    }
+    if ((*it)->x != pos.x && (*it)->y != pos.y)
+      {
+	t_broadcast *tmp = new t_broadcast(pos.x, pos.y, (*it)->x, (*it)->y);
+
+	if (!tmp->line.initialize())
+	  {
+	    delete tmp;
+	    return ;
+	  }
+	_broadcast.push_back(tmp);
+      }
 }
 
 void Map::updateBroadcast()
@@ -219,10 +226,10 @@ void Map::updateBroadcast()
     {
       --((*it)->timeout);
       if ((*it)->timeout == 0)
-	{
-	  it = _broadcast.erase(it);
-	  end = _broadcast.end();
-	}
+      	{
+      	  it = _broadcast.erase(it);
+      	  end = _broadcast.end();
+      	}
       else
 	++it;
     }
