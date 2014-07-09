@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr 20 08:36:48 2014 luc sinet
-** Last update Tue Jul  8 00:19:16 2014 luc sinet
+** Last update Wed Jul  9 10:27:48 2014 luc sinet
 */
 
 #include "server.h"
@@ -20,7 +20,7 @@ int		user_read(t_server *server, t_client *cl)
 
   tmp = aligned;
   if ((retv = read(cl->fd, buf, RSIZE)) <= 0)
-    return (kick_user(&server->cl, cl, &server->world));
+    return (disconnect_user(server, cl));
   fill_ringbuffer(cl->rb, buf, retv);
   if ((tmp = get_buff(cl->rb)) == NULL)
     return (-1);
@@ -41,14 +41,7 @@ int		user_read(t_server *server, t_client *cl)
 
 int	read_state(t_server *server, t_client *client)
 {
-  int	ret;
-
-  ret = user_read(server, client);
-  if (ret == DISCONNECTED)
-    {
-      free(client);
-      return (-1);
-    }
+  user_read(server, client);
   return (0);
 }
 
@@ -63,7 +56,7 @@ int		user_write(t_server *server, t_client *cl)
   if ((wsize = write(cl->fd, msg, msglen)) <= 0)
     {
       perror("");
-      return (kick_user(&server->cl, cl, &server->world));
+      return (disconnect_user(server, cl));
     }
   if (wsize < msglen)
     shift_msg(msg, wsize);
@@ -74,15 +67,8 @@ int		user_write(t_server *server, t_client *cl)
 
 int	write_state(t_server *server, t_client *client)
 {
-  int	ret;
-
   if (queue_empty(client->queue))
     return (-1);
-  ret = user_write(server, client);
-  if (ret == DISCONNECTED)
-    {
-      free(client);
-      return (-1);
-    }
+  user_write(server, client);
   return (0);
 }

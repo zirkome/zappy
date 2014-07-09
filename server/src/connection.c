@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Tue Jul  8 16:32:53 2014 luc sinet
+** Last update Wed Jul  9 11:03:08 2014 luc sinet
 */
 
 #include "server.h"
@@ -72,8 +72,29 @@ int		kick_user(t_list *list, t_client *cl, t_world *world)
   return (2);
 }
 
-int	disconnect_user(UNUSED t_server *server, t_client *cl)
+void		remove_associated_jobs(t_list *jobs, t_client *client)
 {
-  cl->ghost = true;
-  return (0);
+  t_node	*node;
+  t_job		*job;
+
+  node = *jobs;
+  while (node != NULL)
+    {
+      job = (t_job *)node->value;
+      if (job->client == client)
+	{
+	  node = node->next;
+	  list_del_node(jobs, job);
+	}
+      else
+	node = node->next;
+    }
+}
+
+int	disconnect_user(t_server *server, t_client *client)
+{
+  if (server != NULL)
+    remove_associated_jobs(&server->jobs, client);
+  client->ghost = true;
+  return (2);
 }
