@@ -3,8 +3,10 @@
 
 GameEngine::GameEngine(GNetwork *socket, gdl::SdlContext *win,
 		       Settings *set, Input *input)
-  : _socket(socket), _win(win), _set(set), _input(input), _ground(GROUND_TEXTURE),
-    _loading(LOADING_TEXTURE), _resources(64, NULL), _cam(*_set)
+  : _socket(socket), _win(win), _set(set), _input(input),
+    _console(*set, *input, _clock, _shader),
+    _ground(GROUND_TEXTURE), _loading(LOADING_TEXTURE),
+    _resources(65, NULL), _cam(*_set)
 {
   _display.loading = true;
 }
@@ -172,6 +174,13 @@ bool GameEngine::update()
     {
       _socket->changeTime(_display.time - CHANGETIME);
       _display.time -= CHANGETIME;
+    }
+  if (_input->isPressed(SDLK_F1))
+    {
+      glDisable(GL_DEPTH_TEST);
+      _console.aff(*_win, _set->getVar(W_WIDTH),
+		    _set->getVar(W_HEIGHT));
+      glEnable(GL_DEPTH_TEST);
     }
   if ((time = _clock.getElapsed()) < fps)
     usleep((fps - time) * 1000);
