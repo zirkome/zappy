@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Wed Jul  9 18:17:03 2014 guillaume fillon
+** Last update Wed Jul  9 23:55:25 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
@@ -77,6 +77,7 @@ typedef struct	s_team
 {
   char		*name;
   int		slots;
+  char		nb_of_level_max;
 }		t_team;
 
 typedef struct	s_job	t_job;
@@ -201,6 +202,7 @@ void		update_living_state(t_server *server, t_client *client,
 */
 t_client	*client_new(int fd);
 void		erase_client(t_world *world, t_client *cl);
+void		player_level_up(t_server *server, t_player *player);
 
 int		process_input(t_server *server, t_client *cl, char *input);
 t_bool		check_argument_type(char *arg, t_command *cmd);
