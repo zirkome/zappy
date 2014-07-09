@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sat May  3 14:58:51 2014 luc sinet
-** Last update Sat May  3 15:35:08 2014 luc sinet
+** Last update Mon Jun 30 11:23:48 2014 luc sinet
 */
 
 #include <stdlib.h>
@@ -44,4 +44,21 @@ int	queue_size(t_queue *queue)
       ++size;
     }
   return (size);
+}
+
+int		queue_append_back(t_queue **queue, char *msg)
+{
+  t_queue	*back;
+  int		old_len;
+
+  if (!queue)
+    return (queue_push(queue, msg));
+  for (back = *queue; back->next != NULL; back = back->next);
+  old_len = (back->msg == NULL ? 0 : strlen(back->msg));
+  if ((back->msg = realloc(back->msg, old_len + strlen(msg) + 1)) == NULL)
+    return (-1);
+  if (old_len == 0)
+    back->msg[0] = '\0';
+  strcat(back->msg, msg);
+  return (0);
 }

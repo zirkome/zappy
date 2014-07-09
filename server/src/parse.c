@@ -5,44 +5,45 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Tue Jun 24 14:03:03 2014 guillaume fillon
+** Last update Tue Jul  8 16:45:59 2014 luc sinet
 */
 
 #include "server.h"
+#include "scheduler.h"
+#include "gui.h"
 
 static	t_command	g_command[] =
 {
-  /* {"GRAPHIC", false, none, &client_set_type} */
-  {"avance", false, none,  &pl_forward},
-  {"droite", false, none, &pl_right},
-  {"gauche", false, none, &pl_left},
-  {"voir", false, none, &pl_see},
-  {"inventaire", false, none, &pl_inventory},
-  {"prend", true, string, &pl_take},
-  {"pose", true, string, &pl_put},
-  {"expulse", false, none, &pl_expulse},
-  {"broadcast", true, string, &pl_broadcast},
-  {"incantation", false, none, &pl_incantation},
-  {"fork", false, none, &pl_fork},
-  {"connect_nbr", false, none, &pl_connect_nbr},
-  {"msz", false, none, &gui_msz},
-  {"bct", true, string, &gui_bct},
-  {"mct", false, none, &gui_mct},
-  {"tna", false, none, &gui_tna},
-  {"ppo", true, number, &gui_ppo},
-  {"plv", true, number, &gui_plv},
-  {"pin", true, number, &gui_pin},
-  {"sgt", false, none, &gui_sgt},
-  {"sst", true, number, &gui_sst},
-  {NULL, false, none, NULL}
+  {"avance", false, none,  &pl_forward, 7},
+  {"droite", false, none, &pl_right, 7},
+  {"gauche", false, none, &pl_left, 7},
+  {"voir", false, none, &pl_see, 7},
+  {"inventaire", false, none, &pl_inventory, 7},
+  {"prend", true, string, &pl_take, 7},
+  {"pose", true, string, &pl_put, 7},
+  {"expulse", false, none, &pl_expulse, 7},
+  {"broadcast", true, string, &pl_broadcast, 7},
+  {"incantation", false, none, &pl_incantation, 300},
+  {"fork", false, none, &pl_lay_egg, 42},
+  {"connect_nbr", false, none, &pl_connect_nbr, 0},
+  {"msz", false, none, &gui_msz, 0},
+  {"bct", true, string, &gui_bct, 0},
+  {"mct", false, none, &gui_mct, 0},
+  {"tna", false, none, &gui_tna, 0},
+  {"ppo", true, number, &gui_ppo, 0},
+  {"plv", true, number, &gui_plv, 0},
+  {"pin", true, number, &gui_pin, 0},
+  {"sgt", false, none, &gui_sgt, 0},
+  {"sst", true, number, &gui_sst, 0},
+  {NULL, false, none, NULL, 0}
 };
 
-t_bool	get_command(char *line, char *command)
+static t_bool	get_command(char *line, char *command)
 {
-  int	i;
+  int		i;
 
   i = 0;
-  while (line[i] && line[i] != ' ' && i < CMDLEN)
+  while (line[i] && (line[i] != ' ' && line[i] != '\t') && i < CMDLEN)
     {
       command[i] = line[i];
       ++i;
@@ -53,10 +54,10 @@ t_bool	get_command(char *line, char *command)
   return (true);
 }
 
-int	get_argument(char *line, char *arg, t_bool need_arg)
+static int	get_argument(char *line, char *arg, t_bool need_arg)
 {
-  int	i;
-  int	j;
+  int		i;
+  int		j;
 
   i = 0;
   j = 0;
@@ -73,37 +74,47 @@ int	get_argument(char *line, char *arg, t_bool need_arg)
   return (true);
 }
 
-int	parse_input(char *line, char *arg)
+static int	parse_input(char *line, char *arg)
 {
-  char	command[CMDLEN];
-  int	i;
+  char		command[CMDLEN];
+  int		i;
 
   i = 0;
   if (get_command(line, command) == false)
-    return (-1);
+    return (UNKNOWN_CMD);
   while (g_command[i].name && strcmp(g_command[i].name, command) != 0)
     ++i;
-  if (g_command[i].name == NULL ||
-      get_argument(&line[strlen(command)], arg, g_command[i].arg) == false ||
-      check_argument_type(arg, g_command, i) == false)
-    return (-1);
+  if (g_command[i].name == NULL)
+    return (UNKNOWN_CMD);
+  if (get_argument(&line[strlen(command)], arg, g_command[i].arg) == false ||
+      check_argument_type(arg, &g_command[i]) == false)
+    return (BAD_PARAM);
   if (g_command[i].arg == true && i != BROADCAST)
     {
-      if (check_argument_type(arg, g_command, i) == false)
-	return (-1);
+      if (check_argument_type(arg, &g_command[i]) == false)
+	return (BAD_PARAM);
     }
   return (i);
 }
 
-int	process_input(t_server *server, t_client *cl, char *input)
+int		process_input(t_server *server, t_client *cl, char *input)
 {
-  char	arg[ARGLEN];
-  int	idx;
+  struct s_job	task;
+  char		arg[ARGLEN];
+  int		idx;
 
-  printf("Got input: %s\n", input);
-  if ((idx = parse_input(input, arg)) == -1)
+  if (cl->type == UNKNOWN)
+    return (authenticate_user(server, cl, input));
+  printf("Got input: %s %d\n", input, parse_input(input, arg));
+  if ((idx = parse_input(input, arg)) < 0 ||
+      (idx == INCANTATION && prepare_incantation(server, cl) == -1) ||
+      (idx == FORK && gui_events_handling(server, cl, NULL,
+					  &gui_fork_start) == -1))
     return (-1);
-  if (idx < MSZ)
-    g_command[idx].func(server, cl, arg);
-  return (0);
+  task.client = cl;
+  task.at = g_command[idx].delay / server->world.delay;
+  task.callback = g_command[idx].func;
+  if ((task.arg = strdup(arg)) == NULL)
+    return (iperror("process_input: strdup", -1));
+  return (scheduler_add(&cl->player->jobs, &task));
 }

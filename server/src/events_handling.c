@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Sun Apr 20 08:36:48 2014 luc sinet
-** Last update Tue Jun 24 16:15:05 2014 guillaume fillon
+** Last update Wed Jul  9 17:48:10 2014 luc sinet
 */
 
 #include "server.h"
@@ -15,32 +15,33 @@ int		user_read(t_server *server, t_client *cl)
   char		buf[RSIZE];
   char		aligned[cl->rb->size + 1];
   char		*tmp;
+  char		*save;
   ssize_t	retv;
 
   tmp = aligned;
   if ((retv = read(cl->fd, buf, RSIZE)) <= 0)
     return (disconnect_user(server, cl));
   fill_ringbuffer(cl->rb, buf, retv);
-  align_ringbuffer(cl->rb, aligned, sizeof(aligned));
-  while ((retv = get_char_pos(cl->rb, tmp, '\n')) != -1)
+  if ((tmp = get_buff(cl->rb)) == NULL)
+    return (-1);
+  save = tmp;
+  while ((retv = get_char_pos(tmp, '\n')) != -1)
     {
       tmp[retv] = '\0';
-      process_input(server, cl, tmp);
+      if (process_input(server, cl, tmp) < -1)
+	{
+	  queue_push(&cl->queue, "ko\n");
+	  return (disconnect_user(server, cl));
+	}
       tmp = &tmp[retv + 1];
     }
+  update_ringbuffer(cl->rb, save, tmp);
   return (0);
 }
 
 int	read_state(t_server *server, t_client *client)
 {
-  int	ret;
-
-  ret = user_read(server, client);
-  if (ret == DISCONNECTED)
-    {
-      free(client);
-      return (-1);
-    }
+  user_read(server, client);
   return (0);
 }
 
@@ -66,15 +67,8 @@ int		user_write(t_server *server, t_client *cl)
 
 int	write_state(t_server *server, t_client *client)
 {
-  int	ret;
-
   if (queue_empty(client->queue))
     return (-1);
-  ret = user_write(server, client);
-  if (ret == DISCONNECTED)
-    {
-      free(client);
-      return (-1);
-    }
+  user_write(server, client);
   return (0);
 }

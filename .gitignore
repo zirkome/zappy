@@ -1,6 +1,7 @@
 Thumbs.db
 .fuse_hidden*
 *~
+*#*
 *#
 #*#
 *.out
@@ -39,3 +40,6 @@ _ReSharper*/
 client/client
 server/server
 libsocket/libsocket.a
+visualiseur-fedora
+zappy-gfx-linux64
+zappy-server-linux

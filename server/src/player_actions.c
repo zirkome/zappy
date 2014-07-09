@@ -5,72 +5,108 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 13:50:31 2014 luc sinet
-** Last update Tue Jun 24 11:27:07 2014 luc sinet
+** Last update Wed Jul  9 15:24:20 2014 guillaume fillon
 */
 
 #include "server.h"
+#include "gui.h"
 
-int	get_view(t_world *world, t_player *pl, t_string *string)
+int		pl_take(t_server *server, t_client *client,
+			char *arg)
 {
-  char	*elem;
-  int	start;
-  int	i;
-  int	x;
-  int	y;
-
-  for (y = 0; y < 4 + pl->level - 1; ++y)
-    {
-      start = -y;
-      for (x = start; x < start + y * 2 + 1; ++x)
-	{
-	  for (i = 0; (elem = get_element_name(world, pl->x + x,
-					       pl->y + y, i)) != NULL; ++i)
-	    {
-	      if ((i > 0 && string_append(string, " ", ALLOC_SIZE) == NULL) ||
-		  string_append(string, elem, ALLOC_SIZE) == NULL)
-		return (iperror("get_view: malloc", -1));
-	      free(elem);
-	    }
-	  if (x + 1 < start + y * 2 + 1)
-	    if (string_append(string, ",", ALLOC_SIZE) == NULL)
-	      return (iperror("get_view: malloc", -1));
-	}
-    }
-  return (0);
-}
-
-int		pl_see(t_server *server, t_client *client,
-		       char *arg UNUSED)
-{
+  t_gui_arg	garg;
   t_player	*pl;
-  t_string	string;
+  int		elem_id;
+  int		pos;
 
   pl = client->player;
-  string_init(&string);
-  if (string_append(&string, "{", ALLOC_SIZE) == NULL)
-    return (iperror("pl_see: malloc", -1));
-  get_view(&server->world, pl, &string);
-  if (string_append(&string, "}\n", ALLOC_SIZE) == NULL)
-    return (iperror("pl_see: malloc", -1));
-  queue_push(&client->queue, string.content);
-  free(string.content);
+  pos = MAP_POS(pl->x, pl->y, server->world.width);
+  if ((elem_id = get_element_id(arg)) == -1 ||
+      elem_id >= PLAYER ||
+      string_erase(server->world.map[pos], elem_id) == -1 ||
+      add_to_inventory(pl, elem_id, 1) == -1)
+    {
+      queue_push(&client->queue, "ko\n");
+      return (-1);
+    }
+  queue_push(&client->queue, "ok\n");
+  garg.id = elem_id - 1;
+  gui_events_handling(server, client, &garg, &gui_take);
   return (0);
 }
 
-int	pl_take(t_server *server UNUSED, t_client *client UNUSED,
-		char *arg UNUSED)
+int		pl_put(t_server *server, t_client *client,
+		       char *arg)
 {
+  t_gui_arg	garg;
+  t_player	*pl;
+  int		elem_id;
+
+  pl = client->player;
+  if ((elem_id = get_element_id(arg)) == -1 ||
+      remove_from_inventory(pl, elem_id, 1) == -1 ||
+      add_to_world(&server->world, elem_id, pl->x, pl->y))
+    {
+      queue_push(&client->queue, "ko\n");
+      return (-1);
+    }
+  queue_push(&client->queue, "ok\n");
+  garg.id = elem_id - 1;
+  gui_events_handling(server, client, &garg, &gui_put);
   return (0);
 }
 
-int	pl_put(t_server *server UNUSED, t_client *client UNUSED,
-	       char *arg UNUSED)
+void		expulse_player(t_world *world, t_client *client, t_dir dir)
 {
-  return (0);
+  char		tab[32];
+  t_player	*pl;
+  int		fdir;
+  double       	oldx;
+  double	oldy;
+
+  pl = client->player;
+  oldx = pl->x + 0.5;
+  oldy = pl->y + 0.5;
+  remove_from_world(world, PLAYER, pl->x, pl->y);
+  pl->x += ((dir == WEST) ? -1 : (dir == EAST) ? 1 : 0);
+  pl->y += ((dir == SOUTH) ? 1 : (dir == NORTH) ? -1 : 0);
+  fdir = get_case_pos((double)pl->x + 0.5, (double)pl->y + 0.5, oldx, oldy);
+  if (fdir != 0)
+    {
+      fdir = (fdir + client->player->dir * 2);
+      fdir = (fdir > 8) ? (fdir - 8) : fdir;
+    }
+  apply_map_looping(&pl->x, &pl->y, world->width, world->height);
+  add_to_world(world, PLAYER, pl->x, pl->y);
+  snprintf(tab, sizeof(tab), "deplacement: %d\n", fdir);
+  queue_push(&client->queue, tab);
 }
 
-int	pl_expulse(t_server *server UNUSED, t_client *client UNUSED,
-		   char *arg UNUSED)
+int		pl_expulse(t_server *server, t_client *client,
+			   char *arg UNUSED)
 {
+  int		to_expulse;
+  t_node	*tmp;
+
+  to_expulse = count_type_on_box(&server->world, PLAYER,
+				 client->player->x, client->player->y) - 1;
+  if (to_expulse > 0)
+    {
+      for (tmp = server->cl; tmp != NULL && to_expulse > 0; tmp = tmp->next)
+	{
+	  if (((t_client*)tmp->value) != client &&
+	      ((t_client*)tmp->value)->player->x == client->player->x &&
+	      ((t_client*)tmp->value)->player->y == client->player->y)
+	    {
+	      expulse_player(&server->world,
+			     ((t_client*)tmp->value), client->player->dir);
+	      --to_expulse;
+	    }
+	}
+      gui_events_handling(server, client, NULL, &gui_expulse);
+      return (queue_push(&client->queue, "ok\n"));
+    }
+  else
+    return (queue_push(&client->queue, "ko\n"));
   return (0);
 }

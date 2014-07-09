@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 16:42:29 2014 guillaume fillon
-** Last update Tue Jun 24 11:53:45 2014 luc sinet
+** Last update Tue Jul  8 16:22:39 2014 luc sinet
 */
 
 #include <signal.h>
@@ -13,6 +13,7 @@
 #include <locale.h>
 
 #include "server.h"
+#include "scheduler.h"
 
 static int	g_sigint = 0;
 
@@ -57,11 +58,14 @@ static void	clear_server(t_server *server)
   int		map_size;
 
   map_size = server->world.height * server->world.width;
+  list_clear(&server->jobs, &free_job);
   close(server->fd);
   for (i = 0; i < map_size; ++i)
     {
+      free(server->world.map[i]->content);
       free(server->world.map[i]);
     }
+  free(server->world.teams);
   free(server->world.map);
 }
 
