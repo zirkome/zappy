@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Wed Jul  2 18:22:49 2014 luc sinet
-** Last update Tue Jul  8 15:55:52 2014 luc sinet
+** Last update Wed Jul  9 12:13:51 2014 luc sinet
 */
 
 #include "server.h"
@@ -82,6 +82,28 @@ int		prepare_incantation(t_server *server, t_client *client)
   return (0);
 }
 
+t_vector       	*second_incantation_check(t_server *server, t_client *client)
+{
+  t_gui_arg	garg;
+  t_vector	*vec;
+
+  if ((vec = check_incantation_conditions(server, client)) == NULL ||
+      (client->player->save_pos[0] != client->player->x) ||
+      (client->player->save_pos[1] != client->player->y))
+    {
+      if (vec != NULL)
+	{
+	  vector_clear(vec);
+	  free(vec);
+	}
+      queue_push(&client->queue, "ko\n");
+      garg.id = 0;
+      gui_events_handling(server, client, &garg, &gui_incantation_end);
+      return (NULL);
+    }
+  return (vec);
+}
+
 int		pl_incantation(t_server *server, t_client *client,
 			       char *arg UNUSED)
 {
@@ -92,15 +114,8 @@ int		pl_incantation(t_server *server, t_client *client,
   t_gui_arg	garg;
 
   pl = client->player;
-  if ((vec = check_incantation_conditions(server, client)) == NULL ||
-      (client->player->save_pos[0] != client->player->x) ||
-      (client->player->save_pos[1] != client->player->y))
-    {
-      queue_push(&client->queue, "ko\n");
-      garg.id = 0;
-      gui_events_handling(server, client, &garg, &gui_incantation_end);
-      return (-1);
-    }
+  if ((vec = second_incantation_check(server, client)) == NULL)
+    return (-1);
   num_player = needed_same_level(pl->level);
   pl->level += 1;
   snprintf(tab, sizeof(tab), "niveau actuel : %d\n",

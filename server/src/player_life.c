@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jul  4 00:30:30 2014 luc sinet
-** Last update Tue Jul  8 13:17:16 2014 guillaume fillon
+** Last update Wed Jul  9 12:09:27 2014 luc sinet
 */
 
 #include "scheduler.h"
@@ -25,11 +25,15 @@ void	init_client_foodjob(t_server *server, t_client *client, time_t now)
   task->arg = NULL;
 }
 
-void	rotten_egg(t_client *client)
+void		rotten_egg(t_server *server, t_client *client)
 {
+  t_gui_arg	garg;
+
+  garg.id = client->player->id;
   if (client->player->teamptr->slots > 0)
     --client->player->teamptr->slots;
   disconnect_user(NULL, client);
+  gui_events_handling(server, client, &garg, &gui_egg_dead);
 }
 
 void	update_living_state(t_server *server, t_client *client,
@@ -55,7 +59,7 @@ void	update_living_state(t_server *server, t_client *client,
 	      disconnect_user(NULL, client);
 	    }
 	  else
-	    rotten_egg(client);
+	    rotten_egg(server, client);
 	}
     }
 }

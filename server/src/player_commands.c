@@ -5,11 +5,12 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 14:03:33 2014 luc sinet
-** Last update Tue Jul  8 16:24:51 2014 luc sinet
+** Last update Wed Jul  9 11:44:51 2014 luc sinet
 */
 
 #include "scheduler.h"
 #include "server.h"
+#include "gui.h"
 
 int		pl_lay_egg(t_server *server, t_client *client,
 			   char *arg UNUSED)
@@ -27,6 +28,7 @@ int		pl_fork(t_server *server, t_client *client,
 			char *arg UNUSED)
 {
   t_client	*new;
+  t_gui_arg	garg;
 
   if ((new = client_new(-1)) == NULL)
     return (-1);
@@ -37,6 +39,8 @@ int		pl_fork(t_server *server, t_client *client,
   list_add_elem_at_back(&server->cl, new);
   add_to_world(&server->world, PLAYER, new->player->x, new->player->y);
   new->player->teamptr->slots += 1;
+  garg.id = new->player->id;
+  gui_events_handling(server, client, &garg, &gui_egg_born);
   return (queue_push(&client->queue, "ok\n"));
 }
 

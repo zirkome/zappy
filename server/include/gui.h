@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Fri Jul  4 14:50:48 2014 guillaume fillon
-** Last update Tue Jul  8 16:44:01 2014 luc sinet
+** Last update Wed Jul  9 12:09:23 2014 luc sinet
 */
 
 #ifndef _GUI_H_
@@ -51,6 +51,7 @@ int	gui_fork_start(t_server *, t_client *, t_client *, t_gui_arg *);
 int	gui_fork_end(t_server *, t_client *, t_client *, t_gui_arg *);
 int	gui_egg_born(t_server *, t_client *, t_client *, t_gui_arg *);
 int	gui_egg_dead(t_server *, t_client *, t_client *, t_gui_arg *);
+int	gui_egg_connect(t_server *, t_client *, t_client *, t_gui_arg *);
 int	gui_player_dead(t_server *, t_client *, t_client *, t_gui_arg *);
 int	gui_team_win(t_server *, t_client *, t_client *, t_gui_arg *);
 

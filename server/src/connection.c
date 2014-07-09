@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Wed Jul  9 11:03:08 2014 luc sinet
+** Last update Wed Jul  9 11:43:33 2014 luc sinet
 */
 
 #include "server.h"
@@ -85,6 +85,7 @@ void		remove_associated_jobs(t_list *jobs, t_client *client)
 	{
 	  node = node->next;
 	  list_del_node(jobs, job);
+	  free(job);
 	}
       else
 	node = node->next;
