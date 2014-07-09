@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri Jun 20 13:50:31 2014 luc sinet
-** Last update Mon Jul  7 14:57:13 2014 guillaume fillon
+** Last update Wed Jul  9 15:24:20 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -98,7 +98,8 @@ int		pl_expulse(t_server *server, t_client *client,
 	      ((t_client*)tmp->value)->player->x == client->player->x &&
 	      ((t_client*)tmp->value)->player->y == client->player->y)
 	    {
-	      expulse_player(&server->world, ((t_client*)tmp->value), client->player->dir);
+	      expulse_player(&server->world,
+			     ((t_client*)tmp->value), client->player->dir);
 	      --to_expulse;
 	    }
 	}

@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Wed Jul  2 18:22:49 2014 luc sinet
-** Last update Wed Jul  9 12:13:51 2014 luc sinet
+** Last update Wed Jul  9 15:25:26 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -82,7 +82,7 @@ int		prepare_incantation(t_server *server, t_client *client)
   return (0);
 }
 
-t_vector       	*second_incantation_check(t_server *server, t_client *client)
+t_vector	*second_incantation_check(t_server *server, t_client *client)
 {
   t_gui_arg	garg;
   t_vector	*vec;

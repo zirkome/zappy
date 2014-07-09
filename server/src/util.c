@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 17:02:27 2014 guillaume fillon
-** Last update Wed Jul  9 14:09:08 2014 guillaume fillon
+** Last update Wed Jul  9 15:03:08 2014 guillaume fillon
 */
 
 #include <err.h>
@@ -15,12 +15,11 @@
 
 #include "server.h"
 
-struct epoll_event	create_event(struct epoll_event	*ev, int fd, int flags)
+void	create_event(struct epoll_event	*ev, int fd, int flags)
 {
-  ev.events = flags;
-  ev.data.ptr = NULL;
-  ev.data.fd = fd;
-  return (ev);
+  ev->events = flags;
+  ev->data.ptr = NULL;
+  ev->data.fd = fd;
 }
 
 char	*vcnprintf(size_t size, const char *format, va_list ap)

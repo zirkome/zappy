@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Tue Jul  1 15:52:59 2014 guillaume fillon
-** Last update Tue Jul  8 16:31:59 2014 luc sinet
+** Last update Wed Jul  9 15:26:07 2014 guillaume fillon
 */
 
 #include "scheduler.h"
@@ -36,7 +36,8 @@ int		scheduler_add(t_scheduler *sched, struct s_job *task)
     job->at = node->at + job->at;
   else
     job->at = clock_getsecond() + job->at;
-  printf("[SCHEDULER][ADD] now: %lu \tsched on: %lu\n", clock_getsecond(), job->at);
+  printf("[SCHEDULER][ADD] now: %lu \t" \
+	 "sched on: %lu\n", clock_getsecond(), job->at);
   list_add_elem_at_back(sched, job);
   return (0);
 }
@@ -46,7 +47,8 @@ static int	check_job(struct s_job *job, time_t date,
 {
   if (job != NULL && date >= job->at)
     {
-      printf("[SCHEDULER][EXEC] now: %lu \tsched on: %lu\n", clock_getsecond(), job->at);
+      printf("[SCHEDULER][EXEC] now: %lu \t" \
+	     "sched on: %lu\n", clock_getsecond(), job->at);
       job->callback(server, job->client, job->arg);
       if (!glob)
 	list_del_node(&job->client->player->jobs, job);

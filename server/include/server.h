@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 10:31:10 2014 luc sinet
-** Last update Tue Jul  8 16:14:45 2014 luc sinet
+** Last update Wed Jul  9 15:13:07 2014 guillaume fillon
 */
 
 #ifndef _SERVER_H_
@@ -152,6 +152,7 @@ typedef struct	s_command
 /*
 ** Util
 */
+void		create_event(struct epoll_event	*ev, int fd, int flags);
 long		stoi(char *str);
 __attribute__((format (printf, 2, 3)))
 char		*cnprintf(size_t size, const char *format, ...);
@@ -198,6 +199,7 @@ void		update_living_state(t_server *server, t_client *client,
 ** Client
 */
 t_client	*client_new(int fd);
+void		erase_client(t_world *world, t_client *cl);
 
 int		process_input(t_server *server, t_client *cl, char *input);
 t_bool		check_argument_type(char *arg, t_command *cmd);

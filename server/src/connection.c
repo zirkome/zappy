@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Wed Jul  9 11:43:33 2014 luc sinet
+** Last update Wed Jul  9 15:12:18 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -27,27 +27,6 @@ int			connect_new_user(t_server *server)
   list_add_elem_at_back(&server->cl, cl);
   queue_push(&cl->queue, "BIENVENUE\n");
   return (fd);
-}
-
-void		erase_client(t_world *world, t_client *cl)
-{
-  if ((cl->type == (t_client_type)IA || cl->type == (t_client_type)EGG)
-      && cl->player->teamptr != NULL)
-    remove_from_world(world, PLAYER, cl->player->x,
-		      cl->player->y);
-  if (cl->player->teamptr != NULL && cl->type != EGG)
-    ++cl->player->teamptr->slots;
-  queue_clear(&cl->queue);
-  if (cl->player != NULL)
-    {
-      free(cl->player->foodjob);
-      list_clear(&cl->player->jobs, &free_job);
-    }
-  free_ringbuffer(cl->rb);
-  free(cl->player);
-  if (cl->type != EGG)
-    close(cl->fd);
-  printf("Client disconnected\n");
 }
 
 void		spread_inventory(t_world *world, t_player *pl)

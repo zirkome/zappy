@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Wed Jul  2 21:28:52 2014 luc sinet
-** Last update Thu Jul  3 11:23:18 2014 luc sinet
+** Last update Wed Jul  9 15:19:54 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -17,7 +17,9 @@ void		get_player_at_pos(t_vector *vec, t_list list, int x, int y)
   while (list != NULL)
     {
       client = list->value;
-      if (client->type == IA && client->player->x == x && client->player->y == y)
+      if (client->type == IA &&
+	  client->player->x == x &&
+	  client->player->y == y)
 	if (vector_append(vec, client, ALLOC_SIZE) == -1)
 	  return ;
       list = list->next;
