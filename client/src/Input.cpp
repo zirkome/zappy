@@ -29,6 +29,11 @@ Input::~Input()
 ** What we care off is just the key pressed
 */
 
+/*
+** Seems im obliged to stock the transformation bacause of the links
+**
+*/
+
 Keycode		Input::toAscii(Keycode key) const
 {
   if (key >= SDLK_KP_1 && key <= SDLK_KP_0)
@@ -60,24 +65,35 @@ void	Input::pressKey(const SDL_Event &event)
     _keyPressed.push_back(_key);
 }
 
-void	Input::unpressKey()
+/*
+** Here i need to cehck twice because of the transformations
+*/
+
+void	Input::unpressKey(const SDL_Event &event)
 {
   Scopelock	<Mutex>sc(_mutex);
+  bool		size = false;
   l_Keyit	it;
   Keycode      	key;
 
   key = _key;
   if ((it = std::find(_keyPressed.begin(), _keyPressed.end(), key)) != _keyPressed.end())
     _keyPressed.erase(it);
-  else if (key < 128 && isalpha(key))
+  if ((size ^= (event.key.keysym.mod & (KMOD_SHIFT | KMOD_CAPS))))
     {
-      if (key >= 'A' && key <= 'Z')
-	key += 32;
-      else if (key >= 'a' && key <= 'z')
-	key -= 32;
-      if ((it = std::find(_keyPressed.begin(), _keyPressed.end(), key)) != _keyPressed.end())
-	_keyPressed.erase(it);
+      if (key < 128 && isalpha(key))
+	key -= (size * 32);
+      else
+	{
+	  m_Linkcit it;
+
+	  if ((it = _links.find(key)) != _links.end())
+	    key = it->second;
+	  key = key;
+	}
     }
+  if ((it = std::find(_keyPressed.begin(), _keyPressed.end(), key)) != _keyPressed.end())
+    _keyPressed.erase(it);
 }
 
 void	Input::keyboardInput(const SDL_Event &event)
@@ -86,7 +102,7 @@ void	Input::keyboardInput(const SDL_Event &event)
   if (event.type == SDL_KEYDOWN)
     pressKey(event);
   else
-    unpressKey();
+    unpressKey(event);
 }
 
 void	Input::mouseInput(const SDL_Event &event)
