@@ -29,6 +29,12 @@ bool	AWidget::isClicked(int x, int y)
     return (false);
 }
 
+void	AWidget::refresh(int width, int height, float xRatio, float yRatio)
+{
+  _height = height / xRatio;
+  _width = width / yRatio;
+}
+
 void	AWidget::draw()
 {
 }

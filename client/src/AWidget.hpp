@@ -33,7 +33,7 @@ public:
   virtual void	draw(gdl::AShader &shader, const gdl::Clock &clock) = 0;
 
   void		update(int x, int y);
-
+  void		refresh(int width, int height, float xRatio, float yRatio);
   void		setSquare(Square *);
   Square	*getSquare() const;
   int		getX() const;
