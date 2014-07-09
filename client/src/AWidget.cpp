@@ -31,8 +31,10 @@ bool	AWidget::isClicked(int x, int y)
 
 void	AWidget::refresh(int width, int height, float xRatio, float yRatio)
 {
-  _height = height / xRatio;
-  _width = width / yRatio;
+  _width = width / xRatio;
+  _height = height / yRatio;
+  _x = width / 2;
+  _y = height / 11.25f;
 }
 
 void	AWidget::draw()
