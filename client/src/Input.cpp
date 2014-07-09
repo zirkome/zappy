@@ -72,25 +72,22 @@ void	Input::pressKey(const SDL_Event &event)
 void	Input::unpressKey(const SDL_Event &event)
 {
   Scopelock	<Mutex>sc(_mutex);
-  bool		size = false;
+  bool		size = true;
   l_Keyit	it;
   Keycode      	key;
 
   key = _key;
   if ((it = std::find(_keyPressed.begin(), _keyPressed.end(), key)) != _keyPressed.end())
     _keyPressed.erase(it);
-  if ((size ^= (event.key.keysym.mod & (KMOD_SHIFT | KMOD_CAPS))))
+  if (key < 128 && isalpha(key))
+    key -= (size * 32);
+  else
     {
-      if (key < 128 && isalpha(key))
-	key -= (size * 32);
-      else
-	{
-	  m_Linkcit it;
+      m_Linkcit it;
 
-	  if ((it = _links.find(key)) != _links.end())
-	    key = it->second;
-	  key = key;
-	}
+      if ((it = _links.find(key)) != _links.end())
+	key = it->second;
+      key = key;
     }
   if ((it = std::find(_keyPressed.begin(), _keyPressed.end(), key)) != _keyPressed.end())
     _keyPressed.erase(it);
