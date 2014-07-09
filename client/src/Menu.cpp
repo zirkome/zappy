@@ -206,11 +206,10 @@ void	Menu::textInput(std::string &buf, unsigned int maxlen)
 
 bool	Menu::launchGame()
 {
-  std::string ip = "10.10.253.239", port = "6000";
-  // std::string ip = "FREE", port = "6000";
+  std::string ip = "FREE", port = "6000";
 
-  // if (getInfo(ip, port) == true)
-  //   {
+  if (getInfo(ip, port) == true)
+    {
       if (!_gNetwork.open(ip.c_str(), port.c_str()))
 	{
 	  std::cout << "Cannot connect to the server" << std::endl;
@@ -227,12 +226,12 @@ bool	Menu::launchGame()
 	}
       _gNetwork.close();
       return (true);
-  //   }
-  // else
-  //   {
-  //     std::cout << "You must enter an ip address" << std::endl;
-  //     return (false);
-  //   }
+    }
+  else
+    {
+      std::cout << "You must enter an ip address" << std::endl;
+      return (false);
+    }
 }
 
 void	Menu::launch()
