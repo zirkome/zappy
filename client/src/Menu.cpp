@@ -51,9 +51,9 @@ bool  Menu::initialize()
     return (false);
   ImageWidget	*background = new ImageWidget(0, 0, y, x, "./assets/background.tga");
   _mainPanel.push_back(background);
-  _mainPanel.push_back(new InputWidget(x / 4, 9.5f * y / 18, y / 11.25f, x / 2, "./assets/input.tga", "10.10.253.239"));
-  _mainPanel.push_back(new InputWidget(x / 4, 7.5f * y / 18, y / 11.25f, x / 2, "./assets/input.tga", "Port :"));
-  _mainPanel.push_back(new ConnectWidget(x / 4, 5.5f * y / 18, y / 11.25f, x / 2, "./assets/button.tga", "./assets/button_hover.tga"));
+  _mainPanel.push_back(new InputWidget(x / 4, y / 1.9f, y / 11.25f, x / 2, "./assets/input.tga", "IP :"));
+  _mainPanel.push_back(new InputWidget(x / 4, y / 2.4f, y / 11.25f, x / 2, "./assets/input.tga", "Port :"));
+  _mainPanel.push_back(new ConnectWidget(x / 4, y / 3.3f, y / 11.25f, x / 2, "./assets/button.tga", "./assets/button_hover.tga"));
   _mainPanel.push_back(new QuitWidget(x / 4, y / 18, y / 11.25f, x / 2, "./assets/button.tga", "./assets/button_hover.tga"));
   _sound.play("menu", MUSIC);
   _gameEngine = new GameEngine(&_gNetwork, &_win, &_set, &_input);
