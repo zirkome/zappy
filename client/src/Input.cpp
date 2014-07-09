@@ -61,6 +61,8 @@ void	Input::pressKey(const SDL_Event &event)
 	    _key = it->second;
 	}
     }
+  if (_key == SDLK_KP_PERIOD)
+    _key = '.';
   if ((it = std::find(_keyPressed.begin(), _keyPressed.end(), _key)) == _keyPressed.end())
     _keyPressed.push_back(_key);
 }
@@ -69,7 +71,7 @@ void	Input::pressKey(const SDL_Event &event)
 ** Here i need to cehck twice because of the transformations
 */
 
-void	Input::unpressKey(const SDL_Event &event)
+void	Input::unpressKey()
 {
   Scopelock	<Mutex>sc(_mutex);
   bool		size = true;
@@ -77,6 +79,8 @@ void	Input::unpressKey(const SDL_Event &event)
   Keycode      	key;
 
   key = _key;
+  if (key == SDLK_KP_PERIOD)
+    key = '.';
   if ((it = std::find(_keyPressed.begin(), _keyPressed.end(), key)) != _keyPressed.end())
     _keyPressed.erase(it);
   if (key < 128 && isalpha(key))
@@ -99,7 +103,7 @@ void	Input::keyboardInput(const SDL_Event &event)
   if (event.type == SDL_KEYDOWN)
     pressKey(event);
   else
-    unpressKey(event);
+    unpressKey();
 }
 
 void	Input::mouseInput(const SDL_Event &event)

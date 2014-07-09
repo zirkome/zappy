@@ -175,11 +175,7 @@ void	Menu::textInput(std::string &buf, unsigned int maxlen)
 	++beg;
       if (beg != end)
 	{
-	  key = *beg;
-	  if (key >= SDLK_KP_1 && key <= SDLK_KP_0)
-	    key = '0' + (key == SDLK_KP_0 ? (key - 10) : key) - SDLK_KP_1 + 1;
-	  else if (key == SDLK_KP_PERIOD)
-	    key = '.';
+	  key = _input.toAscii(*beg);
 	  if (save == key)
 	    {
 	      if (((key < 128 && key != '\b') && frame < 8) ||
@@ -197,8 +193,11 @@ void	Menu::textInput(std::string &buf, unsigned int maxlen)
 	  save = key;
 	}
       for (; beg != end; ++beg)
-	if (textFillBuf(buf, maxlen, key) == false)
-	  return ;
+	{
+	  key = _input.toAscii(*beg);
+	  if (textFillBuf(buf, maxlen, key) == false)
+	    return ;
+	}
       handleClock(frame, time, fps);
       draw();
     }
