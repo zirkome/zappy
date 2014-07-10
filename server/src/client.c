@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Wed Jul  9 15:12:20 2014 guillaume fillon
+** Last update Wed Jul  9 23:55:04 2014 guillaume fillon
 */
 
 #include "scheduler.h"
@@ -74,4 +74,21 @@ void		erase_client(t_world *world, t_client *cl)
   if (cl->type != EGG)
     close(cl->fd);
   printf("Client disconnected\n");
+}
+
+void		player_level_up(t_server *server, t_player *player)
+{
+  t_node	*tmp;
+
+  player->level += 1;
+  player->teamptr->nb_of_level_max += 1;
+  if (player->teamptr->nb_of_level_max >= 6)
+    {
+      for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
+	{
+	  if (((t_client*)tmp->value)->type == GRAPHIC)
+	    queue_push_message(&((t_client*)tmp->value)->queue, "seg %s\n",
+			       player->teamptr->name);
+	}
+    }
 }

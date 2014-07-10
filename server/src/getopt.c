@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 11:11:11 2014 guillaume fillon
-** Last update Wed Jul  9 09:58:52 2014 guillaume fillon
+** Last update Wed Jul  9 22:49:55 2014 luc sinet
 */
 
 #include <stdlib.h>
@@ -41,41 +41,63 @@ static int	option_part1(int opt, t_world *option,
 {
   if (opt == 'h')
     option->hflg = 1;
-  if (opt == 'c')
+  else if (opt == 'c')
     option->slots = stoi(optarg);
-  if (opt == 't')
+  else if  (opt == 't')
     option->delay = stoi(optarg);
-  if (opt == 'p')
+  else if (opt == 'x')
+    {
+      if ((option->width = stoi(optarg)) < 4)
+	option->width = 4;
+      printf("Too weak value for world width, set to 4\n");
+    }
+  else if (opt == 'y')
+    {
+      if ((option->height = stoi(optarg)) < 4)
+	option->height = 4;
+      printf("Too weak value for world height, set to 4\n");
+    }
+  else if (opt == 'p')
     option->port = optarg;
-  if (opt == 'x')
-    option->width = stoi(optarg);
-  if (opt == 'y')
-    option->height = stoi(optarg);
+  return (0);
+}
+
+static int	check_team_name(char *tname, t_team *teams, int nb_teams)
+{
+  int		i;
+
+  if (teams == NULL)
+    return (0);
+  for (i = 0; i < nb_teams; ++i)
+    {
+      if (strcmp(tname, teams[i].name) == 0)
+	return (-1);
+    }
   return (0);
 }
 
 static int	option_part2(int opt, t_world *option, int argc, char *argv[])
 {
-  if (opt == 'n')
-    {
-      int index = optind - 1;
+  int		index;
 
-      while (index < argc)
-	{
-	  if (argv[index][0] != '-')
-	    {
-	      ++option->nb_teams;
-	      option->teams =
-		realloc(option->teams, option->nb_teams * sizeof(t_team));
-	      if (option->teams == NULL)
-		return (iperror("getopt: malloc", -1));
-	      option->teams[option->nb_teams - 1].name = argv[index];
-	    }
-	  else
-	    break;
-	  index++;
-	}
-    }
+  if (opt == 'n')
+    for (index = optind - 1; index < argc; ++index)
+      {
+	if (argv[index][0] != '-')
+	  {
+	    if (check_team_name(argv[index], option->teams,
+				option->nb_teams) == -1)
+	      continue ;
+	    ++option->nb_teams;
+	    option->teams =
+	      realloc(option->teams, option->nb_teams * sizeof(t_team));
+	    if (option->teams == NULL)
+	      return (iperror("getopt: malloc", -1));
+	    option->teams[option->nb_teams - 1].name = argv[index];
+	  }
+	else
+	  break;
+      }
   return (0);
 }
 

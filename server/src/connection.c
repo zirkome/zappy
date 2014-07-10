@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:12:56 2014 luc sinet
-** Last update Wed Jul  9 15:12:18 2014 guillaume fillon
+** Last update Wed Jul  9 23:51:52 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -76,5 +76,7 @@ int	disconnect_user(t_server *server, t_client *client)
   if (server != NULL)
     remove_associated_jobs(&server->jobs, client);
   client->ghost = true;
+  if (client->player->teamptr != NULL && client->player->level >= 8)
+    client->player->teamptr->nb_of_level_max -= 1;
   return (2);
 }
