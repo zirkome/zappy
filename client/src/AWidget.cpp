@@ -31,10 +31,17 @@ bool	AWidget::isClicked(int x, int y)
 
 void	AWidget::refresh(int width, int height, float xRatio, float yRatio)
 {
-  _width = width / xRatio;
-  _height = height / yRatio;
-  _x = width / 2;
-  _y = height / 11.25f;
+  _width = width / 2;
+  _height = height / 11.25f;
+  _x = width / xRatio;
+  _y = height / yRatio;
+  _square->setPos(_x, _y);
+  _square->setSize(_width, _height);
+  if (_squareHover != NULL)
+    {
+      _squareHover->setPos(_x, _y);
+      _squareHover->setSize(_width, _height);
+    }
 }
 
 void	AWidget::draw()

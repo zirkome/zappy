@@ -88,6 +88,13 @@ bool		Menu::update()
 	   endit = _mainPanel.end(); it != endit ; ++it)
       (*it)->update(mouse.x, y - mouse.y);
   _win.updateClock(_clock);
+  if (_input.isPressed(SDLK_g))
+    {
+      _mainPanel[1]->refresh(800, 600, 4.0f, 1.9f);
+      _mainPanel[2]->refresh(800, 600, 4.0f, 2.4f);
+      _mainPanel[3]->refresh(800, 600, 4.0f, 3.3f);
+      _mainPanel[4]->refresh(800, 600, 4.0f, 18.0f);
+    }
   if (_input.isPressed(SDLK_ESCAPE) || win.event == WIN_QUIT || _done == true)
     return (false);
   _frames++;
