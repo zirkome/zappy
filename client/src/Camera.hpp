@@ -5,11 +5,12 @@
 # include <glm/gtc/matrix_transform.hpp>
 # include <Clock.hh>
 # include "Input.hpp"
+# include "Settings.hpp"
 
 class Camera
 {
 public:
-  Camera();
+  Camera(Settings &set);
   ~Camera();
 
   void lookAt();

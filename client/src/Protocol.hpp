@@ -17,6 +17,7 @@ public:
   virtual ~Protocol();
 
   std::string parseCmd(const std::string &cmd, t_display &info);
+  std::string changeTime(int t) const;
 
 private:
   int getNb(const std::string &) const;

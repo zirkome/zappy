@@ -8,13 +8,14 @@ enum
     SOUTH = 3,
     WEST = 4,
 
-    FOOD = 1,
-    LINEMATE = 2,
-    DERAUMERE = 4,
-    SIBUR = 8,
-    MENDIANE = 16,
-    PHIRAS = 32,
-    THYSTAME = 64,
+    FOOD = 0,
+    LINEMATE,
+    DERAUMERE,
+    SIBUR,
+    MENDIANE,
+    PHIRAS,
+    THYSTAME,
+    LASTRESSOURCES,
   };
 
 enum Action
@@ -56,7 +57,7 @@ typedef struct	s_player
   int		y;
   int		lvl;
   int		orient;
-  int		inventory[7];
+  int		inventory[LASTRESSOURCES];
   Action	cuAction;
   std::string   team;
 }		t_player;

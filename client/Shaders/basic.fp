@@ -58,7 +58,7 @@ void main(void)
   /* Density of the fog */
   float density = 0.09;
 
-  vec4 fOutColor = texture2D(fTexture0, fUv);
+  vec4 fOutColor = texture2D(fTexture0, fUv) * fColor;
   vec3 color = vec3(fOutColor.xyz);
   float factor = getFog(abs(fEyePos.z / fEyePos.w), density);
 

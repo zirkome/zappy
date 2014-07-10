@@ -1,8 +1,12 @@
 #include "Camera.hpp"
 
-Camera::Camera(): _pos(0.0, 0.0, 0.0), _pos_view(0.0, 0.0, 1.0), _dir(0.0, 1.0, 0.0)
+Camera::Camera(Settings &set)
+  : _pos(0.0, 0.0, 0.0), _pos_view(0.0, 0.0, 1.0), _dir(0.0, 1.0, 0.0)
 {
-  _projection = glm::perspective(60.0f, 1600.0f / 900.0f, 0.1f, 100.0f);
+  _projection = glm::perspective(static_cast<float>(set.getVar(FOV)),
+				 static_cast<float>(set.getVar(W_WIDTH))
+				 / static_cast<float>(set.getVar(W_HEIGHT)),
+				 0.1f, 100.0f);
 }
 
 
@@ -55,12 +59,16 @@ void	Camera::tranlate(glm::vec3 vec)
 
 void	Camera::update(Input in, gdl::Clock clock)
 {
-  if (in.isPressed(SDLK_w))
+  if (in.isPressed(SDLK_w) || in.isPressed(SDLK_z))
     translate(glm::vec3(0.0, 0.0, -1.0) * static_cast<float>(5 * clock.getElapsed()));
   if (in.isPressed(SDLK_s))
     translate(glm::vec3(0.0, 0.0, 1.0) * static_cast<float>(5 * clock.getElapsed()));
   if (in.isPressed(SDLK_d))
     translate(glm::vec3(1.0, 0.0, 0.0) * static_cast<float>(5 * clock.getElapsed()));
-  if (in.isPressed(SDLK_a))
+  if (in.isPressed(SDLK_a) || in.isPressed(SDLK_q))
     translate(glm::vec3(-1.0, 0.0, 0.0) * static_cast<float>(5 * clock.getElapsed()));
+  if (in.isPressed(SDLK_SPACE))
+    translate(glm::vec3(0.0, 1.0, 0.0) * static_cast<float>(5 * clock.getElapsed()));
+  if (in.isPressed(SDLK_c))
+    translate(glm::vec3(0.0, -1.0, 0.0) * static_cast<float>(5 * clock.getElapsed()));
 }

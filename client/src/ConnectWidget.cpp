@@ -1,13 +1,9 @@
 #include "Menu.hpp"
 #include "ConnectWidget.hpp"
 
-ConnectWidget::ConnectWidget(int x, int y, int height, int width, const std::string &texture)
-  : TextImgWidget(x, y, height, width, texture, "Connect")
+ConnectWidget::ConnectWidget(int x, int y, int height, int width, const std::string &texture, const std::string &textureHover)
+  : TextImgWidget(x, y, height, width, texture, textureHover, "Connect")
 {
-  _square = new Square(texture);
-  _square->initialize();
-  _square->setPos(x, y);
-  _square->setSize(width, height);
 }
 
 ConnectWidget::~ConnectWidget()

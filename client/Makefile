@@ -5,7 +5,7 @@
 ## Login   <fritsc_h@epitech.net>
 ##
 ## Started on  Sun May  4 15:17:27 2014 Harold Fritsch
-## Last update Thu Jul  3 14:50:14 2014 Adrien Della Maggiora
+## Last update Wed Jul  9 18:29:26 2014 luc sinet
 ##
 
 CC 		=	g++
@@ -41,15 +41,18 @@ SRC 		=	main.cpp \
 			Model.cpp \
 			TextWidget.cpp \
 			TextImgWidget.cpp \
-			LoadWidget.cpp \
 			InputWidget.cpp \
-			ConnectWidget.cpp
+			ConnectWidget.cpp \
+			Light.cpp \
+			Sound.cpp \
+			Line.cpp \
+			Console.cpp
 
 OBJ		=	$(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 
 CXXFLAGS 	+=	-W -Wall -Wextra -g
 
-LDFLAGS		+=	-L$(LIBGDL)/libs/ -lgdl_gl -lGLEW -lGL -lfbxsdk -lSDL2 -lpthread -lm -ldl -lrt
+LDFLAGS		+=	-L$(LIBGDL)/libs/ -lgdl_gl -lGLEW -lGL -lfbxsdk -lSDL2 -lSDL2_mixer -lpthread -lm -ldl -lrt
 LDFLAGS		+=	-Wl,-O2 -L$(LIBSOCKET)/ -lsocket
 
 

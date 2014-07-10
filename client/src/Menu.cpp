@@ -16,12 +16,14 @@ Menu::Menu()
 {
   _done = false;
   _gameEngine = NULL;
+  _set.loadFile("default.cfg");
 }
 
 Menu::~Menu()
 {
+  if (_gameEngine != NULL)
+    delete _gameEngine;
   freePanel(_mainPanel);
-  _gNetwork.close();
 }
 
 void	Menu::freePanel(std::vector<AWidget *> &panel)
@@ -48,13 +50,15 @@ bool  Menu::initialize()
       !_textShader.build())
     return (false);
   ImageWidget	*background = new ImageWidget(0, 0, y, x, "./assets/background.tga");
-  ImageWidget	*title = new ImageWidget((1024 / 2) - ((340 * 1.25f) / 2), 400, 120 * 1.25f, 340 * 1.25f, "./assets/zappy.tga");
   _mainPanel.push_back(background);
-  _mainPanel.push_back(title);
-  _mainPanel.push_back(new InputWidget(x / 4, 9.5f * y / 18, y / 11.25f, x / 2, "./assets/input.tga", "IP :"));
-  _mainPanel.push_back(new InputWidget(x / 4, 7.5f * y / 18, y / 11.25f, x / 2, "./assets/input.tga", "Port :"));
-  _mainPanel.push_back(new ConnectWidget(x / 4, 5.5f * y / 18, y / 11.25f, x / 2, "./assets/button.tga"));
-  _mainPanel.push_back(new QuitWidget(x / 4, y / 18, y / 11.25f, x / 2, "./assets/quit.tga"));
+  _mainPanel.push_back(new InputWidget(x / 4, y / 1.9f, y / 11.25f, x / 2, "./assets/input.tga", "IP :"));
+  _mainPanel.push_back(new InputWidget(x / 4, y / 2.4f, y / 11.25f, x / 2, "./assets/input.tga", "Port :"));
+  _mainPanel.push_back(new ConnectWidget(x / 4, y / 3.3f, y / 11.25f, x / 2, "./assets/button.tga", "./assets/button_hover.tga"));
+  _mainPanel.push_back(new QuitWidget(x / 4, y / 18, y / 11.25f, x / 2, "./assets/button.tga", "./assets/button_hover.tga"));
+  _sound.play("menu", MUSIC);
+  _gameEngine = new GameEngine(&_gNetwork, &_win, &_set, &_input);
+  if (!_gameEngine->initialize())
+    return (false);
   return (true);
 }
 
@@ -70,14 +74,27 @@ bool		Menu::update()
   _input[mouse];
   _input[win];
   if (mouse.event == BUTTONUP)
+    {
+      for (std::vector<AWidget *>::iterator it = _mainPanel.begin(),
+	     endit = _mainPanel.end(); it != endit ; ++it)
+	if ((*it)->isClicked(mouse.x, y - mouse.y))
+	  {
+	    (*it)->onClick((*this));
+	    break;
+	  }
+    }
+  else
     for (std::vector<AWidget *>::iterator it = _mainPanel.begin(),
 	   endit = _mainPanel.end(); it != endit ; ++it)
-      if ((*it)->isClicked(mouse.x, y - mouse.y))
-	{
-	  (*it)->onClick((*this));
-	  break;
-	}
+      (*it)->update(mouse.x, y - mouse.y);
   _win.updateClock(_clock);
+  if (_input.isPressed(SDLK_g))
+    {
+      _mainPanel[1]->refresh(800, 600, 4.0f, 1.9f);
+      _mainPanel[2]->refresh(800, 600, 4.0f, 2.4f);
+      _mainPanel[3]->refresh(800, 600, 4.0f, 3.3f);
+      _mainPanel[4]->refresh(800, 600, 4.0f, 18.0f);
+    }
   if (_input.isPressed(SDLK_ESCAPE) || win.event == WIN_QUIT || _done == true)
     return (false);
   _frames++;
@@ -94,7 +111,6 @@ void	Menu::draw()
   float x = _set.getVar(W_WIDTH), y = _set.getVar(W_HEIGHT);
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glViewport(0, 0, x, y);
   glDisable(GL_DEPTH_TEST);
   _textShader.bind();
   _textShader.setUniform("projection", glm::ortho(0.0f, x, 0.0f, y, -1.0f, 1.0f));
@@ -153,7 +169,6 @@ void	Menu::textInput(std::string &buf, unsigned int maxlen)
   int		frame = -1;
   Keycode	key = 0;
   Keycode	save = -1;
-  Input		*input = &_input;
 
   buf.clear();
   buf.push_back('|');
@@ -167,11 +182,7 @@ void	Menu::textInput(std::string &buf, unsigned int maxlen)
 	++beg;
       if (beg != end)
 	{
-	  key = *beg;
-	  if (key >= SDLK_KP_1 && key <= SDLK_KP_0)
-	    key = '0' + (key == SDLK_KP_0 ? (key - 10) : key) - SDLK_KP_1 + 1;
-	  else if (key == SDLK_KP_PERIOD)
-	    key = '.';
+	  key = _input.toAscii(*beg);
 	  if (save == key)
 	    {
 	      if (((key < 128 && key != '\b') && frame < 8) ||
@@ -189,8 +200,11 @@ void	Menu::textInput(std::string &buf, unsigned int maxlen)
 	  save = key;
 	}
       for (; beg != end; ++beg)
-	if (textFillBuf(buf, maxlen, key) == false)
-	  return ;
+	{
+	  key = _input.toAscii(*beg);
+	  if (textFillBuf(buf, maxlen, key) == false)
+	    return ;
+	}
       handleClock(frame, time, fps);
       draw();
     }
@@ -202,16 +216,28 @@ bool	Menu::launchGame()
 
   if (getInfo(ip, port) == true)
     {
-      _gameEngine = new GameEngine(&_gNetwork, &_win);
       if (!_gNetwork.open(ip.c_str(), port.c_str()))
-	throw Exception("cannot connect to the server"); // replace exception by error
-      _gameEngine->initialize();
-      while (_gameEngine->update())
-	_gameEngine->draw();
+	{
+	  std::cout << "Cannot connect to the server" << std::endl;
+	  return (false);
+	}
+      try
+	{
+	  while (_gameEngine->update())
+	    _gameEngine->draw();
+	}
+      catch(Exception &e)
+	{
+	  std::cout << e.what() << std::endl;
+	}
+      _gNetwork.close();
       return (true);
     }
   else
-    return (false);
+    {
+      std::cout << "You must enter an ip address" << std::endl;
+      return (false);
+    }
 }
 
 void	Menu::launch()
@@ -234,8 +260,10 @@ void	Menu::setDone(bool done)
 
 bool Menu::getInfo(std::string &ip, std::string &port)
 {
-  ip = dynamic_cast<InputWidget *>(_mainPanel[2])->getContent();
-  port = dynamic_cast<InputWidget *>(_mainPanel[3])->getContent();
+  ip = dynamic_cast<InputWidget *>(_mainPanel[1])->getContent();
+  port = dynamic_cast<InputWidget *>(_mainPanel[2])->getContent();
+  if (port == "Port :")
+    port = "6000";
   if (ip == "FREE")
     return (false);
   else

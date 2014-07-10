@@ -1,15 +1,15 @@
 #ifndef _INPUTWIDGET_H_
 # define _INPUTWIDGET_H_
 
-# include "LoadWidget.hpp"
 # include "TextImgWidget.hpp"
 # include "Menu.hpp"
 
-class InputWidget : public LoadWidget
+class InputWidget : public TextImgWidget
 {
 public:
   InputWidget(int x, int y, int height, int width,
-	      const std::string &texture, const std::string &text);
+	      const std::string &texture, const std::string &text,
+	      const std::string &textureHover = "");
   ~InputWidget();
 
   void	onDisplay(const std::list<std::string> &text, int file);

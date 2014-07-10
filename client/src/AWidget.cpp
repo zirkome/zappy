@@ -3,24 +3,22 @@
 AWidget::AWidget(int x, int y, int height, int width)
   : _text()
 {
+  _hover = false;
   _x = x;
   _y = y;
   _height = height;
   _width = width;
   _square = NULL;
-  try
-    {
-      _text.initialize();
-    }
-  catch (const Exception &e)
-    {
-      std::cerr << e.what() << std::endl;
-      return ;
-    }
+  _squareHover = NULL;
+  _text.initialize();
 }
 
 AWidget::~AWidget()
 {
+  if (_square != NULL)
+    delete _square;
+  if (_squareHover != NULL)
+    delete _squareHover;
 }
 
 bool	AWidget::isClicked(int x, int y)
@@ -29,6 +27,21 @@ bool	AWidget::isClicked(int x, int y)
     return (true);
   else
     return (false);
+}
+
+void	AWidget::refresh(int width, int height, float xRatio, float yRatio)
+{
+  _width = width / 2;
+  _height = height / 11.25f;
+  _x = width / xRatio;
+  _y = height / yRatio;
+  _square->setPos(_x, _y);
+  _square->setSize(_width, _height);
+  if (_squareHover != NULL)
+    {
+      _squareHover->setPos(_x, _y);
+      _squareHover->setSize(_width, _height);
+    }
 }
 
 void	AWidget::draw()
@@ -76,4 +89,12 @@ int	AWidget::getWidth() const
 const Text	&AWidget::getText() const
 {
   return (_text);
+}
+
+void	AWidget::update(int x, int y)
+{
+  if (isClicked(x, y))
+    _hover = true;
+  else
+    _hover = false;
 }

@@ -51,6 +51,14 @@ std::string Protocol::parseCmd(const std::string &cmd, t_display &info)
   return (msg);
 }
 
+std::string Protocol::changeTime(int t) const
+{
+  std::stringstream ss("");
+
+  ss << "sst " << t << "\n";
+  return (ss.str());
+}
+
 int Protocol::getNb(const std::string &cmd) const
 {
   std::stringstream ss(cmd);
@@ -88,20 +96,17 @@ void Protocol::bct(const std::string &cmd, std::string &, t_display &info)
   std::stringstream ss(cmd);
   std::string tmp;
   int x, y;
-  int q[7];
+  int q[LASTRESSOURCES];
 
   try
     {
       if (!(ss >> tmp >> x >> y))
 	return ;
-      for (int i = 0;i < 7;++i)
+      for (int i = FOOD;i < LASTRESSOURCES;++i)
 	if (!(ss >> q[i]))
 	  return ;
-      info.map[x * info.map.getY() + y] = 0;
-      for (int i = 1, j = 0;i <= 64;i = i << 1, j++)
-	if (q[j] > 0)
-	  info.map[x * info.map.getY() + y] |= i;
-      info.map.display();
+      for (int i = FOOD;i < LASTRESSOURCES;++i)
+	(info.map[x * info.map.getY() + y])[i] = q[i];
     }
   catch (Exception &e)
     {
@@ -126,8 +131,7 @@ void Protocol::pnw(const std::string &cmd, std::string &, t_display &info)
   int nb, x, y, lvl, orient;
   std::string team;
 
-  if ((nb = getNb(cmd)) == -1
-      || !(ss >> team >> team >> x >> y >> orient >> lvl >> team))
+  if (!(ss >> team >> nb >> x >> y >> orient >> lvl >> team))
     return ;
   info.map.addPlayer(new t_player(nb, x, y, lvl, orient, team));
 }
@@ -138,8 +142,7 @@ void Protocol::ppo(const std::string &cmd, std::string &, t_display &info)
   int nb, x, y, orient;
   std::string team;
 
-  if ((nb = getNb(cmd)) == -1
-      || !(ss >> team >> team >> x >> y >> orient))
+  if (!(ss >> team >> nb >> x >> y >> orient))
     return ;
   info.map.updatePlayerPos(nb, x, y, orient);
 }
@@ -150,8 +153,7 @@ void Protocol::plv(const std::string &cmd, std::string &, t_display &info)
   int nb, lvl;
   std::string team;
 
-  if ((nb = getNb(cmd)) == -1
-      || !(ss >> team >> team >> lvl))
+  if (!(ss >> team >> nb >> lvl))
     return ;
   info.map.updatePlayerLvl(nb, lvl);
 }
@@ -161,12 +163,12 @@ void Protocol::pin(const std::string &cmd, std::string &, t_display &info)
   std::stringstream ss(cmd);
   std::string tmp;
   int nb, x, y;
-  int q[7];
+  int q[LASTRESSOURCES];
 
-  if ((nb = getNb(cmd)) == -1 || !(ss >> tmp >> tmp >> x >> y))
+  if (!(ss >> tmp >> nb >> x >> y))
     return ;
-  for (int i = 0;i < 7;++i)
-    if (!(ss >> q[7]))
+  for (int i = FOOD;i < LASTRESSOURCES;++i)
+    if (!(ss >> q[LASTRESSOURCES]))
       return ;
   info.map.updatePlayerInventory(nb, q);
 }
@@ -178,7 +180,13 @@ void Protocol::pex(const std::string &cmd, std::string &, t_display &info)
 
 void Protocol::pbc(const std::string &cmd, std::string &, t_display &info)
 {
-  /* BROADCAST */
+  std::stringstream ss(cmd);
+  std::string tmp;
+  int nb;
+
+  if (!(ss >> tmp >> nb))
+    return ;
+  info.map.addBroadcast(nb);
 }
 
 void Protocol::pic(const std::string &cmd, std::string &, t_display &info)
@@ -197,8 +205,7 @@ void Protocol::pfk(const std::string &cmd, std::string &, t_display &info)
   int nb, lvl;
   std::string team;
 
-  if ((nb = getNb(cmd)) == -1
-      || !(ss >> team >> team >> lvl))
+  if (!(ss >> team >> nb >> lvl))
     return ;
   info.map.updatePlayerAction(nb, LAY);
 }
@@ -209,8 +216,7 @@ void Protocol::pdr(const std::string &cmd, std::string &, t_display &info)
   int nb, type;
   std::string team;
 
-  if ((nb = getNb(cmd)) == -1
-      || !(ss >> team >> team >> type))
+  if (!(ss >> team >> nb >> type))
     return ;
   info.map.updatePlayerAction(nb, DROP);
 }
@@ -221,8 +227,7 @@ void Protocol::pgt(const std::string &cmd, std::string &, t_display &info)
   int nb, type;
   std::string team;
 
-  if ((nb = getNb(cmd)) == -1
-      || !(ss >> team >> team >> type))
+  if (!(ss >> team >> nb >> type))
     return ;
   info.map.updatePlayerAction(nb, LOOT);
 }
@@ -230,11 +235,10 @@ void Protocol::pgt(const std::string &cmd, std::string &, t_display &info)
 void Protocol::pdi(const std::string &cmd, std::string &, t_display &info)
 {
   std::stringstream ss(cmd);
-  int nb, type;
+  int nb;
   std::string team;
 
-  if ((nb = getNb(cmd)) == -1
-      || !(ss >> team >> team >> type))
+  if (!(ss >> team >> nb))
     return ;
   info.map.deletePlayer(nb);
 }
@@ -245,8 +249,7 @@ void Protocol::enw(const std::string &cmd, std::string &, t_display &info)
   int nb, nb_player, x, y;
   std::string tmp;
 
-  if ((nb = getNb(cmd)) == -1 || (nb_player = getNb(cmd.substr(cmd.find(" ")))) == -1
-      || (!(ss >> tmp >> tmp >> tmp >> x >> y)))
+  if ((!(ss >> tmp >> nb >> nb_player >> x >> y)))
     return ;
   info.map.addEgg(new t_egg(x, y, nb));
 }
@@ -263,11 +266,10 @@ void Protocol::eht(const std::string &cmd, std::string &, t_display &info)
 void Protocol::ebo(const std::string &cmd, std::string &, t_display &info)
 {
   std::stringstream ss(cmd);
-  int nb, type;
+  int nb;
   std::string team;
 
-  if ((nb = getNb(cmd)) == -1
-      || !(ss >> team >> team >> type))
+  if (!(ss >> team >> nb))
     return ;
   info.map.deleteEgg(nb);
 }
@@ -275,11 +277,10 @@ void Protocol::ebo(const std::string &cmd, std::string &, t_display &info)
 void Protocol::edi(const std::string &cmd, std::string &, t_display &info)
 {
   std::stringstream ss(cmd);
-  int nb, type;
+  int nb;
   std::string team;
 
-  if ((nb = getNb(cmd)) == -1
-      || !(ss >> team >> team >> type))
+  if (!(ss >> team >> nb))
     return ;
   info.map.deleteEgg(nb);
 }

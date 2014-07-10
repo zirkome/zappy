@@ -1,16 +1,16 @@
 #ifndef _QUITWIDGET_HPP_
 # define _QUITWIDGET_HPP_
 
-# include "AWidget.hpp"
+# include "TextImgWidget.hpp"
 
-class	QuitWidget : public AWidget
+class	QuitWidget : public TextImgWidget
 {
 public:
-  QuitWidget(int x, int y, int height, int width, const std::string &texture);
+  QuitWidget(int x, int y, int height, int width, const std::string &texture,
+	     const std::string &textureHover = "");
   ~QuitWidget();
 
-  virtual void	draw(gdl::AShader &shader, const gdl::Clock &clock);
-
+  virtual bool  isClicked(int x, int y);
   void	onClick(Menu &menu);
 };
 

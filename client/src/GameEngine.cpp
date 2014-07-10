@@ -1,16 +1,25 @@
 #include "GameEngine.hpp"
 #include "Input.hpp"
 
-GameEngine::GameEngine(GNetwork *socket, gdl::SdlContext *win)
-  : _socket(socket), _win(win), _input(), _ground(GROUND_TEXTURE),
-    _loading(LOADING_TEXTURE), _resources(64, NULL)
+GameEngine::GameEngine(GNetwork *socket, gdl::SdlContext *win,
+		       Settings *set, Input *input)
+  : _socket(socket), _win(win), _set(set), _input(input),
+    _console(*set, *input, _clock, _shader),
+    _ground(GROUND_TEXTURE), _loading(LOADING_TEXTURE),
+    _resources(LASTRESSOURCES, NULL), _cam(*_set)
 {
   _display.loading = true;
 }
 
 GameEngine::~GameEngine()
 {
-  _win->stop();
+  delete _resources[FOOD];
+  delete _resources[LINEMATE];
+  delete _resources[DERAUMERE];
+  delete _resources[SIBUR];
+  delete _resources[MENDIANE];
+  delete _resources[PHIRAS];
+  delete _resources[THYSTAME];
 }
 
 bool GameEngine::initialize()
@@ -34,7 +43,7 @@ bool GameEngine::initialize()
     return (false);
   _ground.translate(glm::vec3(0.0, -0.5, 0.0));
   _loading.setPos(0, 0);
-  _loading.setSize(1600, 900);
+  _loading.setSize(_set->getVar(W_WIDTH), _set->getVar(W_HEIGHT));
   _loading.fillGeometry();
   _resources[FOOD] = new Model();
   _resources[LINEMATE] = new Model();
@@ -53,62 +62,88 @@ bool GameEngine::initialize()
       || !_player.load(PLAYER_MODEL)
       || !_egg.load(EGG_MODEL))
     return (false);
-  return (true);
-}
+   return (true);
+ }
 
-void GameEngine::draw()
-{
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  _cam.lookAt();
-  if (!_display.loading)
-    {
-      _shader.bind();
-      _shader.setUniform("projection", _cam.getProjection());
-      _shader.setUniform("view", _cam.getTransformation());
-      _shader.setUniform("nbLight", 0);
-      _shader.setUniform("isFog", 0);
-      _shader.setUniform("isLight", 0);
-      _ground.setScale(glm::vec3(_display.map.getX(), 1.0, _display.map.getY()));
-      _ground.draw(_shader, _clock);
-      for (int x = 0;x < _display.map.getX();++x)
-	for (int y = 0;y < _display.map.getY();++y)
-	  displayItem(_display.map[x * _display.map.getY() + y], x, y);
-      std::list<t_egg *>::const_iterator endEgg = _display.map.getEggEnd();
-      for (std::list<t_egg *>::const_iterator it = _display.map.getEggBegin();it != endEgg;++it)
-	{
-	  _egg.setPos(glm::vec3((*it)->x, 0.0, (*it)->y));
-	  _egg.draw(_shader, _clock);
-	}
-      std::list<t_player *>::const_iterator endPlayer = _display.map.getPlayerEnd();
-      for (std::list<t_player *>::const_iterator it = _display.map.getPlayerBegin();it != endPlayer;++it)
-	{
-	  _player.setPos(glm::vec3((*it)->x, 0.0, (*it)->y));
-	  _player.draw(_shader, _clock);
-	}
-    }
-  else
-    {
-      glDisable(GL_DEPTH_TEST);
-      _textShader.bind();
-      _textShader.setUniform("projection", glm::ortho(0.0f, 1600.f,
-						      0.0f, 900.f, -1.0f, 1.0f));
-      _textShader.setUniform("view", glm::mat4(1));
-      _textShader.setUniform("winX", 1600.f);
-      _textShader.setUniform("winY", 900.f);
-      _loading.draw(_textShader, _clock);
-      glEnable(GL_DEPTH_TEST);
-    }
-  _win->flush();
-}
+ void GameEngine::draw()
+ {
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   _cam.lookAt();
+   if (!_display.loading)
+     {
+       glEnable(GL_CULL_FACE);
+       glCullFace(GL_BACK);
+       _shader.bind();
+       _shader.setUniform("projection", _cam.getProjection());
+       _shader.setUniform("view", _cam.getTransformation());
+       _shader.setUniform("nbLight", static_cast<int>(_lights.size()));
+       _shader.setUniform("isFog", _set->getVar(R_DRAWFOG));
+       _shader.setUniform("isLight", _set->getVar(R_DRAWLIGHT));
+       _ground.setPos(glm::vec3(_display.map.getX() / 2.0, -0.5,
+				   _display.map.getY() / 2.0));
+       _ground.setScale(glm::vec3(_display.map.getX(), 1.0, _display.map.getY()));
+       _ground.draw(_shader, _clock);
+       for (int x = 0;x < _display.map.getX();++x)
+	 for (int y = 0;y < _display.map.getY();++y)
+	   displayItem(_display.map[x * _display.map.getY() + y], x, y);
+       std::list<t_egg *>::const_iterator endEgg = _display.map.getEggEnd();
+       for (std::list<t_egg *>::const_iterator it = _display.map.getEggBegin();it != endEgg;++it)
+	 {
+	   _egg.setPos(glm::vec3((*it)->x + 0.5, 0.0, (*it)->y + 0.5));
+	   _egg.draw(_shader, _clock);
+	 }
+       std::list<t_player *>::const_iterator endPlayer = _display.map.getPlayerEnd();
+       for (std::list<t_player *>::const_iterator it = _display.map.getPlayerBegin();it != endPlayer;++it)
+	 {
+	   _player.setPos(glm::vec3((*it)->x + 0.5, 0.0, (*it)->y + 0.5));
+	   _player.setRotation(glm::vec3(0.0, 90 - 90 * (*it)->orient, 0.0));
+	   _player.draw(_shader, _clock);
+	 }
+       for (std::list<t_broadcast *>::const_iterator it = _display.map.getBroadcastBegin();it != _display.map.getBroadcastEnd();it++)
+	 (*it)->line.draw(_shader, _clock);
+       glDisable(GL_CULL_FACE);
+     }
+   else
+     {
+       float x = _set->getVar(W_WIDTH), y = _set->getVar(W_HEIGHT);
 
-void GameEngine::displayItem(const char flag, int x, int y)
-{
-  for (int i = 0;i < 64;i = i << 1)
-    if (flag & i)
-      {
-	_resources[i]->setPos(glm::vec3(x, 0, y));
-	_resources[i]->draw(_shader, _clock);
-      }
+       glDisable(GL_DEPTH_TEST);
+       _textShader.bind();
+       _textShader.setUniform("projection", glm::ortho(0.0f, x,
+						       0.0f, y, -1.0f, 1.0f));
+       _textShader.setUniform("view", glm::mat4(1));
+       _textShader.setUniform("winX", x);
+       _textShader.setUniform("winY", y);
+       _loading.draw(_textShader, _clock);
+       glEnable(GL_DEPTH_TEST);
+     }
+   _win->flush();
+ }
+
+ void GameEngine::displayItem(const unsigned int *flag, int x, int y)
+ {
+   float posx = x, posy = y;
+   float inter = 0.0;
+
+   if (flag[FOOD])
+     {
+       _resources[FOOD]->setPos(glm::vec3(posx + 0.5, 0.10, posy + 0.5));
+       _resources[FOOD]->draw(_shader, _clock);
+     }
+   posx += 0.25;
+   posy += 0.10;
+   for (int i = LINEMATE;i < LASTRESSOURCES;++i)
+    {
+      if (flag[i])
+	{
+	  _resources[i]->setPos(glm::vec3(posx + inter, 0.10,
+					  posy + ((i > 2) ? (i - 3.0) * 1.0 / 3.0
+						  : i * 1.0 / 3.0)));
+	  _resources[i]->draw(_shader, _clock);
+	}
+      if (i > 2 && inter == 0)
+	inter += 0.5;
+    }
 }
 
 
@@ -122,12 +157,27 @@ bool GameEngine::update()
 
   _win->updateClock(_clock);
   _socket->update(_display);
-  _input.getInput();
-  _cam.update(_input, _clock);
-  if (_input.isPressed(SDLK_ESCAPE) || (_input[win] && win.event == WIN_QUIT))
+  _input->getInput();
+  _cam.update(*_input, _clock);
+  _display.map.updateBroadcast();
+  if (_input->isPressed(SDLK_ESCAPE) || ((*_input)[win] && win.event == WIN_QUIT))
+    return (false);
+  if (_input->isPressed(SDLK_EQUALS))
     {
-      usleep(100000);
-      return (false);
+      _socket->changeTime(_display.time + CHANGETIME);
+      _display.time += CHANGETIME;
+    }
+  if (_input->isPressed(SDLK_MINUS))
+    {
+      _socket->changeTime(_display.time - CHANGETIME);
+      _display.time -= CHANGETIME;
+    }
+  if (_input->isPressed(SDLK_F1))
+    {
+      glDisable(GL_DEPTH_TEST);
+      _console.aff(*_win, _set->getVar(W_WIDTH),
+		    _set->getVar(W_HEIGHT));
+      glEnable(GL_DEPTH_TEST);
     }
   if ((time = _clock.getElapsed()) < fps)
     usleep((fps - time) * 1000);
