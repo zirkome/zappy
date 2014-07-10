@@ -5,7 +5,7 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 09:39:44 2014 luc sinet
-** Last update Tue Jul  8 16:26:40 2014 luc sinet
+** Last update Wed Jul  9 23:57:34 2014 guillaume fillon
 */
 
 #include <signal.h>
@@ -19,7 +19,10 @@ static void	init_teams_slots(t_server *server)
 
   w = server->world;
   for (i = 0; i < w.nb_teams; ++i)
-    w.teams[i].slots = w.slots;
+    {
+      w.teams[i].slots = w.slots;
+      w.teams[i].nb_of_level_max = 0;
+    }
 }
 
 //TODO: Norme

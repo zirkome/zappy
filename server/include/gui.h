@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Fri Jul  4 14:50:48 2014 guillaume fillon
-** Last update Wed Jul  9 12:09:23 2014 luc sinet
+** Last update Wed Jul  9 23:02:49 2014 guillaume fillon
 */
 
 #ifndef _GUI_H_
@@ -41,6 +41,7 @@ typedef int (*t_gui_callback)(t_server *, t_client *, t_client *, t_gui_arg *);
 int	gui_events_handling(t_server *server, t_client *client,
 			    t_gui_arg *arg, t_gui_callback f);
 int	gui_movements(t_server *, t_client *, t_client *, t_gui_arg *);
+int	gui_player_connect(t_server *, t_client *, t_client *, t_gui_arg *);
 int	gui_take(t_server *, t_client *, t_client *, t_gui_arg *);
 int	gui_put(t_server *, t_client *, t_client *, t_gui_arg *);
 int	gui_expulse(t_server *, t_client *, t_client *, t_gui_arg *);

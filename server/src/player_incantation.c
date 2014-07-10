@@ -5,18 +5,17 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Wed Jul  2 18:22:49 2014 luc sinet
-** Last update Wed Jul  9 15:25:26 2014 guillaume fillon
+** Last update Wed Jul  9 23:56:16 2014 guillaume fillon
 */
 
 #include "server.h"
 #include "gui.h"
 
-int		elevate_players(t_vector *vec, int num, int lev)
+int		elevate_players(t_server *server, t_vector *vec, int num, int lev)
 {
   t_client	*client;
   unsigned int	i;
   unsigned int	size;
-  char		tab[64];
 
   size = vector_size(vec);
   for (i = 0; i < size && num > 0; ++i)
@@ -24,10 +23,9 @@ int		elevate_players(t_vector *vec, int num, int lev)
       client = vector_get(vec, i);
       if (client->player->level == lev)
 	{
-	  snprintf(tab, sizeof(tab), "niveau actuel : %d\n",
-		   client->player->level);
-	  queue_push(&client->queue, tab);
-	  client->player->level += 1;
+	  queue_push_message(&client->queue, "niveau actuel : %d\n",
+			     client->player->level);
+	  player_level_up(server, client->player);
 	  --num;
 	}
     }
@@ -117,10 +115,10 @@ int		pl_incantation(t_server *server, t_client *client,
   if ((vec = second_incantation_check(server, client)) == NULL)
     return (-1);
   num_player = needed_same_level(pl->level);
-  pl->level += 1;
+  player_level_up(server, client->player);
   snprintf(tab, sizeof(tab), "niveau actuel : %d\n",
 	   pl->level);
-  elevate_players(vec, num_player - 1, pl->level);
+  elevate_players(server, vec, num_player - 1, pl->level);
   vector_clear(vec);
   free(vec);
   reassign_ressources(pl->level - 1, pl->x, pl->y, &server->world);

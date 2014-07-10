@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 26 15:24:27 2014 guillaume fillon
-** Last update Wed Jul  9 11:57:11 2014 luc sinet
+** Last update Wed Jul  9 23:03:00 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -55,7 +55,6 @@ int		check_remaining_slots(t_server *server, t_list *list,
 				      t_client *cl, char *command)
 {
   int		i;
-  char		*msg;
   t_world	*w;
 
   w = &server->world;
@@ -67,12 +66,9 @@ int		check_remaining_slots(t_server *server, t_list *list,
 	cl->type = IA;
 	--w->teams[i].slots;
 	add_to_world(w, PLAYER, cl->player->x, cl->player->y);
-	msg = cnprintf(10, "%d\n", w->teams[i].slots);
-	queue_push(&cl->queue, msg);
-	free(msg);
-	msg = cnprintf(10, "%d %d\n", w->width, w->height);
-	queue_push(&cl->queue, msg);
-	free(msg);
+	queue_push_message(&cl->queue, "%d\n", w->teams[i].slots);
+	queue_push_message(&cl->queue, "%d %d\n", w->width, w->height);
+	gui_events_handling(server, cl, NULL, &gui_player_connect);
 	return (0);
       }
   return (-2);
