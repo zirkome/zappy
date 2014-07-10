@@ -5,9 +5,10 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Thu Apr 17 12:29:40 2014 luc sinet
-** Last update Wed Jul  2 22:16:22 2014 guillaume fillon
+** Last update Wed Jul  9 23:55:04 2014 guillaume fillon
 */
 
+#include "scheduler.h"
 #include "server.h"
 
 static int	g_increment = 1;
@@ -23,7 +24,10 @@ static int	init_player(t_client *new)
   new->player->id = g_increment++;
   new->player->teamptr = NULL;
   new->player->jobs = NULL;
+  new->player->foodjob = NULL;
   memset(new->player->inventory, 0, sizeof(new->player->inventory));
+  memset(new->player->save_pos, 0, sizeof(new->player->save_pos));
+  new->player->inventory[FOOD - 1] = INITFOOD;
   return (0);
 }
 
@@ -49,4 +53,42 @@ t_client	*client_new(int fd)
     }
   init_client(new, fd);
   return (new);
+}
+
+void		erase_client(t_world *world, t_client *cl)
+{
+  if ((cl->type == (t_client_type)IA || cl->type == (t_client_type)EGG)
+      && cl->player->teamptr != NULL)
+    remove_from_world(world, PLAYER, cl->player->x,
+		      cl->player->y);
+  if (cl->player->teamptr != NULL && cl->type != EGG)
+    ++cl->player->teamptr->slots;
+  queue_clear(&cl->queue);
+  if (cl->player != NULL)
+    {
+      free(cl->player->foodjob);
+      list_clear(&cl->player->jobs, &free_job);
+    }
+  free_ringbuffer(cl->rb);
+  free(cl->player);
+  if (cl->type != EGG)
+    close(cl->fd);
+  printf("Client disconnected\n");
+}
+
+void		player_level_up(t_server *server, t_player *player)
+{
+  t_node	*tmp;
+
+  player->level += 1;
+  player->teamptr->nb_of_level_max += 1;
+  if (player->teamptr->nb_of_level_max >= 6)
+    {
+      for (tmp = server->cl; tmp != NULL; tmp = tmp->next)
+	{
+	  if (((t_client*)tmp->value)->type == GRAPHIC)
+	    queue_push_message(&((t_client*)tmp->value)->queue, "seg %s\n",
+			       player->teamptr->name);
+	}
+    }
 }

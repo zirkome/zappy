@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Sun May  4 17:02:27 2014 guillaume fillon
-** Last update Fri Jun 27 23:58:50 2014 guillaume fillon
+** Last update Wed Jul  9 15:03:08 2014 guillaume fillon
 */
 
 #include <err.h>
@@ -14,6 +14,13 @@
 #include <stdio.h>
 
 #include "server.h"
+
+void	create_event(struct epoll_event	*ev, int fd, int flags)
+{
+  ev->events = flags;
+  ev->data.ptr = NULL;
+  ev->data.fd = fd;
+}
 
 char	*vcnprintf(size_t size, const char *format, va_list ap)
 {
@@ -35,6 +42,18 @@ char		*cnprintf(size_t size, const char *format, ...)
   str = vcnprintf(size, format, ap);
   va_end(ap);
   return (str);
+}
+
+void		queue_push_message(t_queue **queue, const char *format, ...)
+{
+  char		*str;
+  va_list	ap;
+
+  va_start(ap, format);
+  str = vcnprintf(BUFSIZ, format, ap);
+  va_end(ap);
+  queue_push(queue, str);
+  free(str);
 }
 
 long		stoi(char *str)

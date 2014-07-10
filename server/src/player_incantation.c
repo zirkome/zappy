@@ -5,56 +5,17 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Wed Jul  2 18:22:49 2014 luc sinet
-** Last update Thu Jul  3 11:23:23 2014 luc sinet
+** Last update Wed Jul  9 23:56:16 2014 guillaume fillon
 */
 
 #include "server.h"
+#include "gui.h"
 
-int		get_ent_amount(int x, int y, int type, t_world *world)
-{
-  int		pos;
-  int		i;
-  int		counter;
-  t_string	*box;
-
-  counter = 0;
-  pos = MAP_POS(x, y, world->width);
-  box = world->map[pos];
-  if (box->content == NULL)
-    return (0);
-  for (i = 0; box->content[i]; ++i)
-    if (box->content[i] == type)
-      ++counter;
-  return (counter);
-}
-
-t_bool		enough_ressources(int lev, int x, int y, t_world *world)
-{
-  static int	ressources[7][7] = {
-    {1, 0, 0, 0, 0, 0},
-    {1, 1, 1, 0, 0, 0},
-    {2, 0, 1, 0, 2, 0},
-    {1, 1, 2, 0, 1, 0},
-    {1, 2, 1, 3, 0, 0},
-    {1, 2, 3, 0, 1, 0},
-    {2, 2, 2, 2, 2, 1}
-  };
-  int		i;
-
-  if (lev >= 8)
-    return (false);
-  for (i = 0; i < 7; ++i)
-    if (ressources[lev - 1][i] > get_ent_amount(x, y, i + LINEMATE, world))
-      return (false);
-  return (true);
-}
-
-int		elevate_players(t_vector *vec, int num, int lev)
+int		elevate_players(t_server *server, t_vector *vec, int num, int lev)
 {
   t_client	*client;
   unsigned int	i;
   unsigned int	size;
-  char		tab[64];
 
   size = vector_size(vec);
   for (i = 0; i < size && num > 0; ++i)
@@ -62,39 +23,106 @@ int		elevate_players(t_vector *vec, int num, int lev)
       client = vector_get(vec, i);
       if (client->player->level == lev)
 	{
-	  snprintf(tab, sizeof(tab), "elevation en cours niveau actuel : %d\n",
-		   client->player->level);
-	  queue_push(&client->queue, tab);
-	  client->player->level += 1;
+	  queue_push_message(&client->queue, "niveau actuel : %d\n",
+			     client->player->level);
+	  player_level_up(server, client->player);
 	  --num;
 	}
     }
   return (0);
 }
 
-int		pl_incantation(t_server *server, t_client *client,
-			       char *arg UNUSED)
+t_vector	*check_incantation_conditions(t_server *server,
+					      t_client *client)
 {
   t_player	*pl;
-  t_vector	vec;
-  char		tab[64];
+  t_vector	*vec;
   int		num_player;
 
   pl = client->player;
-  vector_init(&vec);
   if (!enough_ressources(pl->level, pl->x, pl->y, &server->world))
-    return (-1);
-  get_player_at_pos(&vec, server->cl, pl->x, pl->y);
-  if ((num_player = needed_same_level(pl->level)) >
-      num_same_level(&vec, client->player->level))
+    return (NULL);
+  if ((vec = malloc(sizeof(t_vector))) == NULL)
+    return (NULL);
+  vector_init(vec);
+  get_player_at_pos(vec, server->cl, pl->x, pl->y);
+  if ((num_player = needed_same_level(pl->level) + 1) !=
+      (num_same_level(vec, pl->level))
+      || (int)vector_size(vec) != num_player)
     {
-      vector_clear(&vec);
+      vector_clear(vec);
+      free(vec);
+      return (NULL);
+    }
+  return (vec);
+}
+
+int		prepare_incantation(t_server *server, t_client *client)
+{
+  t_vector	*vec;
+
+  if ((vec = check_incantation_conditions(server, client)) == NULL ||
+      queue_push(&client->queue, "elevation en cours\n") == -1)
+    {
+      if (vec != NULL)
+	{
+	  vector_clear(vec);
+	  free(vec);
+	}
+      queue_push(&client->queue, "ko\n");
       return (-1);
     }
-  snprintf(tab, sizeof(tab), "elevation en cours niveau actuel : %d\n",
-	   client->player->level);
-  client->player->level += 1;
-  elevate_players(&vec, num_player - 1, client->player->level);
-  vector_clear(&vec);
+  gui_events_handling(server, client, NULL, &gui_incantation_start);
+  client->player->save_pos[0] = client->player->x;
+  client->player->save_pos[1] = client->player->y;
+  vector_clear(vec);
+  free(vec);
+  return (0);
+}
+
+t_vector	*second_incantation_check(t_server *server, t_client *client)
+{
+  t_gui_arg	garg;
+  t_vector	*vec;
+
+  if ((vec = check_incantation_conditions(server, client)) == NULL ||
+      (client->player->save_pos[0] != client->player->x) ||
+      (client->player->save_pos[1] != client->player->y))
+    {
+      if (vec != NULL)
+	{
+	  vector_clear(vec);
+	  free(vec);
+	}
+      queue_push(&client->queue, "ko\n");
+      garg.id = 0;
+      gui_events_handling(server, client, &garg, &gui_incantation_end);
+      return (NULL);
+    }
+  return (vec);
+}
+
+int		pl_incantation(t_server *server, t_client *client,
+			       char *arg UNUSED)
+{
+  char		tab[64];
+  t_player	*pl;
+  t_vector	*vec;
+  unsigned int	num_player;
+  t_gui_arg	garg;
+
+  pl = client->player;
+  if ((vec = second_incantation_check(server, client)) == NULL)
+    return (-1);
+  num_player = needed_same_level(pl->level);
+  player_level_up(server, client->player);
+  snprintf(tab, sizeof(tab), "niveau actuel : %d\n",
+	   pl->level);
+  elevate_players(server, vec, num_player - 1, pl->level);
+  vector_clear(vec);
+  free(vec);
+  reassign_ressources(pl->level - 1, pl->x, pl->y, &server->world);
+  garg.id = 1;
+  gui_events_handling(server, client, &garg, &gui_incantation_end);
   return (queue_push(&client->queue, tab));
 }

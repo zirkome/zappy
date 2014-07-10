@@ -5,11 +5,12 @@
 ** Login   <sinet_l@epitech.net>
 **
 ** Started on  Fri May  2 22:46:12 2014 luc sinet
-** Last update Wed Jul  2 22:29:00 2014 guillaume fillon
+** Last update Wed Jul  9 19:02:08 2014 guillaume fillon
 */
 
-#include "scheduler.h"
 #include "server.h"
+#include "scheduler.h"
+#include "gui.h"
 
 static	t_command	g_command[] =
 {
@@ -23,7 +24,7 @@ static	t_command	g_command[] =
   {"expulse", false, none, &pl_expulse, 7},
   {"broadcast", true, string, &pl_broadcast, 7},
   {"incantation", false, none, &pl_incantation, 300},
-  {"fork", false, none, &pl_lay_egg, 42},
+  {"fork", false, none, &pl_fork_start, 0},
   {"connect_nbr", false, none, &pl_connect_nbr, 0},
   {"msz", false, none, &gui_msz, 0},
   {"bct", true, string, &gui_bct, 0},
@@ -42,7 +43,7 @@ static t_bool	get_command(char *line, char *command)
   int		i;
 
   i = 0;
-  while (line[i] && line[i] != ' ' && i < CMDLEN)
+  while (line[i] && (line[i] != ' ' && line[i] != '\t') && i < CMDLEN)
     {
       command[i] = line[i];
       ++i;
@@ -80,17 +81,18 @@ static int	parse_input(char *line, char *arg)
 
   i = 0;
   if (get_command(line, command) == false)
-    return (-1);
+    return (UNKNOWN_CMD);
   while (g_command[i].name && strcmp(g_command[i].name, command) != 0)
     ++i;
-  if (g_command[i].name == NULL ||
-      get_argument(&line[strlen(command)], arg, g_command[i].arg) == false ||
+  if (g_command[i].name == NULL)
+    return (UNKNOWN_CMD);
+  if (get_argument(&line[strlen(command)], arg, g_command[i].arg) == false ||
       check_argument_type(arg, &g_command[i]) == false)
-    return (-1);
+    return (BAD_PARAM);
   if (g_command[i].arg == true && i != BROADCAST)
     {
       if (check_argument_type(arg, &g_command[i]) == false)
-	return (-1);
+	return (BAD_PARAM);
     }
   return (i);
 }
@@ -103,8 +105,9 @@ int		process_input(t_server *server, t_client *cl, char *input)
 
   if (cl->type == UNKNOWN)
     return (authenticate_user(server, cl, input));
-  printf("Got input: %s\n", input);
-  if ((idx = parse_input(input, arg)) == -1)
+  printf("Got input: %s %d\n", input, parse_input(input, arg));
+  if ((idx = parse_input(input, arg)) < 0 ||
+      (idx == INCANTATION && prepare_incantation(server, cl) == -1))
     return (-1);
   task.client = cl;
   task.at = g_command[idx].delay / server->world.delay;

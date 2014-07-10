@@ -5,10 +5,11 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Tue Jun 24 13:50:43 2014 guillaume fillon
-** Last update Tue Jul  1 17:22:55 2014 guillaume fillon
+** Last update Wed Jul  9 23:02:31 2014 guillaume fillon
 */
 
 #include "server.h"
+#include "gui.h"
 
 int		gui_ppo(t_server *server, t_client *client, char *arg)
 {
@@ -84,4 +85,19 @@ int		gui_pin(t_server *server, t_client *client, char *arg)
     }
   queue_push(&client->queue, "sbp\n");
   return (-1);
+}
+
+int	gui_player_connect(UNUSED t_server *server, t_client *graphic,
+			   t_client *client, UNUSED t_gui_arg *arg)
+{
+  t_player	*pl;
+
+  pl = client->player;
+  queue_push_message(&graphic->queue, "pnw %d %d %d %d %d %s\n",
+		     pl->id,
+		     pl->x, pl->y,
+		     pl->dir,
+		     pl->level,
+		     pl->teamptr->name);
+  return (0);
 }

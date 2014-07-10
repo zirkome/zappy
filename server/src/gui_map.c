@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Tue Jun 24 13:18:45 2014 guillaume fillon
-** Last update Mon Jun 30 15:34:03 2014 guillaume fillon
+** Last update Wed Jul  9 15:11:27 2014 guillaume fillon
 */
 
 #include "server.h"
@@ -32,14 +32,11 @@ int	gui_msz(t_server *server, t_client *client, UNUSED char *arg)
   return (0);
 }
 
-//TODO: Norme
 int		gui_bct(t_server *server, t_client *client, char *arg)
 {
   int		x;
   int		y;
-  int		i;
-  t_string	**map;
-  char		*msg;
+  t_string	*line;
   char		*x_str;
   char		*y_str;
 
@@ -52,25 +49,19 @@ int		gui_bct(t_server *server, t_client *client, char *arg)
     }
   x = stoi(x_str);
   y = stoi(y_str);
-  i = y * server->world.width + x;
-  map = server->world.map;
-  msg = cnprintf(BUFSIZ, "bct %d %d %d %d %d %d %d %d %d\n", x, y,
-		 count_resource(map[i], FOOD),
-		 count_resource(map[i], LINEMATE),
-		 count_resource(map[i], DERAUMERE),
-		 count_resource(map[i], SIBUR),
-		 count_resource(map[i], MENDIANE),
-		 count_resource(map[i], PHIRAS),
-		 count_resource(map[i], THYSTAME));
-  queue_push(&client->queue, msg);
-  free(msg);
+  line = server->world.map[y * server->world.width + x];
+  queue_push_message(&client->queue, "bct %d %d %d %d %d %d %d %d %d\n", x, y,
+		     count_resource(line, FOOD), count_resource(line, LINEMATE),
+		     count_resource(line, DERAUMERE),
+		     count_resource(line, SIBUR),
+		     count_resource(line, MENDIANE),
+		     count_resource(line, PHIRAS),
+		     count_resource(line, THYSTAME));
   return (0);
 }
 
-//TODO: Norme
 int		gui_mct(t_server *server, t_client *client, UNUSED char *arg)
 {
-  char		*msg;
   int		i;
   int		x;
   int		y;
@@ -85,16 +76,15 @@ int		gui_mct(t_server *server, t_client *client, UNUSED char *arg)
     {
       x = i % width;
       y = i / width;
-      msg = cnprintf(BUFSIZ, "bct %d %d %d %d %d %d %d %d %d\n", x, y,
-		     count_resource(map[i], FOOD),
-		     count_resource(map[i], LINEMATE),
-		     count_resource(map[i], DERAUMERE),
-		     count_resource(map[i], SIBUR),
-		     count_resource(map[i], MENDIANE),
-		     count_resource(map[i], PHIRAS),
-		     count_resource(map[i], THYSTAME));
-      queue_push(&client->queue, msg);
-      free(msg);
+      queue_push_message(&client->queue, "bct %d %d %d %d %d %d %d %d %d\n",
+			 x, y,
+			 count_resource(map[i], FOOD),
+			 count_resource(map[i], LINEMATE),
+			 count_resource(map[i], DERAUMERE),
+			 count_resource(map[i], SIBUR),
+			 count_resource(map[i], MENDIANE),
+			 count_resource(map[i], PHIRAS),
+			 count_resource(map[i], THYSTAME));
     }
   return (0);
 }

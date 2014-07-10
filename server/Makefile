@@ -5,7 +5,7 @@
 ## Login   <sinet_l@epitech.net>
 ## 
 ## Started on  Fri May  2 18:19:19 2014 luc sinet
-## Last update Wed Jul  2 23:42:46 2014 luc sinet
+## Last update Tue Jul  8 16:24:27 2014 guillaume fillon
 ##
 
 CC 		= gcc
@@ -46,16 +46,28 @@ SRC 		= main.c \
 		  player_view.c \
 		  player_inventory.c \
 		  player_incantation.c \
+		  player_life.c \
 		  incantation_calcul.c \
+		  incantation_ressources.c \
 		  geometry.c \
 		  broadcast_calculs.c \
-		  strings.c \
 		  vectors.c \
 		  vectors_get.c \
+		  gui_events.c \
 		  gui_misc.c \
 		  gui_map.c \
 		  gui_player.c \
+		  gui_movements.c \
 		  gui_time.c \
+		  gui_take.c \
+		  gui_put.c \
+		  gui_expulse.c \
+		  gui_broadcast.c \
+		  gui_incantation.c \
+		  gui_fork.c \
+		  gui_egg.c \
+		  gui_player_dead.c \
+		  gui_team_win.c \
 		  authentication.c \
 		  scheduler.c \
 		  time.c

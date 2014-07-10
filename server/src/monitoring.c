@@ -5,7 +5,7 @@
 ** Login   <kokaz@epitech.net>
 **
 ** Started on  Thu Jun 19 15:28:17 2014 guillaume fillon
-** Last update Wed Jul  2 22:33:36 2014 guillaume fillon
+** Last update Wed Jul  9 18:56:41 2014 guillaume fillon
 */
 
 #include <err.h>
@@ -22,7 +22,7 @@ int		dispatch_fds(t_server *server, struct epoll_event *ev)
       if (((t_client *)tmp->value)->fd == ev->data.fd)
 	break;
     }
-  if (tmp && ((t_client *)tmp->value)->fd != ev->data.fd)
+  if (tmp == NULL || ((t_client *)tmp->value)->fd != ev->data.fd)
     return (-1);
   if (ev->events & EPOLLIN)
     {
@@ -38,51 +38,69 @@ static void		update_fds_to_epoll(t_server *server)
 {
   struct epoll_event	ev;
   t_node		*tmp;
-  t_node		*tmp2;
-  t_client		*tofree;
   t_client		*client;
 
-  for (tmp = server->cl, tofree = NULL; tmp != NULL;)
+  for (tmp = server->cl; tmp != NULL;)
     {
-      if (tofree != NULL)
-      	{
-      	  free(tofree);
-      	  tofree = NULL;
-      	}
       client = ((t_client*)tmp->value);
-      if (client->ghost == true &&
-	  queue_empty(client->queue))
+      if (client->ghost == true && queue_empty(client->queue))
 	{
 	  if (client->type != EGG && epoll_event_del(client->fd, NULL) == -1)
 	    iperror("epoll_ctl: client", -1);
-	  tofree = (t_client*)tmp->value;
-	  tmp2 = tmp->next;
-	  kick_user(&server->cl, (t_client*)tmp->value, &server->world);
-	  tmp = tmp2;
+	  tmp = tmp->next;
+	  kick_user(&server->cl, client, &server->world);
+	  free(client);
 	  continue ;
 	}
-      else if (client->type == EGG)
+      else if (client->type == EGG || client->type == EGG_HATCHING)
 	{
 	  tmp = tmp->next;
 	  continue ;
 	}
-      ev.events = EPOLLIN | EPOLLONESHOT;
+      create_event(&ev, client->fd, EPOLLIN | EPOLLONESHOT);
       if (!queue_empty(client->queue))
 	ev.events |= EPOLLOUT;
-      ev.data.ptr = NULL;
-      ev.data.fd = client->fd;
       if (epoll_event_mod(client->fd, &ev) == -1)
-	iperror("epoll_ctl: client", -1);
+      	iperror("epoll_ctl: client", -1);
       tmp = tmp->next;
     }
 }
 
-//TODO: Norme
+static int		dispatch_events(t_server *server,
+					int nfds,
+					struct epoll_event
+					events[MAX_EPOLL_EVENTS])
+{
+  int			fd;
+  int			n;
+  struct epoll_event	ev;
+
+  for (n = 0; n < nfds; ++n)
+    {
+      if ((events[n].events & EPOLLERR) || (events[n].events & EPOLLHUP))
+	{
+	  close(events[n].data.fd);
+	  epoll_event_del(events[n].data.fd, NULL);
+	  continue;
+	}
+      if (events[n].data.fd == server->fd)
+	{
+	  if ((fd = connect_new_user(server)) > 0)
+	    {
+	      create_event(&ev, fd, EPOLLIN | EPOLLONESHOT);
+	      if (epoll_event_add(fd, &ev) == -1)
+		return (iperror("epoll_ctl: client", -1));
+	    }
+	}
+      else
+	dispatch_fds(server, &events[n]);
+    }
+  return (0);
+}
+
 int			start_monitoring(t_server *server)
 {
   int			nfds;
-  int			n;
-  int			fd;
   struct epoll_event	ev;
   struct epoll_event	events[MAX_EPOLL_EVENTS];
 
@@ -102,28 +120,6 @@ int			start_monitoring(t_server *server)
       scheduler_update(&server->cl, server);
       if (nfds == -1)
 	return (iperror("epoll_wait", -1));
-      for (n = 0; n < nfds; ++n)
-	{
-	  if ((events[n].events & EPOLLERR) ||
-              (events[n].events & EPOLLHUP))
-	    {
-	      close(events[n].data.fd);
-	      epoll_event_del(events[n].data.fd, NULL);
-	      continue;
-	    }
-	  if (events[n].data.fd == server->fd)
-	    {
-	      if ((fd = connect_new_user(server)) > 0)
-		{
-		  ev.events = EPOLLIN | EPOLLONESHOT;
-		  ev.data.ptr = NULL;
-		  ev.data.fd = fd;
-		  if (epoll_event_add(fd, &ev) == -1)
-		    return (iperror("epoll_ctl: client", -1));
-		}
-	    }
-	  else
-	    dispatch_fds(server, &events[n]);
-	}
+      dispatch_events(server, nfds, events);
     }
 }

@@ -5,71 +5,58 @@
 ** Login   <fillon_g@epitech.net>
 **
 ** Started on  Thu Jan  9 14:22:00 2014 guillaume fillon
-** Last update Tue Jul  1 18:29:59 2014 guillaume fillon
+** Last update Wed Jul  9 16:16:12 2014 luc sinet
 */
 
 #include <stdlib.h>
 #include <stdio.h>
-
 #include "generic_list.h"
 
-unsigned int list_get_size(t_list list)
+unsigned int	list_get_size(t_list list)
 {
-  unsigned int count = 0;
-  t_node *tmp;
+  unsigned int	count;
+  t_node	*tmp;
 
+  count = 0;
   tmp = list;
   if (tmp == NULL)
-    return 0;
+    return (0);
   while (tmp != NULL)
     {
       ++count;
       tmp = tmp->next;
     }
-  return count;
+  return (count);
 }
 
-t_bool list_is_empty(t_list list)
+t_bool	list_is_empty(t_list list)
 {
   if (list_get_size(list) == 0)
-    return true;
-  return false;
+    return (true);
+  return (false);
 }
 
-void list_dump(t_list list, t_value_displayer val_disp)
+t_bool		list_add_elem_at_front(t_list *front_ptr, void *elem)
 {
-  t_node *tmp;
-
-  tmp = list;
-  while (tmp != NULL)
-    {
-      val_disp(tmp->value);
-      tmp = tmp->next;
-    }
-}
-
-t_bool list_add_elem_at_front(t_list *front_ptr, void *elem)
-{
-  t_node *new_node;
+  t_node	*new_node;
 
   if ((new_node = malloc(sizeof(t_node))) == NULL)
-    return false;
+    return (false);
   new_node->value = elem;
   new_node->next = *front_ptr;
   *front_ptr = new_node;
-  return true;
+  return (true);
 }
 
-t_bool  list_add_elem_at_back(t_list *front_ptr, void *elem)
+t_bool		list_add_elem_at_back(t_list *front_ptr, void *elem)
 {
-  t_node *new_node = NULL;
-  t_node *tmp = NULL;
+  t_node	*new_node = NULL;
+  t_node	*tmp = NULL;
 
   if ((new_node = malloc(sizeof(t_node))) == NULL)
-    return false;
+    return (false);
   new_node->value = elem;
   new_node->next = NULL;
-
   if (*front_ptr != NULL)
     {
       for (tmp = *front_ptr; tmp->next != NULL; tmp = tmp->next);
@@ -77,92 +64,59 @@ t_bool  list_add_elem_at_back(t_list *front_ptr, void *elem)
     }
   else
     *front_ptr = new_node;
-
-  return true;
+  return (true);
 }
 
-t_bool list_add_elem_at_position(t_list *front_ptr, void *elem,
-				 unsigned int position)
+t_bool		list_del_elem_at_front(t_list *front_ptr)
 {
-  unsigned int i = 0;
-  unsigned int lsize;
-  t_node *new_node = NULL;
-  t_node *tmp = NULL;
-
-  lsize = list_get_size(*front_ptr);
-  if (position > lsize)
-    return false;
-  if (position == 0)
-    return (list_add_elem_at_front(front_ptr, elem));
-  if (position == lsize)
-    return (list_add_elem_at_back(front_ptr, elem));
-  if ((new_node = malloc(sizeof(t_node))) == NULL)
-    return false;
-
-  tmp = *front_ptr;
-  if (tmp != NULL)
-    {
-      while (i < position)
-	{
-	  tmp = tmp->next;
-	  ++i;
-	}
-      new_node->value = elem;
-      new_node->next = tmp->next;
-      tmp->next = new_node;
-    }
-  return true;
-}
-
-t_bool list_del_elem_at_front(t_list *front_ptr)
-{
-  t_node *node_tofree;
+  t_node	*node_tofree;
 
   if (list_is_empty(*front_ptr) == true)
-    return false;
+    return (false);
   if (*front_ptr != NULL)
     {
       node_tofree = *front_ptr;
       *front_ptr = node_tofree->next;
       free(node_tofree);
     }
-  return true;
+  return (true);
 }
 
-t_bool list_del_elem_at_back(t_list *front_ptr)
+t_bool		list_del_elem_at_back(t_list *front_ptr)
 {
-  t_node *tmp;
-  t_node *node_tofree;
+  t_node	*tmp;
+  t_node	*node_tofree;
 
   if (list_is_empty(*front_ptr) == true)
-    return false;
+    return (false);
   tmp = *front_ptr;
   if (tmp == NULL)
-    return true;
+    return (true);
   if (tmp->next == NULL)
     {
       free(tmp);
       *front_ptr = NULL;
-      return true;
+      return (true);
     }
   while (tmp->next->next != NULL)
     tmp = tmp->next;
   node_tofree = tmp->next;
   tmp->next = NULL;
   free(node_tofree);
-  return true;
+  return (true);
 }
 
-t_bool list_del_elem_at_position(t_list *front_ptr, unsigned int position)
+t_bool		list_del_elem_at_position(t_list *front_ptr,
+					  unsigned int position)
 {
-  unsigned int i = 0;
-  unsigned int lsize;
-  t_node *tmp;
-  t_node *node_tofree;
+  unsigned int	i = 0;
+  unsigned int	lsize;
+  t_node	*tmp;
+  t_node	*node_tofree;
 
   lsize = list_get_size(*front_ptr);
   if (position > lsize)
-    return false;
+    return (false);
   if (position == 0)
     return (list_del_elem_at_front(front_ptr));
   if (position == lsize)
@@ -180,7 +134,7 @@ t_bool list_del_elem_at_position(t_list *front_ptr, unsigned int position)
       tmp->next = tmp->next->next;
       free(node_tofree);
     }
-  return true;
+  return (true);
 }
 
 t_bool		list_del_node(t_list *front_ptr, void *data)
@@ -198,64 +152,52 @@ t_bool		list_del_node(t_list *front_ptr, void *data)
   return (false);
 }
 
-void *list_get_elem_at_front(t_list list)
+void	*list_get_elem_at_front(t_list list)
 {
   if (list_is_empty(list) == true && list == NULL)
-    return NULL;
-  return list->value;
+    return (NULL);
+  return (list->value);
 }
 
-void *list_get_elem_at_back(t_list list)
+void		*list_get_elem_at_back(t_list list)
 {
-  t_node *tmp;
+  t_node	*tmp;
 
   if (list_is_empty(list) == true && list == NULL)
-    return NULL;
+    return (NULL);
   for (tmp = list; tmp->next != NULL; tmp = tmp->next);
-  return tmp->value;
+  return (tmp->value);
 }
 
-void *list_get_elem_at_position(t_list list, unsigned int position)
+void		*list_get_elem_at_position(t_list list, unsigned int position)
 {
-  t_node *node;
-  unsigned int i = 0;
+  t_node	*node;
+  unsigned int	i = 0;
 
   if (list_is_empty(list) == true)
-    return NULL;
+    return (NULL);
   if (position == 0)
-    return list_get_elem_at_front(list);
+    return (list_get_elem_at_front(list));
   if (position == list_get_size(list))
-    return list_get_elem_at_back(list);
+    return (list_get_elem_at_back(list));
   node = list;
   while (i < position)
     {
       node = node->next;
       ++i;
     }
-  return node->value;
+  return (node->value);
 }
 
-t_node *list_get_first_node_with_value(t_list list, void *value, t_value_comparator val_comp)
+void		list_clear(t_list *front_ptr, void (*release)(void *))
 {
-  t_node *tmp = NULL;
-
-  tmp = list;
-  while (tmp != NULL)
-    {
-      if (val_comp(tmp->value, value) == 0)
-	return (tmp);
-      tmp = tmp->next;
-    }
-  return tmp;
-}
-
-void list_clear(t_list *front_ptr)
-{
-  t_node *tmp;
+  t_node	*tmp;
 
   tmp = *front_ptr;
-  if (tmp->next != NULL)
-    list_clear(&(tmp->next));
+  if (tmp != NULL && tmp->next != NULL)
+    list_clear(&(tmp->next), release);
+  if (*front_ptr != NULL)
+    release((*front_ptr)->value);
   free(*front_ptr);
   *front_ptr = NULL;
 }
