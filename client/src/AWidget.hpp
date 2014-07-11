@@ -31,9 +31,9 @@ public:
   virtual void	onDisplay(const std::list<std::string> &text, int filePos);
   virtual void	onClick(Menu &menu) = 0;
   virtual void	draw(gdl::AShader &shader, const gdl::Clock &clock) = 0;
+  virtual void	refresh(int width, int height, float xRatio, float yRatio);
 
   void		update(int x, int y);
-  void		refresh(int width, int height, float xRatio, float yRatio);
   void		setSquare(Square *);
   Square	*getSquare() const;
   int		getX() const;

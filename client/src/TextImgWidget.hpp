@@ -15,6 +15,7 @@ public:
 
   const std::string	&getContent() const;
   virtual void	draw(gdl::AShader &shader, const gdl::Clock &clock);
+  void		refresh(int width, int height, float xRatio, float yRatio);
 
 protected:
   std::string	_sentence;
