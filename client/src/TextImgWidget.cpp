@@ -25,6 +25,21 @@ TextImgWidget::~TextImgWidget()
 {
 }
 
+void	TextImgWidget::refresh(int width, int height, float xRatio, float yRatio)
+{
+  _width = width / 2;
+  _height = height / 11.25f;
+  _x = width / xRatio;
+  _y = height / yRatio;
+  _square->setPos(_x, _y);
+  _square->setSize(_width, _height);
+  if (_squareHover != NULL)
+    {
+      _squareHover->setPos(_x, _y);
+      _squareHover->setSize(_width, _height);
+    }
+}
+
 void	TextImgWidget::draw(gdl::AShader &shader, const gdl::Clock &clock)
 {
   if (_hover && _squareHover != NULL)
@@ -37,7 +52,8 @@ void	TextImgWidget::draw(gdl::AShader &shader, const gdl::Clock &clock)
       _square->fillGeometry();
       _square->draw(shader, clock);
     }
-  _text.setText(_sentence,_x +_width / 2 - (_sentence.length() / 4.0) * 45, _y + (_height - 45) / 2, 45);
+  _text.setText(_sentence,_x + _width / 2 - (_sentence.length() / 4.0) * 45,
+  		_y + (_height - 45) / 2, _height * 0.56f);
   glDisable(GL_DEPTH_TEST);
   _text.draw(shader, clock);
   glEnable(GL_DEPTH_TEST);
